@@ -2,7 +2,7 @@
     <div>
         <div class="ml-auto my-3">
             <span>Вы выбрали ресторан на </span>
-            <select v-model="place" name="places" @change="choosePlace($event)">
+            <select v-model="place" name="places" @change="choosePlace($event)" :style="{height: '30px'}">
                 <option value="" selected>...</option>
                 <option value="place_1">Марата</option>
                 <option value="place_2">Байкальской</option>
@@ -12,12 +12,42 @@
 
         <h1 v-if="place === ''" class="text-center my-5">Пожалуйста, выберите ресторан</h1>
 
-        <ul v-else class="list-group">
-            <li v-for="log in logs" class="list-group-item">{{ log }}</li>
-        </ul>
+        <!-- Loader -->
+        <div class="text-center" v-if="loading">
+            <div class="spinner-grow mt-5 text-success" style="width: 6rem; height: 6rem;" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
 
+        <div v-else-if="logs.length">
+            <ul class="list-group">
+                <li
+                    v-for="log in logs" class="list-group-item d-flex"
+                    :class="{'list-group-item-success' : log.type === 'Бронирование', 'list-group-item-warning': log.type === 'Обновление данных', 'list-group-item-danger' : log.type === 'Отмена бронирования'}">
+                    {{getUserTime(new Date(log.created_at))}}. {{log.type}}. {{log.text}}
+                    <div class="dropdown ms-auto">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuClickableInside" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                            Инфо
+                        </button>
+                        <ul class="dropdown-menu p-1" aria-labelledby="dropdownMenuClickableInside" :style="{minWidth: '200px'}">
+                            <li>
+                                <p>Имя: {{log.name}}</p>
+                            </li>
+                            <li> <p>Телефон: {{log.phone}}</p></li>
+                            <li> <p>Дата: {{log.date}}</p></li>
+                            <li> <p>Время: {{log.time}}</p></li>
+                            <li> <p>Cтол №: {{log.table_id}}</p></li>
+                            <li> <p>Ресторан: {{log.place_id === 1 ? 'Марата' : log.place_id === 2 ? 'Байкальская' : log.place_id === 3 ? 'Горная' : null}}</p></li>
+                            <li> <p>Предоплата : {{log.prepayment}}р.</p></li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
 
-
+        <div v-else>
+            <h2 class="text-center">Пока нет никаких записей</h2>
+        </div>
 
     </div>
 </template>
@@ -28,16 +58,66 @@ export default {
     data() {
         return {
             logs: [],
-            place: ''
+            place: '',
+            loading: false,
         }
     },
+    computed: {
+    },
     methods: {
+        addLeadingZero(date) {
+            return (date < 10) ? '0' + date : date;
+        },
+        getUserTime(date) {
+            const days = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
+            let Y = date.getFullYear();
+            let M = this.addLeadingZero(date.getMonth() + 1);
+            let D = this.addLeadingZero(date.getDate());
+            let d = days[date.getDay()];
+            let h = this.addLeadingZero(date.getHours());
+            let m = this.addLeadingZero(date.getMinutes());
+
+            return `${Y}.${M}.${D} ${h}:${m} (${d})`
+        },
         choosePlace($event) {
             this.place = $event.target.value;
             this.fetchLogs();
         },
-        fetchLogs() {
-            this.logs.push(1);
+        async fetchLogs() {
+            if(this.place === 'place_1') {
+                this.loading = true;
+                const response = await axios.get('http://127.0.0.1:8000/api/logs')
+                const logs = response.data.filter((log) => {
+                   if(log.place_id === 1) {
+                       return log;
+                   }
+                })
+                this.logs = logs.reverse();
+                this.loading = false;
+            }
+            if(this.place === 'place_2') {
+                this.loading = true;
+                const response = await axios.get('http://127.0.0.1:8000/api/logs')
+                const logs = response.data.filter((log) => {
+                    if(log.place_id === 2) {
+                        return log;
+                    }
+                })
+                this.logs = logs.reverse();
+                this.loading = false;
+            }
+            if(this.place === 'place_3') {
+                this.loading = true;
+                const response = await axios.get('http://127.0.0.1:8000/api/logs')
+                const logs = response.data.filter((log) => {
+                    if(log.place_id === 3) {
+                        return log;
+                    }
+                })
+                console.log(this.logs)
+                this.logs = logs.reverse();
+                this.loading = false;
+            }
         }
     }
 }

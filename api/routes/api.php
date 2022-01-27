@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ReservationController;
 use \App\Http\Controllers\LogController;
+use \App\Http\Controllers\WaitingUserController;
 
 
 /*
@@ -26,6 +27,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::apiResources([
     'tables' => TableController::class,
     'reservations' => ReservationController::class,
-    'logs'=> LogController::class
+    'logs'=> LogController::class,
+    'waiting'=> WaitingUserController::class
 ]);
 

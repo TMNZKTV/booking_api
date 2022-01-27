@@ -22,6 +22,7 @@ class CreateTablesTable extends Migration
             $table->bigInteger('w')->unsigned()->default('1');;
             $table->bigInteger('h')->unsigned()->default('2');;
             $table->string('i', );
+            $table->boolean('bbq');
             $table->string('slug');
         });
     }

@@ -20,12 +20,12 @@ class CreateReservationsTable extends Migration
             $table->foreignId('table_id')->constrained();
             $table->foreignId('place_id')->constrained();
             $table->string('name');
-            $table->string('phone');
-            $table->boolean('prepayment');
-            $table->bigInteger('amount');
+            $table->string('phone')->nullable();
+            $table->bigInteger('prepayment')->unsigned()->default('0');
+            $table->bigInteger('amount')->unsigned()->default('1');
             $table->string('date');
             $table->string('time');
-            $table->text('note');
+            $table->string('note')->nullable();
         });
     }
 

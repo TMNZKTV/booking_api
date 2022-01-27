@@ -2076,7 +2076,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var vue2_datepicker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue2-datepicker */ "../node_modules/vue2-datepicker/index.esm.js");
 //
 //
 //
@@ -2099,20 +2098,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: "App",
-  components: {
-    DatePicker: vue2_datepicker__WEBPACK_IMPORTED_MODULE_0__["default"]
-  },
-  data: function data() {
-    return {
-      date: new Date()
-    };
-  }
+  name: "App"
 });
 
 /***/ }),
@@ -2418,6 +2405,93 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2434,6 +2508,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       actionType: '',
       today: new Date(),
       layout: [],
+      waitingList: [],
       logs: [],
       colors: ['#FFFF8F', '#19DF01', '#FE6126'],
       loading: true,
@@ -2446,13 +2521,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         return i + 9;
       }),
       reservation: {
-        id: null,
         name: '',
         phone: '',
         note: '',
-        prepayment: false,
-        amount: null,
-        date: null,
+        prepayment: 0,
+        amount: 1,
+        date: new Date(),
         time: null,
         table: null,
         place_id: null
@@ -2477,12 +2551,58 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }, _callee);
     }))();
   },
-  computed: {// orderDate() {
-    //     const [reservations] = this.layout;
-    //     return this.layout.sort((a,b) => new Date(reservations.date) - new Date(reservations.date))
-    // }
+  computed: {
+    tables: function tables() {
+      if (this.place === 'place_1') {
+        return this.layout.filter(function (table) {
+          return table.id !== 100;
+        });
+      }
+
+      if (this.place === 'place_2') {
+        return this.layout.filter(function (table) {
+          return table.id !== 101;
+        });
+      }
+
+      if (this.place === 'place_3') {
+        return this.layout.filter(function (table) {
+          return table.id !== 102;
+        });
+      }
+    },
+    dateFilter: function dateFilter() {
+      var options = {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+      };
+
+      function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+      }
+
+      return capitalizeFirstLetter(Intl.DateTimeFormat('ru-RU', options).format(this.today));
+    }
   },
   methods: {
+    addLeadingZero: function addLeadingZero(date) {
+      return date < 10 ? '0' + date : date;
+    },
+    getUserTime: function getUserTime(date) {
+      var days = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
+      var Y = date.getFullYear();
+      var M = this.addLeadingZero(date.getMonth() + 1);
+      var D = this.addLeadingZero(date.getDate());
+      var d = days[date.getDay()];
+      var h = this.addLeadingZero(date.getHours());
+      var m = this.addLeadingZero(date.getMinutes());
+      return "".concat(Y, ".").concat(M, ".").concat(D, " ").concat(h, ":").concat(m, " (").concat(d, ")");
+    },
+    getExactTime: function getExactTime(date) {
+      return new Date(date).getHours() + ':' + new Date(date).getMinutes();
+    },
     colorByTime: function colorByTime(value) {
       var newValue = value.slice(0, 2);
 
@@ -2504,6 +2624,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       this.fetchTables();
     },
     chooseTable: function chooseTable(item) {
+      this.reservation.table_id = item.id;
       this.table = item.id;
     },
     clearReservationInfo: function clearReservationInfo() {
@@ -2521,6 +2642,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       };
     },
     updateGuestInfo: function updateGuestInfo(item) {
+      console.log(item);
       this.reservation = {
         id: item.id,
         name: item.name,
@@ -2534,11 +2656,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         place_id: item.place_id
       };
     },
-    // logAction(text, type, info, date = new Date()) {
-    //     return {
-    //         text, type, date, info
-    //     }
-    // },
     fetchLogs: function fetchLogs() {
       var _this2 = this;
 
@@ -2558,8 +2675,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 console.log(response.data);
                 _this2.logs = response.data;
                 _this2.loading = false;
+                console.log(_this2.logs[0].created_at);
 
-              case 8:
+              case 9:
               case "end":
                 return _context2.stop();
             }
@@ -2671,12 +2789,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this4 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
+        var newLog, _newLog, _newLog2;
+
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
           while (1) {
             switch (_context4.prev = _context4.next) {
               case 0:
                 if (!(_this4.place === 'place_1')) {
-                  _context4.next = 10;
+                  _context4.next = 12;
                   break;
                 }
 
@@ -2685,117 +2805,96 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return axios.put("http://127.0.0.1:8000/api/tables/".concat(item.id), item);
 
               case 4:
-                _this4.logs.push(_this4.logAction("\u0421\u0442\u043E\u043B #".concat(item.i, " \u043D\u0430 \u041C\u0430\u0440\u0430\u0442\u0430 \u0431\u044B\u043B \u043F\u0435\u0440\u0435\u0434\u0432\u0438\u043D\u0443\u0442"), 'Расстановка столов'));
-
-                _context4.next = 10;
-                break;
+                newLog = _objectSpread({
+                  text: "\u0421\u0442\u043E\u043B \u2116".concat(newReservation.table_id, " \u0431\u044B\u043B \u0437\u0430\u0431\u0440\u043E\u043D\u0438\u0440\u043E\u0432\u0430\u043D"),
+                  type: 'Расположение'
+                }, item);
+                _context4.next = 7;
+                return axios.post("http://127.0.0.1:8000/api/logs", newLog);
 
               case 7:
-                _context4.prev = 7;
-                _context4.t0 = _context4["catch"](1);
-                console.log(_context4.t0);
-
-              case 10:
-                if (!(_this4.place === 'place_2')) {
-                  _context4.next = 20;
-                  break;
-                }
-
-                _context4.prev = 11;
-                _context4.next = 14;
-                return axios.put("http://127.0.0.1:8000/api/tables/".concat(item.id), item);
-
-              case 14:
-                _this4.logs.push(_this4.logAction("\u0421\u0442\u043E\u043B #".concat(item.i, " \u043D\u0430 \u0411\u0430\u0439\u043A\u0430\u043B\u044C\u0441\u043A\u043E\u0439 \u0431\u044B\u043B \u043F\u0435\u0440\u0435\u0434\u0432\u0438\u043D\u0443\u0442"), 'Расстановка столов'));
-
-                _context4.next = 20;
+                _context4.next = 12;
                 break;
 
-              case 17:
-                _context4.prev = 17;
-                _context4.t1 = _context4["catch"](11);
-                console.log(_context4.t1);
+              case 9:
+                _context4.prev = 9;
+                _context4.t0 = _context4["catch"](1);
+                _this4.error = _context4.t0;
 
-              case 20:
-                if (!(_this4.place === 'place_3')) {
-                  _context4.next = 30;
+              case 12:
+                if (!(_this4.place === 'place_2')) {
+                  _context4.next = 24;
                   break;
                 }
 
-                _context4.prev = 21;
-                _context4.next = 24;
+                _context4.prev = 13;
+                _context4.next = 16;
                 return axios.put("http://127.0.0.1:8000/api/tables/".concat(item.id), item);
+
+              case 16:
+                _newLog = _objectSpread({
+                  text: "\u0421\u0442\u043E\u043B \u2116".concat(newReservation.table_id, " \u0431\u044B\u043B \u0437\u0430\u0431\u0440\u043E\u043D\u0438\u0440\u043E\u0432\u0430\u043D"),
+                  type: 'Расположение'
+                }, item);
+                _context4.next = 19;
+                return axios.post("http://127.0.0.1:8000/api/logs", _newLog);
+
+              case 19:
+                _context4.next = 24;
+                break;
+
+              case 21:
+                _context4.prev = 21;
+                _context4.t1 = _context4["catch"](13);
+                _this4.error = _context4.t1;
 
               case 24:
-                _this4.logs.push(_this4.logAction("\u0421\u0442\u043E\u043B #".concat(item.i, " \u043D\u0430 \u0413\u043E\u0440\u043D\u043E\u0439 \u0431\u044B\u043B \u043F\u0435\u0440\u0435\u0434\u0432\u0438\u043D\u0443\u0442"), 'Расстановка столов'));
+                if (!(_this4.place === 'place_3')) {
+                  _context4.next = 36;
+                  break;
+                }
 
-                _context4.next = 30;
+                _context4.prev = 25;
+                _context4.next = 28;
+                return axios.put("http://127.0.0.1:8000/api/tables/".concat(item.id), item);
+
+              case 28:
+                _newLog2 = _objectSpread({
+                  text: "\u0421\u0442\u043E\u043B \u2116".concat(newReservation.table_id, " \u0431\u044B\u043B \u0437\u0430\u0431\u0440\u043E\u043D\u0438\u0440\u043E\u0432\u0430\u043D"),
+                  type: 'Расположение'
+                }, item);
+                _context4.next = 31;
+                return axios.post("http://127.0.0.1:8000/api/logs", _newLog2);
+
+              case 31:
+                _context4.next = 36;
                 break;
 
-              case 27:
-                _context4.prev = 27;
-                _context4.t2 = _context4["catch"](21);
+              case 33:
+                _context4.prev = 33;
+                _context4.t2 = _context4["catch"](25);
                 console.log(_context4.t2);
 
-              case 30:
+              case 36:
               case "end":
                 return _context4.stop();
             }
           }
-        }, _callee4, null, [[1, 7], [11, 17], [21, 27]]);
+        }, _callee4, null, [[1, 9], [13, 21], [25, 33]]);
       }))();
     },
     addGuest: function addGuest() {
       var _this5 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5() {
-        var newReservation, newLog, _newReservation, _newLog, _newReservation2, _newLog2;
+        var _newReservation, newLog, _newReservation2, _newLog3, _newReservation3, _newLog4;
 
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
           while (1) {
             switch (_context5.prev = _context5.next) {
               case 0:
                 if (!(_this5.place === 'place_1')) {
-                  _context5.next = 8;
-                  break;
-                }
-
-                newReservation = {
-                  name: _this5.reservation.name,
-                  phone: _this5.reservation.phone,
-                  prepayment: _this5.reservation.prepayment,
-                  amount: _this5.reservation.amount,
-                  note: _this5.reservation.note,
-                  date: _this5.reservation.date,
-                  time: _this5.reservation.time,
-                  table_id: _this5.table,
-                  place_id: 1
-                };
-                _context5.next = 4;
-                return axios.post("http://127.0.0.1:8000/api/reservations", newReservation);
-
-              case 4:
-                newLog = _objectSpread({
-                  text: "\u0421\u0442\u043E\u043B ".concat(newReservation.table_id, " \u0431\u044B\u043B \u0437\u0430\u0431\u0440\u043E\u043D\u0438\u0440\u043E\u0432\u0430\u043D"),
-                  type: 'Бронирование'
-                }, newReservation);
-                _context5.next = 7;
-                return axios.post("http://127.0.0.1:8000/api/logs", newLog);
-
-              case 7:
-                _this5.reservation = {
-                  name: '',
-                  phone: '',
-                  note: '',
-                  date: null,
-                  time: null,
-                  table: null,
-                  layout_id: null
-                };
-
-              case 8:
-                if (!(_this5.place === 'place_2')) {
-                  _context5.next = 16;
+                  _context5.next = 7;
                   break;
                 }
 
@@ -2808,33 +2907,22 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   date: _this5.reservation.date,
                   time: _this5.reservation.time,
                   table_id: _this5.table,
-                  place_id: 2
+                  place_id: 1
                 };
-                _context5.next = 12;
+                _context5.next = 4;
                 return axios.post("http://127.0.0.1:8000/api/reservations", _newReservation);
 
-              case 12:
-                _newLog = _objectSpread({
-                  text: "\u0421\u0442\u043E\u043B ".concat(_newReservation.table_id, " \u043D\u0430 \u0411\u0430\u0439\u043A\u0430\u043B\u044C\u0441\u043A\u043E\u0439 \u0431\u044B\u043B \u0437\u0430\u0431\u0440\u043E\u043D\u0438\u0440\u043E\u0432\u0430\u043D"),
+              case 4:
+                newLog = _objectSpread({
+                  text: "\u0421\u0442\u043E\u043B \u2116".concat(_newReservation.table_id, " \u0431\u044B\u043B \u0437\u0430\u0431\u0440\u043E\u043D\u0438\u0440\u043E\u0432\u0430\u043D."),
                   type: 'Бронирование'
                 }, _newReservation);
-                _context5.next = 15;
-                return axios.post("http://127.0.0.1:8000/api/logs", _newLog);
+                _context5.next = 7;
+                return axios.post("http://127.0.0.1:8000/api/logs", newLog);
 
-              case 15:
-                _this5.reservation = {
-                  name: '',
-                  phone: '',
-                  note: '',
-                  date: null,
-                  time: null,
-                  table: null,
-                  layout_id: null
-                };
-
-              case 16:
-                if (!(_this5.place === 'place_3')) {
-                  _context5.next = 24;
+              case 7:
+                if (!(_this5.place === 'place_2')) {
+                  _context5.next = 14;
                   break;
                 }
 
@@ -2847,35 +2935,54 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   date: _this5.reservation.date,
                   time: _this5.reservation.time,
                   table_id: _this5.table,
-                  place_id: 3
+                  place_id: 2
                 };
-                _context5.next = 20;
+                _context5.next = 11;
                 return axios.post("http://127.0.0.1:8000/api/reservations", _newReservation2);
 
-              case 20:
-                _newLog2 = _objectSpread({
-                  text: "\u0421\u0442\u043E\u043B ".concat(_newReservation2.table_id, " \u043D\u0430 \u0411\u0430\u0439\u043A\u0430\u043B\u044C\u0441\u043A\u043E\u0439 \u0431\u044B\u043B \u0437\u0430\u0431\u0440\u043E\u043D\u0438\u0440\u043E\u0432\u0430\u043D"),
+              case 11:
+                _newLog3 = _objectSpread({
+                  text: "\u0421\u0442\u043E\u043B \u2116".concat(_newReservation2.table_id, " \u043D\u0430 \u0411\u0430\u0439\u043A\u0430\u043B\u044C\u0441\u043A\u043E\u0439 \u0431\u044B\u043B \u0437\u0430\u0431\u0440\u043E\u043D\u0438\u0440\u043E\u0432\u0430\u043D."),
                   type: 'Бронирование'
                 }, _newReservation2);
-                _context5.next = 23;
-                return axios.post("http://127.0.0.1:8000/api/logs", _newLog2);
+                _context5.next = 14;
+                return axios.post("http://127.0.0.1:8000/api/logs", _newLog3);
 
-              case 23:
-                _this5.reservation = {
-                  name: '',
-                  phone: '',
-                  note: '',
-                  date: null,
-                  time: null,
-                  table: null,
-                  layout_id: null
+              case 14:
+                if (!(_this5.place === 'place_3')) {
+                  _context5.next = 21;
+                  break;
+                }
+
+                _newReservation3 = {
+                  name: _this5.reservation.name,
+                  phone: _this5.reservation.phone,
+                  prepayment: _this5.reservation.prepayment,
+                  amount: _this5.reservation.amount,
+                  note: _this5.reservation.note,
+                  date: _this5.reservation.date,
+                  time: _this5.reservation.time,
+                  table_id: _this5.table,
+                  place_id: 3
                 };
+                _context5.next = 18;
+                return axios.post("http://127.0.0.1:8000/api/reservations", _newReservation3);
 
-              case 24:
-                _context5.next = 26;
+              case 18:
+                _newLog4 = _objectSpread({
+                  text: "\u0421\u0442\u043E\u043B \u2116".concat(_newReservation3.table_id, " \u043D\u0430 \u0411\u0430\u0439\u043A\u0430\u043B\u044C\u0441\u043A\u043E\u0439 \u0431\u044B\u043B \u0437\u0430\u0431\u0440\u043E\u043D\u0438\u0440\u043E\u0432\u0430\u043D."),
+                  type: 'Бронирование'
+                }, _newReservation3);
+                _context5.next = 21;
+                return axios.post("http://127.0.0.1:8000/api/logs", _newLog4);
+
+              case 21:
+                _this5.clearReservationInfo();
+
+                _context5.next = 24;
                 return _this5.fetchTables();
 
-              case 26:
+              case 24:
               case "end":
                 return _context5.stop();
             }
@@ -2887,7 +2994,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this6 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee6() {
-        var newLog, _newLog3, _newLog4;
+        var newLog, _newLog5, _newLog6;
 
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee6$(_context6) {
           while (1) {
@@ -2903,7 +3010,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 3:
                 newLog = _objectSpread({
-                  text: "\u041E\u0431\u043D\u043E\u0432\u043B\u0435\u043D\u044B \u0434\u0430\u043D\u043D\u044B\u0435 \u0433\u043E\u0441\u0442\u044F",
+                  text: "\u041E\u0431\u043D\u043E\u0432\u043B\u0435\u043D\u044B \u0434\u0430\u043D\u043D\u044B\u0435 \u0433\u043E\u0441\u0442\u044F.",
                   type: 'Обновление данных'
                 }, _this6.reservation);
                 _context6.next = 6;
@@ -2919,12 +3026,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return axios.put("http://127.0.0.1:8000/api/reservations/".concat(_this6.reservation.id), _this6.reservation);
 
               case 9:
-                _newLog3 = _objectSpread({
-                  text: "\u041E\u0431\u043D\u043E\u0432\u043B\u0435\u043D\u044B \u0434\u0430\u043D\u043D\u044B\u0435 \u0433\u043E\u0441\u0442\u044F",
+                _newLog5 = _objectSpread({
+                  text: "\u041E\u0431\u043D\u043E\u0432\u043B\u0435\u043D\u044B \u0434\u0430\u043D\u043D\u044B\u0435 \u0433\u043E\u0441\u0442\u044F.",
                   type: 'Обновление данных'
                 }, _this6.reservation);
                 _context6.next = 12;
-                return axios.post("http://127.0.0.1:8000/api/logs", _newLog3);
+                return axios.post("http://127.0.0.1:8000/api/logs", _newLog5);
 
               case 12:
                 if (!(_this6.place === 'place_3')) {
@@ -2936,12 +3043,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return axios.put("http://127.0.0.1:8000/api/reservations/".concat(_this6.reservation.id), _this6.reservation);
 
               case 15:
-                _newLog4 = _objectSpread({
-                  text: "\u041E\u0431\u043D\u043E\u0432\u043B\u0435\u043D\u044B \u0434\u0430\u043D\u043D\u044B\u0435 \u0433\u043E\u0441\u0442\u044F",
+                _newLog6 = _objectSpread({
+                  text: "\u041E\u0431\u043D\u043E\u0432\u043B\u0435\u043D\u044B \u0434\u0430\u043D\u043D\u044B\u0435 \u0433\u043E\u0441\u0442\u044F.",
                   type: 'Обновление данных'
                 }, _this6.reservation);
                 _context6.next = 18;
-                return axios.post("http://127.0.0.1:8000/api/logs", _newLog4);
+                return axios.post("http://127.0.0.1:8000/api/logs", _newLog6);
 
               case 18:
                 _this6.clearReservationInfo();
@@ -2957,31 +3064,35 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee6);
       }))();
     },
-    deleteGuest: function deleteGuest() {
+    fetchWaitingList: function fetchWaitingList() {
       var _this7 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee7() {
-        var newLog;
+        var response;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee7$(_context7) {
           while (1) {
             switch (_context7.prev = _context7.next) {
               case 0:
-                _context7.next = 2;
-                return axios["delete"]("http://127.0.0.1:8000/api/reservations/".concat(_this7.reservation.id));
+                if (!(_this7.place === 'place_1')) {
+                  _context7.next = 5;
+                  break;
+                }
 
-              case 2:
-                newLog = _objectSpread({
-                  text: 'Гость был удален',
-                  type: 'Отмена бронирования'
-                }, _this7.reservation);
-                _context7.next = 5;
-                return axios.post("http://127.0.0.1:8000/api/logs", newLog);
+                _context7.next = 3;
+                return axios.get('http://127.0.0.1:8000/api/tables');
+
+              case 3:
+                response = _context7.sent;
+                _this7.waitingList = response.data.data.find(function (table) {
+                  if (table.id === 100) {
+                    return table;
+                  }
+                });
 
               case 5:
-                _context7.next = 7;
-                return _this7.fetchTables();
+                console.log(_this7.waitingList);
 
-              case 7:
+              case 6:
               case "end":
                 return _context7.stop();
             }
@@ -2989,27 +3100,117 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee7);
       }))();
     },
-    addTable: function addTable() {
+    addToWaitingList: function addToWaitingList() {
       var _this8 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee8() {
-        var response, firstLayout, newTable, _response3, secondLayout, _newTable, _response4, thirdLayout, _newTable2;
+        var waitingGuest, _waitingGuest, _waitingGuest2;
 
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee8$(_context8) {
           while (1) {
             switch (_context8.prev = _context8.next) {
               case 0:
                 if (!(_this8.place === 'place_1')) {
-                  _context8.next = 20;
+                  _context8.next = 4;
                   break;
                 }
 
-                _context8.prev = 1;
+                waitingGuest = _objectSpread(_objectSpread({}, _this8.reservation), {}, {
+                  place_id: 1,
+                  table_id: 100
+                });
                 _context8.next = 4;
-                return axios.get('http://127.0.0.1:8000/api/tables');
+                return axios.post("http://127.0.0.1:8000/api/reservations", waitingGuest);
 
               case 4:
-                response = _context8.sent;
+                if (!(_this8.place === 'place_2')) {
+                  _context8.next = 8;
+                  break;
+                }
+
+                _waitingGuest = _objectSpread(_objectSpread({}, _this8.reservation), {}, {
+                  place_id: 2
+                });
+                _context8.next = 8;
+                return axios.post("http://127.0.0.1:8000/api/waiting", _waitingGuest);
+
+              case 8:
+                if (!(_this8.place === 'place_3')) {
+                  _context8.next = 12;
+                  break;
+                }
+
+                _waitingGuest2 = _objectSpread(_objectSpread({}, _this8.reservation), {}, {
+                  place_id: 3
+                });
+                _context8.next = 12;
+                return axios.post("http://127.0.0.1:8000/api/waiting", _waitingGuest2);
+
+              case 12:
+                _this8.clearReservationInfo();
+
+              case 13:
+              case "end":
+                return _context8.stop();
+            }
+          }
+        }, _callee8);
+      }))();
+    },
+    deleteGuest: function deleteGuest() {
+      var _this9 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee9() {
+        var newLog;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee9$(_context9) {
+          while (1) {
+            switch (_context9.prev = _context9.next) {
+              case 0:
+                _context9.next = 2;
+                return axios["delete"]("http://127.0.0.1:8000/api/reservations/".concat(_this9.reservation.id));
+
+              case 2:
+                newLog = _objectSpread({
+                  text: 'Гость был удален.',
+                  type: 'Отмена бронирования'
+                }, _this9.reservation);
+                _context9.next = 5;
+                return axios.post("http://127.0.0.1:8000/api/logs", newLog);
+
+              case 5:
+                _context9.next = 7;
+                return _this9.fetchTables();
+
+              case 7:
+              case "end":
+                return _context9.stop();
+            }
+          }
+        }, _callee9);
+      }))();
+    },
+    addTable: function addTable(type) {
+      var _this10 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee10() {
+        var response, firstLayout, newTable, secondLayout, _newTable, thirdLayout, _newTable2;
+
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee10$(_context10) {
+          while (1) {
+            switch (_context10.prev = _context10.next) {
+              case 0:
+                _context10.next = 2;
+                return axios.get('http://127.0.0.1:8000/api/tables');
+
+              case 2:
+                response = _context10.sent;
+
+                if (!(_this10.place === 'place_1')) {
+                  _context10.next = 14;
+                  break;
+                }
+
+                _context10.prev = 4;
                 firstLayout = response.data.data.filter(function (table) {
                   if (table.place_id === 1) {
                     return table;
@@ -3022,43 +3223,29 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   x: 9,
                   y: 9,
                   i: (firstLayout.length + 1).toString(),
+                  bbq: type,
                   slug: (firstLayout.length + 1).toString()
                 };
-                _context8.next = 9;
+                _context10.next = 9;
                 return axios.post('http://127.0.0.1:8000/api/tables', newTable);
 
               case 9:
-                _this8.loading = true;
-                _context8.next = 12;
-                return _this8.fetchTables();
-
-              case 12:
-                _this8.loading = false;
-
-                _this8.logs.push(_this8.logAction("\u0421\u0442\u043E\u043B #".concat(newTable.i, " \u043D\u0430 \u041C\u0430\u0440\u0430\u0442\u0430 \u0431\u044B\u043B \u0434\u043E\u0431\u0430\u0432\u043B\u0435\u043D"), 'Добавление столов'));
-
-                console.log(_this8.logs);
-                _context8.next = 20;
+                _context10.next = 14;
                 break;
 
-              case 17:
-                _context8.prev = 17;
-                _context8.t0 = _context8["catch"](1);
-                console.log(_context8.t0.message);
+              case 11:
+                _context10.prev = 11;
+                _context10.t0 = _context10["catch"](4);
+                console.log(_context10.t0.message);
 
-              case 20:
-                if (!(_this8.place === 'place_2')) {
-                  _context8.next = 39;
+              case 14:
+                if (!(_this10.place === 'place_2')) {
+                  _context10.next = 25;
                   break;
                 }
 
-                _context8.prev = 21;
-                _context8.next = 24;
-                return axios.get('http://127.0.0.1:8000/api/tables');
-
-              case 24:
-                _response3 = _context8.sent;
-                secondLayout = _response3.data.data.filter(function (table) {
+                _context10.prev = 15;
+                secondLayout = response.data.data.filter(function (table) {
                   if (table.place_id === 2) {
                     return table;
                   }
@@ -3070,42 +3257,29 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   x: 9,
                   y: 9,
                   i: (secondLayout.length + 1).toString(),
+                  bbq: type,
                   slug: (secondLayout.length + 1).toString()
                 };
-                _context8.next = 29;
+                _context10.next = 20;
                 return axios.post('http://127.0.0.1:8000/api/tables', _newTable);
 
-              case 29:
-                _this8.loading = true;
-                _context8.next = 32;
-                return _this8.fetchTables();
-
-              case 32:
-                _this8.loading = false;
-
-                _this8.logs.push(_this8.logAction("\u0421\u0442\u043E\u043B #".concat(_newTable.i, " \u043D\u0430 \u0411\u0430\u0439\u043A\u0430\u043B\u044C\u0441\u043A\u043E\u0439 \u0431\u044B\u043B \u0434\u043E\u0431\u0430\u0432\u043B\u0435\u043D"), 'Добавление столов'));
-
-                _context8.next = 39;
+              case 20:
+                _context10.next = 25;
                 break;
 
-              case 36:
-                _context8.prev = 36;
-                _context8.t1 = _context8["catch"](21);
-                console.log(_context8.t1);
+              case 22:
+                _context10.prev = 22;
+                _context10.t1 = _context10["catch"](15);
+                console.log(_context10.t1);
 
-              case 39:
-                if (!(_this8.place === 'place_3')) {
-                  _context8.next = 58;
+              case 25:
+                if (!(_this10.place === 'place_3')) {
+                  _context10.next = 36;
                   break;
                 }
 
-                _context8.prev = 40;
-                _context8.next = 43;
-                return axios.get('http://127.0.0.1:8000/api/tables');
-
-              case 43:
-                _response4 = _context8.sent;
-                thirdLayout = _response4.data.data.filter(function (table) {
+                _context10.prev = 26;
+                thirdLayout = response.data.data.filter(function (table) {
                   if (table.place_id === 3) {
                     return table;
                   }
@@ -3117,125 +3291,305 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   x: 9,
                   y: 9,
                   i: (thirdLayout.length + 1).toString(),
+                  bbq: type,
                   slug: (thirdLayout.length + 1).toString()
                 };
-                _context8.next = 48;
+                _context10.next = 31;
                 return axios.post('http://127.0.0.1:8000/api/tables', _newTable2);
 
-              case 48:
-                _this8.loading = true;
-                _context8.next = 51;
-                return _this8.fetchTables();
-
-              case 51:
-                _this8.loading = false;
-
-                _this8.logs.push(_this8.logAction("\u0421\u0442\u043E\u043B #".concat(_newTable2.i, " \u043D\u0430 \u0413\u043E\u0440\u043D\u043E\u0439 \u0431\u044B\u043B \u0434\u043E\u0431\u0430\u0432\u043B\u0435\u043D"), 'Добавление столов'));
-
-                _context8.next = 58;
+              case 31:
+                _context10.next = 36;
                 break;
 
-              case 55:
-                _context8.prev = 55;
-                _context8.t2 = _context8["catch"](40);
-                console.log(_context8.t2);
+              case 33:
+                _context10.prev = 33;
+                _context10.t2 = _context10["catch"](26);
+                console.log(_context10.t2);
 
-              case 58:
+              case 36:
+                _this10.loading = true;
+                _context10.next = 39;
+                return _this10.fetchTables();
+
+              case 39:
+                _this10.loading = false;
+
+              case 40:
               case "end":
-                return _context8.stop();
+                return _context10.stop();
             }
           }
-        }, _callee8, null, [[1, 17], [21, 36], [40, 55]]);
+        }, _callee10, null, [[4, 11], [15, 22], [26, 33]]);
       }))();
     },
     deleteOneTable: function deleteOneTable() {
-      var _this9 = this;
+      var _this11 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee9() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee9$(_context9) {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee11() {
+        var table;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee11$(_context11) {
           while (1) {
-            switch (_context9.prev = _context9.next) {
+            switch (_context11.prev = _context11.next) {
               case 0:
-                if (!(_this9.place === "place_1")) {
-                  _context9.next = 13;
+                if (!(_this11.place === "place_1")) {
+                  _context11.next = 12;
                   break;
                 }
 
-                _context9.prev = 1;
-                _context9.next = 4;
-                return axios["delete"]("http://127.0.0.1:8000/api/tables/".concat(_this9.table));
+                _context11.prev = 1;
+                _context11.next = 4;
+                return axios.get("http://127.0.0.1:8000/api/tables/".concat(_this11.table));
 
               case 4:
-                _this9.loading = true;
-                _context9.next = 7;
-                return _this9.fetchTables();
+                table = _context11.sent;
+                _context11.next = 7;
+                return axios["delete"]("http://127.0.0.1:8000/api/tables/".concat(_this11.table));
 
               case 7:
-                _this9.loading = false;
-                _context9.next = 13;
+                _context11.next = 12;
                 break;
 
-              case 10:
-                _context9.prev = 10;
-                _context9.t0 = _context9["catch"](1);
-                console.log(_context9.t0);
+              case 9:
+                _context11.prev = 9;
+                _context11.t0 = _context11["catch"](1);
+                console.log(_context11.t0);
 
-              case 13:
-                if (!(_this9.place === "place_2")) {
-                  _context9.next = 26;
+              case 12:
+                if (!(_this11.place === "place_2")) {
+                  _context11.next = 21;
                   break;
                 }
 
-                _context9.prev = 14;
-                _context9.next = 17;
-                return axios["delete"]("http://127.0.0.1:8000/api/tables/".concat(_this9.table));
+                _context11.prev = 13;
+                _context11.next = 16;
+                return axios["delete"]("http://127.0.0.1:8000/api/tables/".concat(_this11.table));
 
-              case 17:
-                _this9.loading = true;
-                _context9.next = 20;
-                return _this9.fetchTables();
-
-              case 20:
-                _this9.loading = false;
-                _context9.next = 26;
+              case 16:
+                _context11.next = 21;
                 break;
 
-              case 23:
-                _context9.prev = 23;
-                _context9.t1 = _context9["catch"](14);
-                console.log(_context9.t1);
+              case 18:
+                _context11.prev = 18;
+                _context11.t1 = _context11["catch"](13);
+                console.log(_context11.t1);
 
-              case 26:
-                if (!(_this9.place === "place_3")) {
-                  _context9.next = 39;
+              case 21:
+                if (!(_this11.place === "place_3")) {
+                  _context11.next = 30;
                   break;
                 }
 
-                _context9.prev = 27;
-                _context9.next = 30;
-                return axios["delete"]("http://127.0.0.1:8000/api/tables/".concat(_this9.table));
+                _context11.prev = 22;
+                _context11.next = 25;
+                return axios["delete"]("http://127.0.0.1:8000/api/tables/".concat(_this11.table));
+
+              case 25:
+                _context11.next = 30;
+                break;
+
+              case 27:
+                _context11.prev = 27;
+                _context11.t2 = _context11["catch"](22);
+                console.log(_context11.t2);
 
               case 30:
-                _this9.loading = true;
-                _context9.next = 33;
-                return _this9.fetchTables();
+                _this11.loading = true;
+                _context11.next = 33;
+                return _this11.fetchTables();
 
               case 33:
-                _this9.loading = false;
-                _context9.next = 39;
-                break;
+                _this11.loading = false;
 
-              case 36:
-                _context9.prev = 36;
-                _context9.t2 = _context9["catch"](27);
-                console.log(_context9.t2);
-
-              case 39:
+              case 34:
               case "end":
-                return _context9.stop();
+                return _context11.stop();
             }
           }
-        }, _callee9, null, [[1, 10], [14, 23], [27, 36]]);
+        }, _callee11, null, [[1, 9], [13, 18], [22, 27]]);
+      }))();
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/History.vue?vue&type=script&lang=js&":
+/*!**************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/History.vue?vue&type=script&lang=js& ***!
+  \**************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  name: "History.vue",
+  data: function data() {
+    return {
+      logs: [],
+      place: '',
+      loading: false
+    };
+  },
+  computed: {},
+  methods: {
+    addLeadingZero: function addLeadingZero(date) {
+      return date < 10 ? '0' + date : date;
+    },
+    getUserTime: function getUserTime(date) {
+      var days = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
+      var Y = date.getFullYear();
+      var M = this.addLeadingZero(date.getMonth() + 1);
+      var D = this.addLeadingZero(date.getDate());
+      var d = days[date.getDay()];
+      var h = this.addLeadingZero(date.getHours());
+      var m = this.addLeadingZero(date.getMinutes());
+      return "".concat(Y, ".").concat(M, ".").concat(D, " ").concat(h, ":").concat(m, " (").concat(d, ")");
+    },
+    choosePlace: function choosePlace($event) {
+      this.place = $event.target.value;
+      this.fetchLogs();
+    },
+    fetchLogs: function fetchLogs() {
+      var _this = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+        var response, logs, _response, _logs, _response2, _logs2;
+
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                if (!(_this.place === 'place_1')) {
+                  _context.next = 8;
+                  break;
+                }
+
+                _this.loading = true;
+                _context.next = 4;
+                return axios.get('http://127.0.0.1:8000/api/logs');
+
+              case 4:
+                response = _context.sent;
+                logs = response.data.filter(function (log) {
+                  if (log.place_id === 1) {
+                    return log;
+                  }
+                });
+                _this.logs = logs.reverse();
+                _this.loading = false;
+
+              case 8:
+                if (!(_this.place === 'place_2')) {
+                  _context.next = 16;
+                  break;
+                }
+
+                _this.loading = true;
+                _context.next = 12;
+                return axios.get('http://127.0.0.1:8000/api/logs');
+
+              case 12:
+                _response = _context.sent;
+                _logs = _response.data.filter(function (log) {
+                  if (log.place_id === 2) {
+                    return log;
+                  }
+                });
+                _this.logs = _logs.reverse();
+                _this.loading = false;
+
+              case 16:
+                if (!(_this.place === 'place_3')) {
+                  _context.next = 25;
+                  break;
+                }
+
+                _this.loading = true;
+                _context.next = 20;
+                return axios.get('http://127.0.0.1:8000/api/logs');
+
+              case 20:
+                _response2 = _context.sent;
+                _logs2 = _response2.data.filter(function (log) {
+                  if (log.place_id === 3) {
+                    return log;
+                  }
+                });
+                console.log(_this.logs);
+                _this.logs = _logs2.reverse();
+                _this.loading = false;
+
+              case 25:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
       }))();
     }
   }
@@ -3272,21 +3626,22 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
-/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
 /* harmony import */ var _components_App__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/App */ "./resources/js/components/App.vue");
 /* harmony import */ var _components_Home__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/Home */ "./resources/js/components/Home.vue");
 /* harmony import */ var _components_Booking__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/Booking */ "./resources/js/components/Booking.vue");
+/* harmony import */ var _components_History__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/History */ "./resources/js/components/History.vue");
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 
 
 
 
- // import History from "./components/History";
 
-vue__WEBPACK_IMPORTED_MODULE_3__["default"].use(vue_router__WEBPACK_IMPORTED_MODULE_4__["default"]);
-var router = new vue_router__WEBPACK_IMPORTED_MODULE_4__["default"]({
+
+vue__WEBPACK_IMPORTED_MODULE_4__["default"].use(vue_router__WEBPACK_IMPORTED_MODULE_5__["default"]);
+var router = new vue_router__WEBPACK_IMPORTED_MODULE_5__["default"]({
   mode: 'history',
   routes: [{
     path: '/',
@@ -3296,14 +3651,13 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_4__["default"]({
     path: '/booking',
     name: 'Booking',
     component: _components_Booking__WEBPACK_IMPORTED_MODULE_2__["default"]
-  } // {
-  //     path: '/history',
-  //     name: 'History',
-  //     component: History
-  // },
-  ]
+  }, {
+    path: '/history',
+    name: 'History',
+    component: _components_History__WEBPACK_IMPORTED_MODULE_3__["default"]
+  }]
 });
-var app = new vue__WEBPACK_IMPORTED_MODULE_3__["default"]({
+var app = new vue__WEBPACK_IMPORTED_MODULE_4__["default"]({
   el: '#app',
   components: {
     App: _components_App__WEBPACK_IMPORTED_MODULE_0__["default"]
@@ -3465,6 +3819,21 @@ module.exports = function (cssWithMappingToString) {
 
   return list;
 };
+
+/***/ }),
+
+/***/ "./resources/svg/bbq.svg":
+/*!*******************************!*\
+  !*** ./resources/svg/bbq.svg ***!
+  \*******************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/bbq.svg?84ff3e7935d7a9e248e54aaa4c55f026");
 
 /***/ }),
 
@@ -35776,6 +36145,45 @@ component.options.__file = "resources/js/components/Booking.vue"
 
 /***/ }),
 
+/***/ "./resources/js/components/History.vue":
+/*!*********************************************!*\
+  !*** ./resources/js/components/History.vue ***!
+  \*********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _History_vue_vue_type_template_id_270eb80e_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./History.vue?vue&type=template&id=270eb80e&scoped=true& */ "./resources/js/components/History.vue?vue&type=template&id=270eb80e&scoped=true&");
+/* harmony import */ var _History_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./History.vue?vue&type=script&lang=js& */ "./resources/js/components/History.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _History_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _History_vue_vue_type_template_id_270eb80e_scoped_true___WEBPACK_IMPORTED_MODULE_0__.render,
+  _History_vue_vue_type_template_id_270eb80e_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  "270eb80e",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/History.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
 /***/ "./resources/js/components/Home.vue":
 /*!******************************************!*\
   !*** ./resources/js/components/Home.vue ***!
@@ -35847,6 +36255,22 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/History.vue?vue&type=script&lang=js&":
+/*!**********************************************************************!*\
+  !*** ./resources/js/components/History.vue?vue&type=script&lang=js& ***!
+  \**********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_History_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./History.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/History.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_History_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
 /***/ "./resources/js/components/Home.vue?vue&type=script&lang=js&":
 /*!*******************************************************************!*\
   !*** ./resources/js/components/Home.vue?vue&type=script&lang=js& ***!
@@ -35910,6 +36334,23 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/History.vue?vue&type=template&id=270eb80e&scoped=true&":
+/*!****************************************************************************************!*\
+  !*** ./resources/js/components/History.vue?vue&type=template&id=270eb80e&scoped=true& ***!
+  \****************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_History_vue_vue_type_template_id_270eb80e_scoped_true___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_History_vue_vue_type_template_id_270eb80e_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_History_vue_vue_type_template_id_270eb80e_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./History.vue?vue&type=template&id=270eb80e&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/History.vue?vue&type=template&id=270eb80e&scoped=true&");
+
+
+/***/ }),
+
 /***/ "./resources/js/components/Home.vue?vue&type=template&id=f2b6376c&scoped=true&":
 /*!*************************************************************************************!*\
   !*** ./resources/js/components/Home.vue?vue&type=template&id=f2b6376c&scoped=true& ***!
@@ -35955,7 +36396,7 @@ var render = function () {
               staticClass: "btn btn-outline-success me-2",
               attrs: { to: { name: "Home" }, type: "button" },
             },
-            [_vm._v("\n                    Главная\n                ")]
+            [_vm._v("\n                Главная\n            ")]
           ),
           _vm._v(" "),
           _c(
@@ -35964,29 +36405,16 @@ var render = function () {
               staticClass: "btn btn-outline-success btn-outline-secondary me-2",
               attrs: { to: { name: "Booking" }, type: "button" },
             },
-            [_vm._v("\n                    Бронирования\n                ")]
+            [_vm._v("\n                Бронирования\n            ")]
           ),
           _vm._v(" "),
           _c(
-            "div",
-            { style: { marginLeft: "auto" } },
-            [
-              _c("date-picker", {
-                attrs: {
-                  format: "YYYY-MM-DD",
-                  type: "format",
-                  valueType: "date",
-                },
-                model: {
-                  value: _vm.date,
-                  callback: function ($$v) {
-                    _vm.date = $$v
-                  },
-                  expression: "date",
-                },
-              }),
-            ],
-            1
+            "router-link",
+            {
+              staticClass: "btn btn-outline-success btn-outline-secondary",
+              attrs: { to: { name: "History" }, type: "button" },
+            },
+            [_vm._v("\n                История\n            ")]
           ),
         ],
         1
@@ -36020,6 +36448,26 @@ var render = function () {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
+    _c(
+      "div",
+      { staticClass: "d-flex flex-row align-items-center mt-3" },
+      [
+        _c("span", { staticClass: "me-1" }, [_vm._v(_vm._s(_vm.dateFilter))]),
+        _vm._v(" "),
+        _c("date-picker", {
+          attrs: { format: "YYYY-MM-DD", type: "format", valueType: "date" },
+          model: {
+            value: _vm.today,
+            callback: function ($$v) {
+              _vm.today = $$v
+            },
+            expression: "today",
+          },
+        }),
+      ],
+      1
+    ),
+    _vm._v(" "),
     _c("div", { staticClass: "ml-auto my-3" }, [
       _c("span", [_vm._v("Вы выбрали ресторан на ")]),
       _vm._v(" "),
@@ -36034,6 +36482,7 @@ var render = function () {
               expression: "place",
             },
           ],
+          style: { height: "30px" },
           attrs: { name: "places" },
           on: {
             change: [
@@ -36163,10 +36612,7 @@ var render = function () {
         _vm._v(" "),
         _c(
           "label",
-          {
-            staticClass: "btn btn-outline-secondary",
-            attrs: { for: "addTable" },
-          },
+          { staticClass: "btn btn-outline-info", attrs: { for: "addTable" } },
           [_vm._v("Добавить стол")]
         ),
         _vm._v(" "),
@@ -36208,9 +36654,16 @@ var render = function () {
             },
           ],
           staticClass: "btn-check",
-          attrs: { type: "radio", value: "waitingList", id: "waitingList" },
+          attrs: {
+            type: "radio",
+            value: "waitingList",
+            "data-bs-toggle": "modal",
+            "data-bs-target": "#waitingList",
+            id: "waitingListButton",
+          },
           domProps: { checked: _vm._q(_vm.actionType, "waitingList") },
           on: {
+            click: _vm.fetchWaitingList,
             change: function ($event) {
               _vm.actionType = "waitingList"
             },
@@ -36221,35 +36674,9 @@ var render = function () {
           "label",
           {
             staticClass: "btn btn-outline-warning",
-            attrs: { for: "waitingList" },
+            attrs: { for: "waitingListButton" },
           },
           [_vm._v("Лист ожидания")]
-        ),
-        _vm._v(" "),
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.actionType,
-              expression: "actionType",
-            },
-          ],
-          staticClass: "btn-check",
-          attrs: { type: "radio", value: "history", id: "history" },
-          domProps: { checked: _vm._q(_vm.actionType, "history") },
-          on: {
-            click: _vm.fetchLogs,
-            change: function ($event) {
-              _vm.actionType = "history"
-            },
-          },
-        }),
-        _vm._v(" "),
-        _c(
-          "label",
-          { staticClass: "btn btn-outline-info", attrs: { for: "history" } },
-          [_vm._v("История")]
         ),
       ]
     ),
@@ -36262,7 +36689,7 @@ var render = function () {
     _vm._v(" "),
     _vm.loading
       ? _c("div", { staticClass: "text-center" }, [_vm._m(0)])
-      : !_vm.loading && _vm.layout !== null
+      : _vm.layout !== []
       ? _c(
           "div",
           [
@@ -36286,7 +36713,7 @@ var render = function () {
                   },
                 },
               },
-              _vm._l(_vm.layout, function (item) {
+              _vm._l(_vm.tables, function (item) {
                 return _c(
                   "grid-item",
                   {
@@ -36381,8 +36808,20 @@ var render = function () {
                       _vm._v(" "),
                       _c("div", { staticClass: "no-drag text-center" }, [
                         _c("span", { style: { color: "white" } }, [
-                          _vm._v(_vm._s(Number(item.i))),
+                          _vm._v(
+                            _vm._s(Number(item.i) === 0 ? null : Number(item.i))
+                          ),
                         ]),
+                        _vm._v(" "),
+                        item.bbq
+                          ? _c("img", {
+                              style: { width: "25px" },
+                              attrs: {
+                                src: (__webpack_require__(/*! ../../svg/bbq.svg */ "./resources/svg/bbq.svg")["default"]),
+                                alt: "bbq",
+                              },
+                            })
+                          : _vm._e(),
                         _vm._v(" "),
                         _c("br"),
                       ]),
@@ -36439,15 +36878,17 @@ var render = function () {
                                     : _vm._e(),
                                   _vm._v(" "),
                                   _c("span", { staticClass: "align-middle" }, [
-                                    _vm._v(
-                                      _vm._s(item.time) +
-                                        ". " +
-                                        _vm._s(item.name) +
-                                        " [" +
-                                        _vm._s(item.amount) +
-                                        "] | " +
-                                        _vm._s(item.note)
-                                    ),
+                                    _c("b", [
+                                      _vm._v(
+                                        _vm._s(item.time) +
+                                          ". " +
+                                          _vm._s(item.name) +
+                                          " [" +
+                                          _vm._s(item.amount) +
+                                          "] | " +
+                                          _vm._s(item.note)
+                                      ),
+                                    ]),
                                   ]),
                                 ]
                               )
@@ -36464,24 +36905,6 @@ var render = function () {
           ],
           1
         )
-      : _vm.logs !== null
-      ? _c("div", [
-          _c(
-            "ul",
-            { staticClass: "list-group" },
-            _vm._l(_vm.logs, function (log) {
-              return _c(
-                "li",
-                { staticClass: "list-group-item" },
-                _vm._l(log, function (item) {
-                  return _c("span", [_vm._v(_vm._s(item.created_at))])
-                }),
-                0
-              )
-            }),
-            0
-          ),
-        ])
       : _vm._e(),
     _vm._v(" "),
     _c(
@@ -36509,7 +36932,10 @@ var render = function () {
                 _c("div", { staticClass: "mb-3" }, [
                   _c(
                     "label",
-                    { staticClass: "form-label", attrs: { for: "guestName" } },
+                    {
+                      staticClass: "form-label",
+                      attrs: { for: "guestNameAdd" },
+                    },
                     [_vm._v("Имя")]
                   ),
                   _vm._v(" "),
@@ -36525,7 +36951,7 @@ var render = function () {
                     staticClass: "form-control",
                     attrs: {
                       type: "text",
-                      id: "guestName",
+                      id: "guestNameAdd",
                       placeholder: "Иван Иванов",
                     },
                     domProps: { value: _vm.reservation.name },
@@ -36543,7 +36969,10 @@ var render = function () {
                 _c("div", { staticClass: "mb-3" }, [
                   _c(
                     "label",
-                    { staticClass: "form-label", attrs: { for: "guestPhone" } },
+                    {
+                      staticClass: "form-label",
+                      attrs: { for: "guestPhoneAdd" },
+                    },
                     [_vm._v("Телефон")]
                   ),
                   _vm._v(" "),
@@ -36558,8 +36987,8 @@ var render = function () {
                     ],
                     staticClass: "form-control",
                     attrs: {
-                      type: "number",
-                      id: "guestPhone",
+                      type: "text",
+                      id: "guestPhoneAdd",
                       placeholder: "+7(xxx)xxx-xx-xx",
                     },
                     domProps: { value: _vm.reservation.phone },
@@ -36574,7 +37003,16 @@ var render = function () {
                   }),
                 ]),
                 _vm._v(" "),
-                _c("div", { staticClass: "form-check form-switch mb-3" }, [
+                _c("div", { staticClass: "mb-3" }, [
+                  _c(
+                    "label",
+                    {
+                      staticClass: "form-label",
+                      attrs: { for: "guestPrepaymentAdd" },
+                    },
+                    [_vm._v("Предоплата")]
+                  ),
+                  _vm._v(" "),
                   _c("input", {
                     directives: [
                       {
@@ -36584,57 +37022,35 @@ var render = function () {
                         expression: "reservation.prepayment",
                       },
                     ],
-                    staticClass: "form-check-input",
-                    attrs: { type: "checkbox", id: "flexSwitchCheckDefault" },
-                    domProps: {
-                      checked: Array.isArray(_vm.reservation.prepayment)
-                        ? _vm._i(_vm.reservation.prepayment, null) > -1
-                        : _vm.reservation.prepayment,
+                    staticClass: "form-control",
+                    attrs: {
+                      type: "number",
+                      id: "guestPrepaymentAdd",
+                      placeholder: "Сумма предоплаты",
                     },
+                    domProps: { value: _vm.reservation.prepayment },
                     on: {
-                      change: function ($event) {
-                        var $$a = _vm.reservation.prepayment,
-                          $$el = $event.target,
-                          $$c = $$el.checked ? true : false
-                        if (Array.isArray($$a)) {
-                          var $$v = null,
-                            $$i = _vm._i($$a, $$v)
-                          if ($$el.checked) {
-                            $$i < 0 &&
-                              _vm.$set(
-                                _vm.reservation,
-                                "prepayment",
-                                $$a.concat([$$v])
-                              )
-                          } else {
-                            $$i > -1 &&
-                              _vm.$set(
-                                _vm.reservation,
-                                "prepayment",
-                                $$a.slice(0, $$i).concat($$a.slice($$i + 1))
-                              )
-                          }
-                        } else {
-                          _vm.$set(_vm.reservation, "prepayment", $$c)
+                      input: function ($event) {
+                        if ($event.target.composing) {
+                          return
                         }
+                        _vm.$set(
+                          _vm.reservation,
+                          "prepayment",
+                          $event.target.value
+                        )
                       },
                     },
                   }),
-                  _vm._v(" "),
-                  _c(
-                    "label",
-                    {
-                      staticClass: "form-check-label",
-                      attrs: { for: "flexSwitchCheckDefault" },
-                    },
-                    [_vm._v("Предоплата")]
-                  ),
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "mb-3" }, [
                   _c(
                     "label",
-                    { staticClass: "form-label", attrs: { for: "note" } },
+                    {
+                      staticClass: "form-label",
+                      attrs: { for: "guestNoteAdd" },
+                    },
                     [_vm._v("Дополнительная информация")]
                   ),
                   _vm._v(" "),
@@ -36650,7 +37066,7 @@ var render = function () {
                     staticClass: "form-control",
                     attrs: {
                       type: "text",
-                      id: "note",
+                      id: "guestNoteAdd",
                       placeholder: "На заметку",
                     },
                     domProps: { value: _vm.reservation.note },
@@ -36679,6 +37095,7 @@ var render = function () {
                           expression: "reservation.amount",
                         },
                       ],
+                      style: { width: "50px" },
                       on: {
                         change: [
                           function ($event) {
@@ -36718,11 +37135,61 @@ var render = function () {
                       _c("option", { attrs: { value: "5" } }, [_vm._v("5")]),
                       _vm._v(" "),
                       _c("option", { attrs: { value: "6" } }, [_vm._v("6")]),
-                      _vm._v(" "),
-                      _c("option", { attrs: { value: "6+" } }, [
-                        _vm._v("Больше 6"),
-                      ]),
                     ]
+                  ),
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "mb-3" }, [
+                  _c("span", [_vm._v("№ стола")]),
+                  _vm._v(" "),
+                  _c(
+                    "select",
+                    {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.reservation.table_id,
+                          expression: "reservation.table_id",
+                        },
+                      ],
+                      on: {
+                        change: [
+                          function ($event) {
+                            var $$selectedVal = Array.prototype.filter
+                              .call($event.target.options, function (o) {
+                                return o.selected
+                              })
+                              .map(function (o) {
+                                var val = "_value" in o ? o._value : o.value
+                                return val
+                              })
+                            _vm.$set(
+                              _vm.reservation,
+                              "table_id",
+                              $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            )
+                          },
+                          function ($event) {
+                            _vm.reservation.table_id = $event.target.value
+                          },
+                        ],
+                      },
+                    },
+                    _vm._l(_vm.layout, function (table) {
+                      return _c(
+                        "option",
+                        {
+                          key: table.id,
+                          attrs: { selected: "" },
+                          domProps: { value: table.id },
+                        },
+                        [_vm._v(_vm._s(table.i))]
+                      )
+                    }),
+                    0
                   ),
                 ]),
                 _vm._v(" "),
@@ -36839,7 +37306,10 @@ var render = function () {
                 _c("div", { staticClass: "mb-3" }, [
                   _c(
                     "label",
-                    { staticClass: "form-label", attrs: { for: "guestName" } },
+                    {
+                      staticClass: "form-label",
+                      attrs: { for: "guestNameUpdate" },
+                    },
                     [_vm._v("Guest name")]
                   ),
                   _vm._v(" "),
@@ -36855,7 +37325,7 @@ var render = function () {
                     staticClass: "form-control",
                     attrs: {
                       type: "text",
-                      id: "guestName",
+                      id: "guestNameUpdate",
                       placeholder: "Brad Pitt",
                     },
                     domProps: { value: _vm.reservation.name },
@@ -36873,7 +37343,10 @@ var render = function () {
                 _c("div", { staticClass: "mb-3" }, [
                   _c(
                     "label",
-                    { staticClass: "form-label", attrs: { for: "guestPhone" } },
+                    {
+                      staticClass: "form-label",
+                      attrs: { for: "guestPhoneUpdate" },
+                    },
                     [_vm._v("Phone number")]
                   ),
                   _vm._v(" "),
@@ -36889,7 +37362,7 @@ var render = function () {
                     staticClass: "form-control",
                     attrs: {
                       type: "number",
-                      id: "guestPhone",
+                      id: "guestPhoneUpdate",
                       placeholder: "+7(xxx)xxx-xx-xx",
                     },
                     domProps: { value: _vm.reservation.phone },
@@ -36904,7 +37377,16 @@ var render = function () {
                   }),
                 ]),
                 _vm._v(" "),
-                _c("div", { staticClass: "form-check form-switch mb-3" }, [
+                _c("div", { staticClass: "mb-3" }, [
+                  _c(
+                    "label",
+                    {
+                      staticClass: "form-label",
+                      attrs: { for: "guestPrepaymentUpdate" },
+                    },
+                    [_vm._v("Предоплата")]
+                  ),
+                  _vm._v(" "),
                   _c("input", {
                     directives: [
                       {
@@ -36914,57 +37396,35 @@ var render = function () {
                         expression: "reservation.prepayment",
                       },
                     ],
-                    staticClass: "form-check-input",
-                    attrs: { type: "checkbox", id: "flexSwitchCheckDefault" },
-                    domProps: {
-                      checked: Array.isArray(_vm.reservation.prepayment)
-                        ? _vm._i(_vm.reservation.prepayment, null) > -1
-                        : _vm.reservation.prepayment,
+                    staticClass: "form-control",
+                    attrs: {
+                      type: "number",
+                      id: "guestPrepaymentUpdate",
+                      placeholder: "Сумма предоплаты",
                     },
+                    domProps: { value: _vm.reservation.prepayment },
                     on: {
-                      change: function ($event) {
-                        var $$a = _vm.reservation.prepayment,
-                          $$el = $event.target,
-                          $$c = $$el.checked ? true : false
-                        if (Array.isArray($$a)) {
-                          var $$v = null,
-                            $$i = _vm._i($$a, $$v)
-                          if ($$el.checked) {
-                            $$i < 0 &&
-                              _vm.$set(
-                                _vm.reservation,
-                                "prepayment",
-                                $$a.concat([$$v])
-                              )
-                          } else {
-                            $$i > -1 &&
-                              _vm.$set(
-                                _vm.reservation,
-                                "prepayment",
-                                $$a.slice(0, $$i).concat($$a.slice($$i + 1))
-                              )
-                          }
-                        } else {
-                          _vm.$set(_vm.reservation, "prepayment", $$c)
+                      input: function ($event) {
+                        if ($event.target.composing) {
+                          return
                         }
+                        _vm.$set(
+                          _vm.reservation,
+                          "prepayment",
+                          $event.target.value
+                        )
                       },
                     },
                   }),
-                  _vm._v(" "),
-                  _c(
-                    "label",
-                    {
-                      staticClass: "form-check-label",
-                      attrs: { for: "flexSwitchCheckDefault" },
-                    },
-                    [_vm._v("Предоплата")]
-                  ),
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "mb-3" }, [
                   _c(
                     "label",
-                    { staticClass: "form-label", attrs: { for: "note" } },
+                    {
+                      staticClass: "form-label",
+                      attrs: { for: "guestNoteUpdate" },
+                    },
                     [_vm._v("Note")]
                   ),
                   _vm._v(" "),
@@ -36980,7 +37440,7 @@ var render = function () {
                     staticClass: "form-control",
                     attrs: {
                       type: "text",
-                      id: "note",
+                      id: "guestNoteUpdate",
                       placeholder: "Important information",
                     },
                     domProps: { value: _vm.reservation.note },
@@ -37195,6 +37655,446 @@ var render = function () {
       {
         staticClass: "modal fade",
         attrs: {
+          id: "waitingList",
+          "aria-hidden": "true",
+          "aria-labelledby": "waitingList",
+          tabindex: "-1",
+        },
+      },
+      [
+        _c("div", { staticClass: "modal-dialog modal-dialog-centered" }, [
+          _c("div", { staticClass: "modal-content" }, [
+            _vm._m(2),
+            _vm._v(" "),
+            _c("div", { staticClass: "modal-body" }, [
+              _vm.waitingList !== []
+                ? _c(
+                    "ul",
+                    { style: { margin: "0px", padding: "0px" } },
+                    _vm._l(_vm.waitingList.reservations, function (item) {
+                      return _c(
+                        "li",
+                        {
+                          style: {
+                            listStyle: "none",
+                            padding: "0",
+                            margin: "0",
+                            backgroundColor: _vm.colorByTime(item.time),
+                            color: "",
+                            fontSize: "12px",
+                            cursor: "pointer",
+                            borderBottom: "1px solid black",
+                          },
+                          attrs: {
+                            "data-bs-toggle": "modal",
+                            "data-bs-target": "#updateGuestInfo",
+                          },
+                          on: {
+                            click: function ($event) {
+                              return _vm.updateGuestInfo(item)
+                            },
+                          },
+                        },
+                        [
+                          _vm._v(
+                            "\n                            " +
+                              _vm._s(
+                                item.created_at
+                                  ? _vm.getExactTime(new Date(item.created_at))
+                                  : null
+                              ) +
+                              ". " +
+                              _vm._s(item.name) +
+                              " [" +
+                              _vm._s(item.amount) +
+                              "] | " +
+                              _vm._s(item.note) +
+                              "\n                        "
+                          ),
+                        ]
+                      )
+                    }),
+                    0
+                  )
+                : _vm._e(),
+            ]),
+            _vm._v(" "),
+            _vm._m(3),
+          ]),
+        ]),
+      ]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          "data-bs-backdrop": "static",
+          "data-bs-keyboard": "false",
+          id: "sendToWaitingList",
+          tabindex: "-1",
+          "aria-labelledby": "sendToWaitingList",
+          "aria-hidden": "true",
+        },
+      },
+      [
+        _c("div", { staticClass: "modal-dialog" }, [
+          _c("div", { staticClass: "modal-content" }, [
+            _c("div", { staticClass: "modal-header" }, [
+              _c(
+                "h5",
+                {
+                  staticClass: "modal-title",
+                  attrs: { id: "sendToWaitingListTitle" },
+                },
+                [_vm._v("Лист ожидания")]
+              ),
+              _vm._v(" "),
+              _c("button", {
+                staticClass: "btn-close",
+                attrs: {
+                  type: "button",
+                  "data-bs-dismiss": "modal",
+                  "aria-label": "Close",
+                },
+                on: {
+                  click: function () {
+                    return _vm.clearReservationInfo()
+                  },
+                },
+              }),
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "modal-body" },
+              [
+                _c("div", { staticClass: "mb-3" }, [
+                  _c(
+                    "label",
+                    { staticClass: "form-label", attrs: { for: "guestName" } },
+                    [_vm._v("Guest name")]
+                  ),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.reservation.name,
+                        expression: "reservation.name",
+                      },
+                    ],
+                    staticClass: "form-control",
+                    attrs: {
+                      type: "text",
+                      id: "guestName",
+                      placeholder: "Brad Pitt",
+                    },
+                    domProps: { value: _vm.reservation.name },
+                    on: {
+                      input: function ($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.reservation, "name", $event.target.value)
+                      },
+                    },
+                  }),
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "mb-3" }, [
+                  _c(
+                    "label",
+                    { staticClass: "form-label", attrs: { for: "guestPhone" } },
+                    [_vm._v("Phone number")]
+                  ),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.reservation.phone,
+                        expression: "reservation.phone",
+                      },
+                    ],
+                    staticClass: "form-control",
+                    attrs: {
+                      type: "number",
+                      id: "guestPhone",
+                      placeholder: "+7(xxx)xxx-xx-xx",
+                    },
+                    domProps: { value: _vm.reservation.phone },
+                    on: {
+                      input: function ($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.reservation, "phone", $event.target.value)
+                      },
+                    },
+                  }),
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "mb-3" }, [
+                  _c(
+                    "label",
+                    {
+                      staticClass: "form-label",
+                      attrs: { for: "guestPrepayment" },
+                    },
+                    [_vm._v("Предоплата")]
+                  ),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.reservation.prepayment,
+                        expression: "reservation.prepayment",
+                      },
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "number", id: "guestPrepayment" },
+                    domProps: { value: _vm.reservation.prepayment },
+                    on: {
+                      input: function ($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.reservation,
+                          "prepayment",
+                          $event.target.value
+                        )
+                      },
+                    },
+                  }),
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "mb-3" }, [
+                  _c(
+                    "label",
+                    { staticClass: "form-label", attrs: { for: "note" } },
+                    [_vm._v("Note")]
+                  ),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.reservation.note,
+                        expression: "reservation.note",
+                      },
+                    ],
+                    staticClass: "form-control",
+                    attrs: {
+                      type: "text",
+                      id: "note",
+                      placeholder: "Important information",
+                    },
+                    domProps: { value: _vm.reservation.note },
+                    on: {
+                      input: function ($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.reservation, "note", $event.target.value)
+                      },
+                    },
+                  }),
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "mb-3" }, [
+                  _c("span", [_vm._v("Количество гостей")]),
+                  _vm._v(" "),
+                  _c(
+                    "select",
+                    {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.reservation.amount,
+                          expression: "reservation.amount",
+                        },
+                      ],
+                      on: {
+                        change: [
+                          function ($event) {
+                            var $$selectedVal = Array.prototype.filter
+                              .call($event.target.options, function (o) {
+                                return o.selected
+                              })
+                              .map(function (o) {
+                                var val = "_value" in o ? o._value : o.value
+                                return val
+                              })
+                            _vm.$set(
+                              _vm.reservation,
+                              "amount",
+                              $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            )
+                          },
+                          function ($event) {
+                            _vm.reservation.amount = $event.target.value
+                          },
+                        ],
+                      },
+                    },
+                    [
+                      _c("option", { attrs: { value: "1", selected: "" } }, [
+                        _vm._v("1"),
+                      ]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "2" } }, [_vm._v("2")]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "3" } }, [_vm._v("3")]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "4" } }, [_vm._v("4")]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "5" } }, [_vm._v("5")]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "6" } }, [_vm._v("6")]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "6+" } }, [
+                        _vm._v("Больше 6"),
+                      ]),
+                    ]
+                  ),
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "mb-3" }, [
+                  _c("span", [_vm._v("№ стола")]),
+                  _vm._v(" "),
+                  _c(
+                    "select",
+                    {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.reservation.table_id,
+                          expression: "reservation.table_id",
+                        },
+                      ],
+                      on: {
+                        change: [
+                          function ($event) {
+                            var $$selectedVal = Array.prototype.filter
+                              .call($event.target.options, function (o) {
+                                return o.selected
+                              })
+                              .map(function (o) {
+                                var val = "_value" in o ? o._value : o.value
+                                return val
+                              })
+                            _vm.$set(
+                              _vm.reservation,
+                              "table_id",
+                              $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            )
+                          },
+                          function ($event) {
+                            _vm.reservation.table_id = $event.target.value
+                          },
+                        ],
+                      },
+                    },
+                    _vm._l(_vm.layout, function (table) {
+                      return _c(
+                        "option",
+                        { key: table.id, domProps: { value: table.id } },
+                        [_vm._v(_vm._s(table.i))]
+                      )
+                    }),
+                    0
+                  ),
+                ]),
+                _vm._v(" "),
+                _c("date-picker", {
+                  attrs: {
+                    format: "YYYY-MM-DD",
+                    type: "date",
+                    valueType: "format",
+                  },
+                  model: {
+                    value: _vm.reservation.date,
+                    callback: function ($$v) {
+                      _vm.$set(_vm.reservation, "date", $$v)
+                    },
+                    expression: "reservation.date",
+                  },
+                }),
+                _vm._v(" "),
+                _c("date-picker", {
+                  attrs: {
+                    "minute-step": 30,
+                    "hour-options": _vm.hours,
+                    format: "HH:mm",
+                    "value-type": "format",
+                    type: "time",
+                    placeholder: "HH:mm",
+                  },
+                  model: {
+                    value: _vm.reservation.time,
+                    callback: function ($$v) {
+                      _vm.$set(_vm.reservation, "time", $$v)
+                    },
+                    expression: "reservation.time",
+                  },
+                }),
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c("div", { staticClass: "modal-footer" }, [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-secondary",
+                  attrs: { type: "button", "data-bs-dismiss": "modal" },
+                  on: {
+                    click: function () {
+                      return _vm.clearReservationInfo()
+                    },
+                  },
+                },
+                [_vm._v("Закрыть")]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-primary",
+                  attrs: { type: "button", "data-bs-dismiss": "modal" },
+                  on: {
+                    click: function () {
+                      return _vm.addToWaitingList()
+                    },
+                  },
+                },
+                [_vm._v("Добавить в ожидание")]
+              ),
+            ]),
+          ]),
+        ]),
+      ]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
           id: "AddOneTable",
           tabindex: "-1",
           "aria-labelledby": "addTableModal",
@@ -37204,15 +38104,19 @@ var render = function () {
       [
         _c("div", { staticClass: "modal-dialog" }, [
           _c("div", { staticClass: "modal-content" }, [
-            _vm._m(2),
+            _vm._m(4),
             _vm._v(" "),
             _c("div", { staticClass: "modal-footer justify-content-center" }, [
               _c(
                 "button",
                 {
-                  staticClass: "btn btn-secondary",
+                  staticClass: "btn btn-primary",
                   attrs: { type: "button", "data-bs-dismiss": "modal" },
-                  on: { click: _vm.addTable },
+                  on: {
+                    click: function ($event) {
+                      return _vm.addTable(false)
+                    },
+                  },
                 },
                 [_vm._v("Add a table")]
               ),
@@ -37220,10 +38124,15 @@ var render = function () {
               _c(
                 "button",
                 {
-                  staticClass: "btn btn-primary",
+                  staticClass: "btn btn-warning",
                   attrs: { type: "button", "data-bs-dismiss": "modal" },
+                  on: {
+                    click: function ($event) {
+                      return _vm.addTable(true)
+                    },
+                  },
                 },
-                [_vm._v("Close")]
+                [_vm._v("Add a table with BBQ")]
               ),
             ]),
           ]),
@@ -37245,7 +38154,7 @@ var render = function () {
       [
         _c("div", { staticClass: "modal-dialog" }, [
           _c("div", { staticClass: "modal-content" }, [
-            _vm._m(3),
+            _vm._m(5),
             _vm._v(" "),
             _c("div", { staticClass: "modal-footer justify-content-center" }, [
               _c(
@@ -37316,6 +38225,46 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "modal-header" }, [
+      _c(
+        "h5",
+        { staticClass: "modal-title", attrs: { id: "waitingListTitle" } },
+        [_vm._v("Лист ожидания")]
+      ),
+      _vm._v(" "),
+      _c("button", {
+        staticClass: "btn-close",
+        attrs: {
+          type: "button",
+          "data-bs-dismiss": "modal",
+          "aria-label": "Close",
+        },
+      }),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-footer" }, [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-primary",
+          attrs: {
+            "data-bs-target": "#sendToWaitingList",
+            "data-bs-toggle": "modal",
+            "data-bs-dismiss": "modal",
+          },
+        },
+        [_vm._v("Добавить в очередь")]
+      ),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
       _c("h5", { staticClass: "modal-title", attrs: { id: "addTableModal" } }, [
         _vm._v("Do you want to add a table?"),
       ]),
@@ -37350,6 +38299,221 @@ var staticRenderFns = [
         },
       }),
     ])
+  },
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/History.vue?vue&type=template&id=270eb80e&scoped=true&":
+/*!*******************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/History.vue?vue&type=template&id=270eb80e&scoped=true& ***!
+  \*******************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function () {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("div", { staticClass: "ml-auto my-3" }, [
+      _c("span", [_vm._v("Вы выбрали ресторан на ")]),
+      _vm._v(" "),
+      _c(
+        "select",
+        {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.place,
+              expression: "place",
+            },
+          ],
+          style: { height: "30px" },
+          attrs: { name: "places" },
+          on: {
+            change: [
+              function ($event) {
+                var $$selectedVal = Array.prototype.filter
+                  .call($event.target.options, function (o) {
+                    return o.selected
+                  })
+                  .map(function (o) {
+                    var val = "_value" in o ? o._value : o.value
+                    return val
+                  })
+                _vm.place = $event.target.multiple
+                  ? $$selectedVal
+                  : $$selectedVal[0]
+              },
+              function ($event) {
+                return _vm.choosePlace($event)
+              },
+            ],
+          },
+        },
+        [
+          _c("option", { attrs: { value: "", selected: "" } }, [_vm._v("...")]),
+          _vm._v(" "),
+          _c("option", { attrs: { value: "place_1" } }, [_vm._v("Марата")]),
+          _vm._v(" "),
+          _c("option", { attrs: { value: "place_2" } }, [
+            _vm._v("Байкальской"),
+          ]),
+          _vm._v(" "),
+          _c("option", { attrs: { value: "place_3" } }, [_vm._v("Горной")]),
+        ]
+      ),
+    ]),
+    _vm._v(" "),
+    _vm.place === ""
+      ? _c("h1", { staticClass: "text-center my-5" }, [
+          _vm._v("Пожалуйста, выберите ресторан"),
+        ])
+      : _vm._e(),
+    _vm._v(" "),
+    _vm.loading
+      ? _c("div", { staticClass: "text-center" }, [_vm._m(0)])
+      : _vm.logs.length
+      ? _c("div", [
+          _c(
+            "ul",
+            { staticClass: "list-group" },
+            _vm._l(_vm.logs, function (log) {
+              return _c(
+                "li",
+                {
+                  staticClass: "list-group-item d-flex",
+                  class: {
+                    "list-group-item-success": log.type === "Бронирование",
+                    "list-group-item-warning": log.type === "Обновление данных",
+                    "list-group-item-danger":
+                      log.type === "Отмена бронирования",
+                  },
+                },
+                [
+                  _vm._v(
+                    "\n                " +
+                      _vm._s(_vm.getUserTime(new Date(log.created_at))) +
+                      ". " +
+                      _vm._s(log.type) +
+                      ". " +
+                      _vm._s(log.text) +
+                      "\n                "
+                  ),
+                  _c("div", { staticClass: "dropdown ms-auto" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-secondary dropdown-toggle",
+                        attrs: {
+                          type: "button",
+                          id: "dropdownMenuClickableInside",
+                          "data-bs-toggle": "dropdown",
+                          "data-bs-auto-close": "outside",
+                          "aria-expanded": "false",
+                        },
+                      },
+                      [
+                        _vm._v(
+                          "\n                        Инфо\n                    "
+                        ),
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "ul",
+                      {
+                        staticClass: "dropdown-menu p-1",
+                        style: { minWidth: "200px" },
+                        attrs: {
+                          "aria-labelledby": "dropdownMenuClickableInside",
+                        },
+                      },
+                      [
+                        _c("li", [
+                          _c("p", [_vm._v("Имя: " + _vm._s(log.name))]),
+                        ]),
+                        _vm._v(" "),
+                        _c("li", [
+                          _c("p", [_vm._v("Телефон: " + _vm._s(log.phone))]),
+                        ]),
+                        _vm._v(" "),
+                        _c("li", [
+                          _c("p", [_vm._v("Дата: " + _vm._s(log.date))]),
+                        ]),
+                        _vm._v(" "),
+                        _c("li", [
+                          _c("p", [_vm._v("Время: " + _vm._s(log.time))]),
+                        ]),
+                        _vm._v(" "),
+                        _c("li", [
+                          _c("p", [_vm._v("Cтол №: " + _vm._s(log.table_id))]),
+                        ]),
+                        _vm._v(" "),
+                        _c("li", [
+                          _c("p", [
+                            _vm._v(
+                              "Ресторан: " +
+                                _vm._s(
+                                  log.place_id === 1
+                                    ? "Марата"
+                                    : log.place_id === 2
+                                    ? "Байкальская"
+                                    : log.place_id === 3
+                                    ? "Горная"
+                                    : null
+                                )
+                            ),
+                          ]),
+                        ]),
+                        _vm._v(" "),
+                        _c("li", [
+                          _c("p", [
+                            _vm._v(
+                              "Предоплата : " + _vm._s(log.prepayment) + "р."
+                            ),
+                          ]),
+                        ]),
+                      ]
+                    ),
+                  ]),
+                ]
+              )
+            }),
+            0
+          ),
+        ])
+      : _c("div", [
+          _c("h2", { staticClass: "text-center" }, [
+            _vm._v("Пока нет никаких записей"),
+          ]),
+        ]),
+  ])
+}
+var staticRenderFns = [
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      {
+        staticClass: "spinner-grow mt-5 text-success",
+        staticStyle: { width: "6rem", height: "6rem" },
+        attrs: { role: "status" },
+      },
+      [_c("span", { staticClass: "visually-hidden" }, [_vm._v("Loading...")])]
+    )
   },
 ]
 render._withStripped = true

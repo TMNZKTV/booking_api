@@ -8,12 +8,9 @@
                 <router-link class="btn btn-outline-success btn-outline-secondary me-2" :to="{name: 'Booking'}" type="button">
                     Бронирования
                 </router-link>
-<!--                <router-link class="btn btn-outline-success btn-outline-secondary" :to="{name: 'History'}" type="button">-->
-<!--                    История-->
-<!--                </router-link>-->
-                <div :style="{marginLeft: 'auto'}">
-                    <date-picker v-model="date" format="YYYY-MM-DD" type="format" valueType="date"></date-picker>
-                </div>
+                <router-link class="btn btn-outline-success btn-outline-secondary" :to="{name: 'History'}" type="button">
+                    История
+                </router-link>
             </form>
         </nav>
 
@@ -24,15 +21,9 @@
 </template>
 
 <script>
-import DatePicker from "vue2-datepicker";
+
 export default {
     name: "App",
-    components: {DatePicker},
-    data() {
-        return {
-            date: new Date()
-        }
-    }
 }
 </script>
 

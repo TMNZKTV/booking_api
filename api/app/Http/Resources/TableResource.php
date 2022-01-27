@@ -22,6 +22,7 @@ class TableResource extends JsonResource
             'w' => $this->w,
             'h' => $this->h,
             'i' => $this->i,
+            'bbq' => $this->bbq,
             'place_id' => $this->place_id,
             'reservations'=> ReservationResource::collection($this->reservations)
         ];
