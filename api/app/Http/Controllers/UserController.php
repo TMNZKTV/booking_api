@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ThirdLayout;
 use Illuminate\Http\Request;
 
-class ThirdLayoutController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +13,7 @@ class ThirdLayoutController extends Controller
      */
     public function index()
     {
-        return $layout = ThirdLayout::all();
+        //
     }
 
     /**
@@ -25,8 +24,7 @@ class ThirdLayoutController extends Controller
      */
     public function store(Request $request)
     {
-        // Возвращаю ТретийМакет, на котором вызываю метод Create, куда передаю запрос (в запросе выбираю all())
-        return ThirdLayout::create($request->all());
+        //
     }
 
     /**
@@ -47,12 +45,9 @@ class ThirdLayoutController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ThirdLayout $layout, $id)
+    public function update(Request $request, $id)
     {
-        $table = ThirdLayout::findOrFail($id);
-        $table->update($request->all());
-
-        return $layout = ThirdLayout::all();
+        //
     }
 
     /**
@@ -61,8 +56,8 @@ class ThirdLayoutController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, ThirdLayout $layout, $id)
+    public function destroy($id)
     {
-        return ThirdLayout::destroy($id);
+        //
     }
 }
