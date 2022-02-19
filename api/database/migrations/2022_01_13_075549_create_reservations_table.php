@@ -23,8 +23,8 @@ class CreateReservationsTable extends Migration
             $table->string('phone')->nullable();
             $table->bigInteger('prepayment')->unsigned()->default('0');
             $table->bigInteger('amount')->unsigned()->default('1');
-            $table->string('date');
-            $table->string('time');
+            $table->date('date');
+            $table->string('time')->nullable();
             $table->string('note')->nullable();
         });
     }

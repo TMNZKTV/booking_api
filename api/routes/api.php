@@ -1,12 +1,10 @@
 <?php
 
 
-use App\Http\Controllers\TableController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ReservationController;
-use \App\Http\Controllers\LogController;
-use \App\Http\Controllers\WaitingUserController;
+// Удалил путь к контроллерам, т.к. в RouteServiceProdiver указан полный путь на 29 строке
+
 
 
 /*
@@ -24,10 +22,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::apiResources([
-    'tables' => TableController::class,
-    'reservations' => ReservationController::class,
-    'logs'=> LogController::class,
-    'waiting'=> WaitingUserController::class
-]);
+// Защитил все роуты миддлвером от Laravel Sanctum
+Route::group(['middleware' => 'auth:sanctum'], function() {
+    Route::apiResources([
+        'tables' => TableController::class,
+        'reservations' => ReservationController::class,
+        'logs'=> LogController::class,
+        'waiting'=> WaitingUserController::class,
+        'user' => UserController::class
+    ]);
+});
 

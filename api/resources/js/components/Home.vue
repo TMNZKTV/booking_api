@@ -1,5 +1,7 @@
 <template>
-    <h1>This is Home page</h1>
+    <div>
+        <h1 class="text-center my-3">Домашнаяя страница в стадии разработки...</h1>
+    </div>
 </template>
 
 <script>

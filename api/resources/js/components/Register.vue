@@ -3,8 +3,9 @@
         <form
             class="g-3 needs-validation"
             novalidate
-            @submit.prevent="onSubmit"
+            @submit.prevent="register"
         >
+            <!-- Имя -->
             <div class="col-md-4 mx-auto pt-3">
                 <label for="register_name" class="form-label">Имя</label>
                 <input
@@ -17,18 +18,30 @@
                 />
                 <div class="valid-feedback">Looks good!</div>
             </div>
+            <!-- Почта -->
             <div class="col-md-4 mx-auto pt-3">
                 <label for="register_email" class="form-label">Email</label>
-                <input
-                    type="email"
-                    class="form-control"
-                    id="register_email"
-                    v-model="email"
-                    required
-                    placeholder="Укажите почту..."
-                />
+                <div class="d-flex flex-row">
+                    <input
+                        type="email"
+                        class="form-control"
+                        id="register_email"
+                        v-model="email"
+                        required
+                        placeholder="Почта..."
+                    />
+                    <input
+                        type="email"
+                        class="form-control"
+                        v-model="kimchiEmail"
+                        required
+                        disabled
+                    />
+                </div>
+
                 <div class="valid-feedback">Looks good!</div>
             </div>
+            <!-- Пароль -->
             <div class="col-md-4 mx-auto pt-3">
                 <label for="register_password" class="form-label">Пароль</label>
                 <input
@@ -37,7 +50,22 @@
                     id="register_password"
                     v-model="password"
                     required
-                    placeholder="Не забудьте пароль..."
+                    placeholder="Придумайте пароль..."
+                />
+                <div class="valid-feedback">Looks good!</div>
+            </div>
+            <!-- Подвердите пароль -->
+            <div class="col-md-4 mx-auto pt-3">
+                <label for="password_confirmation" class="form-label"
+                    >Повторите пароль</label
+                >
+                <input
+                    type="password"
+                    class="form-control"
+                    id="password_confirmation"
+                    v-model="password_confirmation"
+                    required
+                    placeholder="Повторите пароль..."
                 />
                 <div class="valid-feedback">Looks good!</div>
             </div>
@@ -60,35 +88,37 @@ export default {
     data() {
         return {
             name: "",
+            kimchiEmail: "@kimchi.ru",
             email: "",
             password: "",
+            password_confirmation: "",
         };
     },
-    setup() {},
-    validations() {},
-    mounted() {},
     methods: {
-        onSubmit() {
-            this.$router.push("/");
-        },
-        async onSubmit() {
-            console.log("Submit works!");
-
-            const formData = {
-                email: this.email,
-                password: this.password,
-                name: this.name,
-            };
-            this.$router.push("/");
-
-            // try {
-            //     await axios.post(
-            //         "http://booking-api.test/api/register",
-            //         formData
-            //     );
-            // } catch (error) {
-            //     console.log(error);
-            // }
+        register() {
+            // Отправляем запрос за X-XSRF-TOKEN
+            axios.get("/sanctum/csrf-cookie").then((response) => {
+                // Получив, отправляем запрос на /register с объектом (данные пользователя)
+                axios
+                    .post("/register", {
+                        name: this.name,
+                        email: this.email + this.kimchiEmail,
+                        password: this.password,
+                        password_confirmation: this.password_confirmation,
+                    })
+                    .then((res) => {
+                        // В локалсторедж сохраняем токен
+                        localStorage.setItem(
+                            "token",
+                            res.config.headers["X-XSRF-TOKEN"]
+                        );
+                        this.$router.push({ name: "Home" });
+                    })
+                    .catch((error) => {
+                        // Объект ошибки для дальнейшей работы
+                        console.log(error);
+                    });
+            });
         },
     },
 };

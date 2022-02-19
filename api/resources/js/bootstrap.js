@@ -1,4 +1,6 @@
-window._ = require('lodash');
+import router from "./app";
+
+window._ = require("lodash");
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
@@ -6,9 +8,25 @@ window._ = require('lodash');
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
 
-window.axios = require('axios');
+window.axios = require("axios");
 
-window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+window.axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
+
+axios.defaults.withCredentials = true;
+
+// В случае, если Токен есть, но недействительный, полученные ошибки 401 или 419 будут сигналом к отправке на Логин страницу
+window.axios.interceptors.response.use({}, (err) => {
+    if (err.response.status === 401 || err.response.status === 419) {
+        // Забираем старый Токен из локалсторедж
+        const token = localStorage.getItem("token");
+        // Проверяем, не пустой ли он
+        if (token) {
+            // Удаляем старый Токен
+            localStorage.removeItem("token");
+        }
+        router.push({ name: "Login" });
+    }
+});
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening

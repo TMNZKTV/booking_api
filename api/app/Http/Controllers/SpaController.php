@@ -6,7 +6,13 @@ use Illuminate\Http\Request;
 
 class SpaController extends Controller
 {
-    public function index() {
+    // Для предыдущего рабочего решения
+    // public function index() {
+    //     return view('index');
+    // }
+    
+    public function __invoke() {
         return view('index');
     }
 }
+

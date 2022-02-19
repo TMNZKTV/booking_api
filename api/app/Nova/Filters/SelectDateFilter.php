@@ -20,6 +20,6 @@ class SelectDateFilter extends DateFilter
     {
         $value = Carbon::parse($value);
 
-        return $query->where('date', '=', $value);
+        return $query->where('date', '=', Carbon::parse($value));
     }
 }

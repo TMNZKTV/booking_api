@@ -13,4 +13,11 @@ use App\Http\Controllers\SpaController;
 |
 */
 
-Route::get('/{any}', [SpaController::class, 'index'])->where('any', '.*');
+// Рабочее решение
+//Route::get('/{any}', [SpaController::class, 'index'])->where('any', '^((?!api|nova|nova-api).)*$');
+
+// Решение с invoke методом в SpaController
+Route::get('/{any}', 'SpaController')->where('any', '^((?!api|nova|nova-api).)*$');
+
+Auth::routes();
+
