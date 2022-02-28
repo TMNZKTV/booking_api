@@ -17,15 +17,20 @@ class CreateReservationsTable extends Migration
         Schema::create('reservations', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->foreignId('table_id')->constrained();
-            $table->foreignId('place_id')->constrained();
             $table->string('name');
             $table->string('phone')->nullable();
-            $table->bigInteger('prepayment')->unsigned()->default('0');
+            $table->boolean('conflict')->default(0);
+            $table->string('visit_type')->default('none');
             $table->bigInteger('amount')->unsigned()->default('1');
+            $table->string('note')->nullable();
+            $table->bigInteger('prepayment')->unsigned()->default('0');
+            $table->foreignId('table_id')->constrained();
+            $table->foreignId('place_id')->constrained();
             $table->date('date');
             $table->string('time')->nullable();
-            $table->string('note')->nullable();
+            $table->string('responsible_email')->nullable();
+            $table->string('responsible_name')->nullable();
+
         });
     }
 

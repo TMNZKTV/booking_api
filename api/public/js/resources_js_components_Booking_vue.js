@@ -1086,11 +1086,321 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Booking",
+  props: ["user"],
   components: {
     GridLayout: (vue_grid_layout__WEBPACK_IMPORTED_MODULE_1___default().GridLayout),
     GridItem: (vue_grid_layout__WEBPACK_IMPORTED_MODULE_1___default().GridItem),
@@ -1109,7 +1419,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       selected: "Ожидание",
       waitingList: null,
       logs: [],
-      colors: ["#FFFF8F", "#19DF01", "#FE6126"],
+      colors: ["#FFFF8F", "#19DF01", "#EE4B2B"],
       loading: true,
       error: null,
       showModal: false,
@@ -1128,13 +1438,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       reservation: {
         name: "",
         phone: "",
+        conflict: false,
+        visit_type: "Обычный визит",
+        amount: 1,
         note: "",
         prepayment: 0,
-        amount: 1,
+        table_id: null,
+        place_id: null,
         date: new Date(),
         time: "",
-        table_id: null,
-        place_id: null
+        responsible_email: "",
+        responsible_name: ""
       }
     };
   },
@@ -1146,9 +1460,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
+              console.log(_this.user);
               _this.loading = false;
+              axios.get("api/user").then(function (response) {
+                _this.reservation.responsible_name = response.data.name;
+                _this.reservation.responsible_email = response.data.email;
+              })["catch"](function (err) {
+                console.log(err);
+              });
+              console.log(_this.reservation);
 
-            case 1:
+            case 4:
             case "end":
               return _context.stop();
           }
@@ -1205,10 +1527,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var Y = date.getFullYear();
       var M = this.addLeadingZero(date.getMonth() + 1);
       var D = this.addLeadingZero(date.getDate());
-      var d = days[date.getDay()];
-      var h = this.addLeadingZero(date.getHours());
-      var m = this.addLeadingZero(date.getMinutes());
-      return "".concat(Y, ".").concat(M, ".").concat(D, " ").concat(h, ":").concat(m, " (").concat(d, ")");
+      var d = days[date.getDay()]; // let h = this.addLeadingZero(date.getHours());
+      // let m = this.addLeadingZero(date.getMinutes());
+
+      return "".concat(Y, ".").concat(M, ".").concat(D, " (").concat(d, ")");
     },
     getExactTime: function getExactTime(date) {
       return new Date(date).getHours() + ":" + new Date(date).getMinutes();
@@ -1225,7 +1547,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }
 
       if (newValue >= 17) {
-        return "#FE6126";
+        return "#EE4B2B";
       }
     },
     choosePlace: function choosePlace(event) {
@@ -1237,30 +1559,34 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       this.table.id = item.id;
     },
     clearReservationInfo: function clearReservationInfo() {
-      this.reservation = {
-        name: "",
-        phone: "",
-        note: "",
-        prepayment: 0,
-        amount: null,
-        date: null,
-        time: "",
-        table: null,
-        place_id: null
-      };
+      this.reservation.name = "";
+      this.reservation.phone = "";
+      this.reservation.conflict = false;
+      this.reservation.visit_type = "Обычный визит";
+      this.reservation.amount = 1;
+      this.reservation.note = "";
+      this.reservation.prepayment = 0;
+      this.reservation.table_id = null;
+      this.reservation.place_id = null;
+      this.reservation.date = null;
+      this.reservation.time = ""; // Не очищаю имя и почту ответственного, чтобы использовать на всех 3-х точках
     },
     updateGuestInfo: function updateGuestInfo(item) {
       this.reservation = {
         id: item.id,
         name: item.name,
         phone: item.phone,
-        note: item.note,
+        conflict: item.conflict,
+        visit_type: item.visit_type,
         prepayment: item.prepayment,
         amount: item.amount,
+        note: item.note,
+        table_id: item.table_id,
+        place_id: item.place_id,
         date: item.date,
         time: item.time,
-        table_id: item.table_id,
-        place_id: item.place_id
+        responsible_email: this.reservation.responsible_email,
+        responsible_name: this.reservation.responsible_name
       };
     },
     checkPass: function checkPass(value) {
@@ -1490,100 +1816,122 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context5.prev = _context5.next) {
               case 0:
                 if (!(_this6.place === "place_1")) {
-                  _context5.next = 7;
+                  _context5.next = 13;
                   break;
                 }
 
                 newReservation = {
                   name: _this6.reservation.name,
                   phone: _this6.reservation.phone,
-                  prepayment: _this6.reservation.prepayment,
+                  conflict: _this6.reservation.conflict,
+                  visit_type: _this6.reservation.visit_type,
                   amount: _this6.reservation.amount,
                   note: _this6.reservation.note,
+                  prepayment: _this6.reservation.prepayment,
+                  table_id: _this6.reservation.table_id,
+                  place_id: 1,
                   date: _this6.reservation.date,
                   time: _this6.reservation.time,
-                  table_id: _this6.table.id,
-                  place_id: 1
+                  responsible_email: _this6.reservation.responsible_email,
+                  responsible_name: _this6.reservation.responsible_name
                 };
-                _context5.next = 4;
+                _context5.prev = 2;
+                _context5.next = 5;
                 return axios.post("http://booking-api.test/api/reservations", newReservation);
 
-              case 4:
+              case 5:
                 newLog = _objectSpread({
                   text: "\u0421\u0442\u043E\u043B \u2116".concat(newReservation.table_id, " \u0431\u044B\u043B \u0437\u0430\u0431\u0440\u043E\u043D\u0438\u0440\u043E\u0432\u0430\u043D."),
                   type: "Бронирование"
                 }, newReservation);
-                _context5.next = 7;
+                _context5.next = 8;
                 return axios.post("http://booking-api.test/api/logs", newLog);
 
-              case 7:
+              case 8:
+                _context5.next = 13;
+                break;
+
+              case 10:
+                _context5.prev = 10;
+                _context5.t0 = _context5["catch"](2);
+                console.log(_context5.t0.message);
+
+              case 13:
                 if (!(_this6.place === "place_2")) {
-                  _context5.next = 14;
+                  _context5.next = 20;
                   break;
                 }
 
                 _newReservation = {
                   name: _this6.reservation.name,
                   phone: _this6.reservation.phone,
-                  prepayment: _this6.reservation.prepayment,
+                  conflict: _this6.reservation.conflict,
+                  visit_type: _this6.reservation.visit_type,
                   amount: _this6.reservation.amount,
                   note: _this6.reservation.note,
+                  prepayment: _this6.reservation.prepayment,
+                  table_id: _this6.reservation.table_id,
+                  place_id: 2,
                   date: _this6.reservation.date,
                   time: _this6.reservation.time,
-                  table_id: _this6.table.id,
-                  place_id: 2
+                  responsible_email: _this6.reservation.responsible_email,
+                  responsible_name: _this6.reservation.responsible_name
                 };
-                _context5.next = 11;
+                _context5.next = 17;
                 return axios.post("http://booking-api.test/api/reservations", _newReservation);
 
-              case 11:
+              case 17:
                 _newLog = _objectSpread({
                   text: "\u0421\u0442\u043E\u043B \u2116".concat(_newReservation.table_id, " \u043D\u0430 \u0411\u0430\u0439\u043A\u0430\u043B\u044C\u0441\u043A\u043E\u0439 \u0431\u044B\u043B \u0437\u0430\u0431\u0440\u043E\u043D\u0438\u0440\u043E\u0432\u0430\u043D."),
                   type: "Бронирование"
                 }, _newReservation);
-                _context5.next = 14;
+                _context5.next = 20;
                 return axios.post("http://booking-api.test/api/logs", _newLog);
 
-              case 14:
+              case 20:
                 if (!(_this6.place === "place_3")) {
-                  _context5.next = 21;
+                  _context5.next = 27;
                   break;
                 }
 
                 _newReservation2 = {
                   name: _this6.reservation.name,
                   phone: _this6.reservation.phone,
-                  prepayment: _this6.reservation.prepayment,
+                  conflict: _this6.reservation.conflict,
+                  visit_type: _this6.reservation.visit_type,
                   amount: _this6.reservation.amount,
                   note: _this6.reservation.note,
+                  prepayment: _this6.reservation.prepayment,
+                  table_id: _this6.reservation.table_id,
+                  place_id: 3,
                   date: _this6.reservation.date,
                   time: _this6.reservation.time,
-                  table_id: _this6.table.id,
-                  place_id: 3
+                  responsible_email: _this6.reservation.responsible_email,
+                  responsible_name: _this6.reservation.responsible_name
                 };
-                _context5.next = 18;
+                _context5.next = 24;
                 return axios.post("http://booking-api.test/api/reservations", _newReservation2);
 
-              case 18:
+              case 24:
                 _newLog2 = _objectSpread({
                   text: "\u0421\u0442\u043E\u043B \u2116".concat(_newReservation2.table_id, " \u043D\u0430 \u0411\u0430\u0439\u043A\u0430\u043B\u044C\u0441\u043A\u043E\u0439 \u0431\u044B\u043B \u0437\u0430\u0431\u0440\u043E\u043D\u0438\u0440\u043E\u0432\u0430\u043D."),
                   type: "Бронирование"
                 }, _newReservation2);
-                _context5.next = 21;
+                _context5.next = 27;
                 return axios.post("http://booking-api.test/api/logs", _newLog2);
 
-              case 21:
+              case 27:
                 _this6.clearReservationInfo();
 
-                _context5.next = 24;
+                _context5.next = 30;
                 return _this6.fetchTables();
 
-              case 24:
+              case 30:
               case "end":
                 return _context5.stop();
             }
           }
-        }, _callee5);
+        }, _callee5, null, [[2, 10]]);
       }))();
     },
     updateGuest: function updateGuest() {
@@ -1606,8 +1954,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 3:
                 newLog = _objectSpread({
-                  text: "\u041E\u0431\u043D\u043E\u0432\u043B\u0435\u043D\u044B \u0434\u0430\u043D\u043D\u044B\u0435 \u0433\u043E\u0441\u0442\u044F.",
-                  type: "Обновление данных"
+                  text: "\u041D\u043E\u0432\u044B\u0435 \u0434\u0430\u043D\u043D\u044B\u0435 \u0433\u043E\u0441\u0442\u044F.",
+                  type: "Обновление"
                 }, _this7.reservation);
                 _context6.next = 6;
                 return axios.post("http://booking-api.test/api/logs", newLog);
@@ -1623,8 +1971,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 9:
                 _newLog3 = _objectSpread({
-                  text: "\u041E\u0431\u043D\u043E\u0432\u043B\u0435\u043D\u044B \u0434\u0430\u043D\u043D\u044B\u0435 \u0433\u043E\u0441\u0442\u044F.",
-                  type: "Обновление данных"
+                  text: "\u041D\u043E\u0432\u044B\u0435 \u0434\u0430\u043D\u043D\u044B\u0435 \u0433\u043E\u0441\u0442\u044F.",
+                  type: "Обновление"
                 }, _this7.reservation);
                 _context6.next = 12;
                 return axios.post("http://booking-api.test/api/logs", _newLog3);
@@ -1640,8 +1988,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 15:
                 _newLog4 = _objectSpread({
-                  text: "\u041E\u0431\u043D\u043E\u0432\u043B\u0435\u043D\u044B \u0434\u0430\u043D\u043D\u044B\u0435 \u0433\u043E\u0441\u0442\u044F.",
-                  type: "Обновление данных"
+                  text: "\u041D\u043E\u0432\u044B\u0435 \u0434\u0430\u043D\u043D\u044B\u0435 \u0433\u043E\u0441\u0442\u044F.",
+                  type: "Обновление"
                 }, _this7.reservation);
                 _context6.next = 18;
                 return axios.post("http://booking-api.test/api/logs", _newLog4);
@@ -1669,28 +2017,37 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context7.prev = _context7.next) {
               case 0:
-                console.log(_this8.waitingList);
-
-                if (!(_this8.place === "place_1")) {
-                  _context7.next = 6;
-                  break;
-                }
-
-                _context7.next = 4;
+                _context7.next = 2;
                 return axios.get("http://booking-api.test/api/tables");
 
-              case 4:
+              case 2:
                 response = _context7.sent;
-                _this8.waitingList = response.data.data.find(function (table) {
-                  if (table.id === 100) {
-                    return table;
-                  }
-                });
+
+                if (_this8.place === "place_1") {
+                  _this8.waitingList = response.data.data.find(function (table) {
+                    if (table.id === 100) {
+                      return table;
+                    }
+                  });
+                }
+
+                if (_this8.place === "place_2") {
+                  _this8.waitingList = response.data.data.find(function (table) {
+                    if (table.id === 101) {
+                      return table;
+                    }
+                  });
+                }
+
+                if (_this8.place === "place_3") {
+                  _this8.waitingList = response.data.data.find(function (table) {
+                    if (table.id === 102) {
+                      return table;
+                    }
+                  });
+                }
 
               case 6:
-                console.log("WaitingList: ", _this8.waitingList);
-
-              case 7:
               case "end":
                 return _context7.stop();
             }
@@ -1722,7 +2079,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   date: _this9.reservation.date,
                   time: _this9.reservation.time === "" ? "Ожидание" : _this9.reservation.time,
                   table_id: 100,
-                  place_id: 1
+                  place_id: 1,
+                  responsible_email: _this9.reservation.responsible_email,
+                  responsible_name: _this9.reservation.responsible_name
                 };
                 _context8.next = 4;
                 return axios.post("http://booking-api.test/api/reservations", waitingGuest);
@@ -1750,7 +2109,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   date: _this9.reservation.date,
                   time: _this9.reservation.time === "" ? "Ожидание" : _this9.reservation.time,
                   table_id: 101,
-                  place_id: 2
+                  place_id: 2,
+                  responsible_email: _this9.reservation.responsible_email,
+                  responsible_name: _this9.reservation.responsible_name
                 };
                 _context8.next = 11;
                 return axios.post("http://booking-api.test/api/reservations", _waitingGuest);
@@ -1778,7 +2139,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   date: _this9.reservation.date,
                   time: _this9.reservation.time === "" ? "Ожидание" : _this9.reservation.time,
                   table_id: 102,
-                  place_id: 3
+                  place_id: 3,
+                  responsible_email: _this9.reservation.responsible_email,
+                  responsible_name: _this9.reservation.responsible_name
                 };
                 _context8.next = 18;
                 return axios.post("http://booking-api.test/api/reservations", _waitingGuest2);
@@ -1802,7 +2165,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee8);
       }))();
     },
-    deleteGuest: function deleteGuest() {
+    deleteReservation: function deleteReservation() {
       var _this10 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee9() {
@@ -1811,156 +2174,240 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context9.prev = _context9.next) {
               case 0:
-                _context9.next = 2;
-                return axios["delete"]("http://booking-api.test/api/reservations/".concat(_this10.reservation.id));
+                _context9.prev = 0;
+                _context9.next = 3;
+                return axios.post("http://booking-api.test/api/failed_reservations", _this10.reservation);
 
-              case 2:
-                newLog = _objectSpread({
-                  text: "Гость был удален.",
-                  type: "Отмена бронирования"
-                }, _this10.reservation);
-                _context9.next = 5;
-                return axios.post("http://booking-api.test/api/logs", newLog);
+              case 3:
+                _context9.next = 8;
+                break;
 
               case 5:
-                _context9.next = 7;
+                _context9.prev = 5;
+                _context9.t0 = _context9["catch"](0);
+                console.log(_context9.t0);
+
+              case 8:
+                _context9.prev = 8;
+                _context9.next = 11;
+                return axios["delete"]("http://booking-api.test/api/reservations/".concat(_this10.reservation.id));
+
+              case 11:
+                _context9.next = 16;
+                break;
+
+              case 13:
+                _context9.prev = 13;
+                _context9.t1 = _context9["catch"](8);
+                console.log(_context9.t1);
+
+              case 16:
+                newLog = _objectSpread({
+                  text: "Бронирование удалено.",
+                  type: "Отмена"
+                }, _this10.reservation);
+                _context9.next = 19;
+                return axios.post("http://booking-api.test/api/logs", newLog);
+
+              case 19:
+                _context9.next = 21;
                 return _this10.fetchTables();
 
-              case 7:
+              case 21:
               case "end":
                 return _context9.stop();
             }
           }
-        }, _callee9);
+        }, _callee9, null, [[0, 5], [8, 13]]);
       }))();
     },
-    addTable: function addTable(type) {
+    completeReservation: function completeReservation() {
       var _this11 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee10() {
-        var response, newTable, _newTable, _newTable2;
-
+        var newLog;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee10$(_context10) {
           while (1) {
             switch (_context10.prev = _context10.next) {
               case 0:
-                _context10.next = 2;
-                return axios.get("http://booking-api.test/api/tables");
+                _context10.prev = 0;
+                _context10.next = 3;
+                return axios.post("http://booking-api.test/api/completed_reservations", _this11.reservation);
 
-              case 2:
-                response = _context10.sent;
+              case 3:
+                _context10.next = 8;
+                break;
 
-                if (!(_this11.place === "place_1")) {
-                  _context10.next = 7;
-                  break;
-                }
+              case 5:
+                _context10.prev = 5;
+                _context10.t0 = _context10["catch"](0);
+                console.log(_context10.t0);
 
-                newTable = _objectSpread(_objectSpread({}, _this11.table), {}, {
-                  place_id: 1,
-                  i: (_this11.tables.length + 1).toString(),
-                  bbq: type
-                });
-                _context10.next = 7;
-                return axios.post("http://booking-api.test/api/tables", newTable);
-
-              case 7:
-                if (!(_this11.place === "place_2")) {
-                  _context10.next = 11;
-                  break;
-                }
-
-                _newTable = _objectSpread(_objectSpread({}, _this11.table), {}, {
-                  place_id: 2,
-                  i: (_this11.tables.length + 1).toString(),
-                  bbq: type
-                });
+              case 8:
+                _context10.prev = 8;
                 _context10.next = 11;
-                return axios.post("http://booking-api.test/api/tables", _newTable);
+                return axios["delete"]("http://booking-api.test/api/reservations/".concat(_this11.reservation.id));
 
               case 11:
-                if (!(_this11.place === "place_3")) {
-                  _context10.next = 15;
-                  break;
-                }
+                _context10.next = 16;
+                break;
 
-                _newTable2 = _objectSpread(_objectSpread({}, _this11.table), {}, {
-                  place_id: 3,
-                  i: (_this11.tables.length + 1).toString(),
-                  bbq: type
-                });
-                _context10.next = 15;
-                return axios.post("http://booking-api.test/api/tables", _newTable2);
+              case 13:
+                _context10.prev = 13;
+                _context10.t1 = _context10["catch"](8);
+                console.log(_context10.t1);
 
-              case 15:
-                _this11.loading = true;
-                _context10.next = 18;
-                return _this11.fetchTables();
-
-              case 18:
-                _this11.loading = false;
+              case 16:
+                newLog = _objectSpread({
+                  text: "Бронирование завершено.",
+                  type: "Завершено"
+                }, _this11.reservation);
+                _context10.next = 19;
+                return axios.post("http://booking-api.test/api/logs", newLog);
 
               case 19:
+                _context10.next = 21;
+                return _this11.fetchTables();
+
+              case 21:
               case "end":
                 return _context10.stop();
             }
           }
-        }, _callee10);
+        }, _callee10, null, [[0, 5], [8, 13]]);
       }))();
     },
-    deleteOneTable: function deleteOneTable() {
+    addTable: function addTable(type, password) {
       var _this12 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee11() {
-        var table;
+        var response, newTable, _newTable, _newTable2;
+
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee11$(_context11) {
           while (1) {
             switch (_context11.prev = _context11.next) {
               case 0:
-                if (!(_this12.place === "place_1")) {
-                  _context11.next = 6;
-                  break;
-                }
+                _this12.checkPass(password);
 
                 _context11.next = 3;
-                return axios.get("http://booking-api.test/api/tables/".concat(_this12.table.id));
+                return axios.get("http://booking-api.test/api/tables");
 
               case 3:
-                table = _context11.sent;
-                _context11.next = 6;
-                return axios["delete"]("http://booking-api.test/api/tables/".concat(_this12.table.id));
+                response = _context11.sent;
 
-              case 6:
-                if (!(_this12.place === "place_2")) {
-                  _context11.next = 9;
+                if (!(_this12.place === "place_1" && _this12.passCheck)) {
+                  _context11.next = 8;
                   break;
                 }
 
-                _context11.next = 9;
-                return axios["delete"]("http://booking-api.test/api/tables/".concat(_this12.table));
+                newTable = _objectSpread(_objectSpread({}, _this12.table), {}, {
+                  place_id: 1,
+                  i: (_this12.tables.length + 1).toString(),
+                  bbq: type
+                });
+                _context11.next = 8;
+                return axios.post("http://booking-api.test/api/tables", newTable);
 
-              case 9:
-                if (!(_this12.place === "place_3")) {
+              case 8:
+                if (!(_this12.place === "place_2" && _this12.passCheck)) {
                   _context11.next = 12;
                   break;
                 }
 
+                _newTable = _objectSpread(_objectSpread({}, _this12.table), {}, {
+                  place_id: 2,
+                  i: (_this12.tables.length + 1).toString(),
+                  bbq: type
+                });
                 _context11.next = 12;
-                return axios["delete"]("http://booking-api.test/api/tables/".concat(_this12.table));
+                return axios.post("http://booking-api.test/api/tables", _newTable);
 
               case 12:
-                _this12.loading = true;
-                _context11.next = 15;
-                return _this12.fetchTables();
+                if (!(_this12.place === "place_3" && _this12.passCheck)) {
+                  _context11.next = 16;
+                  break;
+                }
 
-              case 15:
-                _this12.loading = false;
+                _newTable2 = _objectSpread(_objectSpread({}, _this12.table), {}, {
+                  place_id: 3,
+                  i: (_this12.tables.length + 1).toString(),
+                  bbq: type
+                });
+                _context11.next = 16;
+                return axios.post("http://booking-api.test/api/tables", _newTable2);
 
               case 16:
+                _this12.loading = true;
+                _context11.next = 19;
+                return _this12.fetchTables();
+
+              case 19:
+                _this12.loading = false;
+
+              case 20:
               case "end":
                 return _context11.stop();
             }
           }
         }, _callee11);
+      }))();
+    },
+    deleteOneTable: function deleteOneTable(password) {
+      var _this13 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee12() {
+        var table;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee12$(_context12) {
+          while (1) {
+            switch (_context12.prev = _context12.next) {
+              case 0:
+                _this13.checkPass(password);
+
+                if (!(_this13.place === "place_1" && _this13.passCheck)) {
+                  _context12.next = 7;
+                  break;
+                }
+
+                _context12.next = 4;
+                return axios.get("http://booking-api.test/api/tables/".concat(_this13.table.id));
+
+              case 4:
+                table = _context12.sent;
+                _context12.next = 7;
+                return axios["delete"]("http://booking-api.test/api/tables/".concat(_this13.table.id));
+
+              case 7:
+                if (!(_this13.place === "place_2" && _this13.passCheck)) {
+                  _context12.next = 10;
+                  break;
+                }
+
+                _context12.next = 10;
+                return axios["delete"]("http://booking-api.test/api/tables/".concat(_this13.table));
+
+              case 10:
+                if (!(_this13.place === "place_3" && _this13.passCheck)) {
+                  _context12.next = 13;
+                  break;
+                }
+
+                _context12.next = 13;
+                return axios["delete"]("http://booking-api.test/api/tables/".concat(_this13.table));
+
+              case 13:
+                _this13.loading = true;
+                _context12.next = 16;
+                return _this13.fetchTables();
+
+              case 16:
+                _this13.loading = false;
+
+              case 17:
+              case "end":
+                return _context12.stop();
+            }
+          }
+        }, _callee12);
       }))();
     }
   }
@@ -2009,7 +2456,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".vue-draggable-handle {\n  position: absolute;\n  width: 20px;\n  top: 0;\n  right: 0;\n  padding: 0;\n  background-origin: content-box;\n  background-color: #757575;\n  box-sizing: border-box;\n  border-radius: 5px;\n  cursor: pointer;\n}\n.add_guest {\n  position: absolute;\n  width: 20px;\n  top: 0;\n  right: 0;\n  padding: 0;\n  background-origin: content-box;\n  background-color: white;\n  box-sizing: border-box;\n  cursor: pointer;\n}\n.delete_table {\n  position: absolute;\n  width: 20px;\n  top: 0;\n  right: 0;\n  padding: 0;\n  background-origin: content-box;\n  background-color: white;\n  box-sizing: border-box;\n  cursor: pointer;\n}\n.button_action {\n  color: white;\n  background-color: #4099de;\n  font-weight: 600;\n  font-size: 16px;\n  border-radius: 8px;\n  display: inline-block;\n  min-width: 70px;\n  border: 1px solid transparent;\n  transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);\n}\n.size {\n  width: 200px;\n}\n.button_action:hover {\n  box-shadow: 0px 3px 1px rgba(0, 0, 0, 0.1), 0px 1px 2px rgba(0, 0, 0, 0.08), 0px 2px 2px rgba(0, 0, 0, 0.12);\n}\n.button_action:focus {\n  box-shadow: 0px 3px 1px rgba(0, 0, 0, 0.1), 0px 1px 2px rgba(0, 0, 0, 0.08), 0px 2px 2px rgba(0, 0, 0, 0.12);\n}\n.place_input {\n  font-weight: 600;\n  color: #3c4655;\n  background-color: white;\n  border-width: 1px;\n  border: none;\n  /* border-color: #bacad6; */\n}\n.card {\n  width: 18vw;\n  height: 18vw;\n  /* width: 100%;\n  height: 0;\n  padding-top: 100%;\n  background-color: white;\n  position: relative; */\n}\n.card_content {\n  width: 100%;\n  height: 100%;\n  position: absolute;\n  top: 0;\n  left: 0;\n}\n@media (min-width: 576px) {\n.card_content_info {\n    padding: 10px 5px 0 5px;\n}\n}\n@media (min-width: 767px) {\n.card_content_info {\n    padding-top: 5px;\n}\n}\n@media (min-width: 992px) {\n.card_content_info {\n    padding: 10px 5px 0 5px;\n}\n}\n@media (min-width: 1200px) {\n.card_content_info {\n    padding: 30px 10px 0 10px;\n}\n}\n@media (min-width: 375px) {\n.day_full {\n    font-size: 46px;\n}\n}\n@media (min-width: 576px) {\n.day_full {\n    font-size: 30px;\n}\n}\n@media (min-width: 767px) {\n.day_full {\n    font-size: 40px;\n}\n}\n@media (min-width: 992px) {\n.day_full {\n    font-size: 48px;\n}\n}\n@media (min-width: 375px) {\n.date_full {\n    display: none;\n}\n}\n@media (min-width: 576px) {\n.date_full {\n    display: block;\n    font-size: 10px;\n    font-weight: 600;\n}\n}\n@media (min-width: 767px) {\n.date_full {\n    font-size: 15px;\n}\n}\n@media (min-width: 992px) {\n.date_full {\n    font-size: 24px;\n}\n}\n@media (min-width: 375px) and (max-width: 576px) {\n.date_full_mobile {\n    display: block;\n}\n}\n@media (min-width: 577px) {\n.date_full_mobile {\n    display: none;\n}\n}\n.place_title {\n  width: 150px;\n  color: #3c4655;\n}\n.card_time {\n  color: #3c4655;\n}\n@media (min-width: 375px) and (max-width: 576px) {\n.first_column {\n    margin: 0 0 10px 0;\n}\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".vue-draggable-handle {\n  position: absolute;\n  width: 20px;\n  top: 0;\n  right: 0;\n  padding: 0;\n  background-origin: content-box;\n  background-color: #757575;\n  box-sizing: border-box;\n  border-radius: 5px;\n  cursor: pointer;\n}\n.add_guest {\n  position: absolute;\n  width: 20px;\n  top: 0;\n  right: 0;\n  padding: 0;\n  background-origin: content-box;\n  background-color: white;\n  box-sizing: border-box;\n  cursor: pointer;\n}\n.delete_table {\n  position: absolute;\n  width: 20px;\n  top: 0;\n  right: 0;\n  padding: 0;\n  background-origin: content-box;\n  background-color: white;\n  box-sizing: border-box;\n  cursor: pointer;\n}\n.button_action {\n  padding: 2px 5px 2px 5px;\n  color: white;\n  background-color: #4099de;\n  font-weight: 600;\n  font-size: 16px;\n  border-radius: 8px;\n  display: inline-block;\n  min-width: 70px;\n  border: 1px solid transparent;\n  transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);\n}\n.size {\n  width: 200px;\n}\n.button_action:hover {\n  box-shadow: 0px 3px 1px rgba(0, 0, 0, 0.1), 0px 1px 2px rgba(0, 0, 0, 0.08), 0px 2px 2px rgba(0, 0, 0, 0.12);\n}\n.button_action:focus {\n  box-shadow: 0px 3px 1px rgba(0, 0, 0, 0.1), 0px 1px 2px rgba(0, 0, 0, 0.08), 0px 2px 2px rgba(0, 0, 0, 0.12);\n}\n.place_input {\n  font-weight: 600;\n  color: #3c4655;\n  background-color: white;\n  border-width: 1px;\n  border: none;\n  /* border-color: #bacad6; */\n}\n.card {\n  width: 70px;\n  height: 70px;\n  /* width: 100%;\n  height: 0;\n  padding-top: 100%;\n  background-color: white;\n  position: relative; */\n}\n@media (min-width: 576px) {\n.card {\n    width: 74px;\n    height: 74px;\n}\n}\n@media (min-width: 767px) {\n.card {\n    width: 136px;\n    height: 136px;\n}\n}\n@media (min-width: 992px) {\n.card {\n    min-width: 182px;\n    min-height: 182px;\n}\n}\n@media (min-width: 1200px) {\n.card {\n    min-width: 257px;\n    min-height: 257px;\n}\n}\n@media (min-width: 576px) {\n.card_content_info {\n    padding: 15px 5px 15px 5px;\n}\n}\n@media (min-width: 767px) {\n.card_content_info {\n    padding: 20px 5px 20px 5px;\n}\n}\n@media (min-width: 992px) {\n.card_content_info {\n    padding: 20px 5px 20px 5px;\n}\n}\n@media (min-width: 1200px) {\n.card_content_info {\n    padding: 30px 10px 15px 10px;\n}\n}\n@media (min-width: 375px) {\n.day_full {\n    font-size: 30px;\n}\n}\n@media (min-width: 576px) {\n.day_full {\n    font-size: 30px;\n}\n}\n@media (min-width: 767px) {\n.day_full {\n    font-size: 40px;\n}\n}\n@media (min-width: 998px) {\n.day_full {\n    font-size: 60px;\n}\n}\n@media (min-width: 1203px) {\n.day_full {\n    font-size: 80px;\n}\n}\n.date_full {\n  font-weight: bold;\n}\n@media (min-width: 375px) {\n.date_full {\n    display: none;\n}\n}\n@media (min-width: 767px) {\n.date_full {\n    display: block;\n    font-size: 15px;\n}\n}\n@media (min-width: 992px) {\n.date_full {\n    font-size: 20px;\n}\n}\n@media (min-width: 1440px) {\n.date_full {\n    font-size: 28px;\n}\n}\n@media (min-width: 375px) and (max-width: 767px) {\n.date_full_mobile {\n    display: block;\n}\n}\n@media (min-width: 768px) {\n.date_full_mobile {\n    display: none;\n}\n}\n.place_title {\n  width: 150px;\n  color: #3c4655;\n}\n.card_time {\n  color: #3c4655;\n}\n@media (min-width: 375px) and (max-width: 576px) {\n.first_column {\n    margin: 0 0 10px 0;\n}\n}\n.bbq_table path {\n  fill: #fff;\n  stroke: #fff;\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -2753,14 +3200,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/bbq.svg?84ff3e7935d7a9e248e54aaa4c55f026");
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/bbq.svg?287370d66cf536ef1e8d70531c3e1e07");
 
 /***/ }),
 
-/***/ "./resources/svg/no.svg":
-/*!******************************!*\
-  !*** ./resources/svg/no.svg ***!
-  \******************************/
+/***/ "./resources/svg/bbqSign.svg":
+/*!***********************************!*\
+  !*** ./resources/svg/bbqSign.svg ***!
+  \***********************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -2768,7 +3215,112 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/no.svg?c7356ffb8f4d72c8cf52635a9e7d4a28");
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/bbqSign.svg?c249d445a30169f470cc03f4673cef3f");
+
+/***/ }),
+
+/***/ "./resources/svg/birthday.svg":
+/*!************************************!*\
+  !*** ./resources/svg/birthday.svg ***!
+  \************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/birthday.svg?8a7b40d1586912a220129ae536205173");
+
+/***/ }),
+
+/***/ "./resources/svg/conflict.svg":
+/*!************************************!*\
+  !*** ./resources/svg/conflict.svg ***!
+  \************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/conflict.svg?f57465e81ec465d2b1e10fdeb7a90ecb");
+
+/***/ }),
+
+/***/ "./resources/svg/day.svg":
+/*!*******************************!*\
+  !*** ./resources/svg/day.svg ***!
+  \*******************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/day.svg?4dc1b6b381e3c583108bf91c39eeef91");
+
+/***/ }),
+
+/***/ "./resources/svg/evening.svg":
+/*!***********************************!*\
+  !*** ./resources/svg/evening.svg ***!
+  \***********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/evening.svg?580ca1700811f0c6b6d85a35c01aa8a6");
+
+/***/ }),
+
+/***/ "./resources/svg/family.svg":
+/*!**********************************!*\
+  !*** ./resources/svg/family.svg ***!
+  \**********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/family.svg?000f5057a54b1bdfc6d0ef6b7e5dd4b7");
+
+/***/ }),
+
+/***/ "./resources/svg/heart.svg":
+/*!*********************************!*\
+  !*** ./resources/svg/heart.svg ***!
+  \*********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/heart.svg?f94958ae358bacade8d6108e4499d10a");
+
+/***/ }),
+
+/***/ "./resources/svg/morning.svg":
+/*!***********************************!*\
+  !*** ./resources/svg/morning.svg ***!
+  \***********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/morning.svg?f5ce63beb0c1a0a51603dd060c27b801");
 
 /***/ }),
 
@@ -2783,7 +3335,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/ruble.svg?74c6bb59adbd9a2bc78be0b056c7b9f5");
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/ruble.svg?273e4d60379b9da76199c0b82523cd71");
 
 /***/ }),
 
@@ -16632,49 +17184,40 @@ var render = function () {
       { staticClass: "px-4 py-3 mb-5", style: { backgroundColor: "#eef1f4" } },
       [
         _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "xs col-12 col-sm-5 col-md-6 mb-2" }, [
+          _c("div", { staticClass: "xs col-12 col-sm-4 col-md-6 mb-2" }, [
             _c("div", { staticClass: "row" }, [
               _c("div", { staticClass: "col-sm-10 col-md-5 col-lg-5" }, [
-                _c("div", { staticClass: "card" }, [
-                  _c(
-                    "div",
-                    {
-                      staticClass: "card_content d-flex justify-content-center",
-                    },
-                    [
-                      _c("div", { staticClass: "card_content_info" }, [
-                        _c(
-                          "p",
-                          {
-                            staticClass:
-                              "day_full text-center align-middle p-0 m-0",
-                          },
-                          [
-                            _c("b", [
-                              _vm._v(
-                                "\n                                            " +
-                                  _vm._s(_vm.dayFilter) +
-                                  "\n                                        "
-                              ),
-                            ]),
-                          ]
-                        ),
+                _c(
+                  "div",
+                  {
+                    staticClass: "card col-md card_md col-lg-6 border border-4",
+                  },
+                  [
+                    _c(
+                      "div",
+                      {
+                        staticClass: "card-body card_content_info text-center",
+                      },
+                      [
+                        _c("p", { staticClass: "day_full m-0" }, [
+                          _vm._v(
+                            "\n                                    " +
+                              _vm._s(_vm.dayFilter) +
+                              "\n                                "
+                          ),
+                        ]),
                         _vm._v(" "),
-                        _c(
-                          "p",
-                          { staticClass: "date_full text-center p-0 m-0" },
-                          [
-                            _vm._v(
-                              "\n                                        " +
-                                _vm._s(_vm.dateFilter) +
-                                "\n                                    "
-                            ),
-                          ]
-                        ),
-                      ]),
-                    ]
-                  ),
-                ]),
+                        _c("p", { staticClass: "date_full m-0" }, [
+                          _vm._v(
+                            "\n                                    " +
+                              _vm._s(_vm.dateFilter) +
+                              "\n                                "
+                          ),
+                        ]),
+                      ]
+                    ),
+                  ]
+                ),
                 _vm._v(" "),
                 _c("div", [
                   _c("p", { staticClass: "date_full_mobile" }, [
@@ -16705,7 +17248,7 @@ var render = function () {
                     },
                   }),
                   _vm._v(" "),
-                  _c("div", { staticClass: "row" }, [
+                  _c("div", { staticClass: "row mt-2" }, [
                     _c("div", { staticClass: "col-12" }, [
                       _vm._m(1),
                       _vm._v(" "),
@@ -16722,7 +17265,7 @@ var render = function () {
                               },
                             ],
                             staticClass:
-                              "form-control form-select w-full place_input",
+                              "form-control form-select w-full place_input border border-2",
                             attrs: { id: "place_selector" },
                             on: {
                               change: [
@@ -16785,7 +17328,7 @@ var render = function () {
             ]),
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "xs col-12 col-md-6" }, [
+          _c("div", { staticClass: "xs col-12 col-sm-8 col-md-6" }, [
             _c("div", { staticClass: "row row-cols-2 g-1 mb-1" }, [
               _c(
                 "div",
@@ -16949,7 +17492,7 @@ var render = function () {
                     _c(
                       "label",
                       { staticClass: "py-2", attrs: { for: "removeTable" } },
-                      [_vm._v("Удалить   стол")]
+                      [_vm._v("Удалить стол")]
                     ),
                   ]
                 ),
@@ -17001,104 +17544,131 @@ var render = function () {
               ]),
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "row row-cols-2 g-1" }, [
-              _c("div", { staticClass: "col-auto" }, [
-                _c("img", {
-                  style: { width: "20px" },
-                  attrs: {
-                    src: (__webpack_require__(/*! ../../svg/bbq.svg */ "./resources/svg/bbq.svg")["default"]),
-                    alt: "bbq",
+            _c("div", { staticClass: "col-md-12 col-xl-8" }, [
+              _c(
+                "div",
+                {
+                  staticClass: "row row-cols-2 g-1 mt-3 p-3",
+                  style: {
+                    backgroundColor: "white",
                   },
-                }),
-                _vm._v(" "),
-                _c("span", [_vm._v("Стол BBQ")]),
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "col-auto" }, [
-                _c("img", {
-                  style: { width: "20px" },
-                  attrs: {
-                    src: (__webpack_require__(/*! ../../svg/no.svg */ "./resources/svg/no.svg")["default"]),
-                    alt: "Ruble",
-                  },
-                }),
-                _vm._v(" "),
-                _c("span", [_vm._v("Нет предоплаты")]),
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "col-auto" }, [
-                _c("img", {
-                  style: { width: "20px" },
-                  attrs: {
-                    src: (__webpack_require__(/*! ../../svg/ruble.svg */ "./resources/svg/ruble.svg")["default"]),
-                    alt: "Ruble",
-                  },
-                }),
-                _vm._v(" "),
-                _c("span", [_vm._v("Есть предоплата")]),
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "col-auto" }, [
-                _c("img", {
-                  style: { width: "20px" },
-                  attrs: {
-                    src: (__webpack_require__(/*! ../../svg/bbq.svg */ "./resources/svg/bbq.svg")["default"]),
-                    alt: "bbq",
-                  },
-                }),
-                _vm._v(" "),
-                _c("span", [_vm._v("Стол BBQ")]),
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "w-100" }),
-              _vm._v(" "),
-              _c("div", { staticClass: "col-auto" }, [
-                _c("img", {
-                  style: { width: "20px" },
-                  attrs: {
-                    src: (__webpack_require__(/*! ../../svg/bbq.svg */ "./resources/svg/bbq.svg")["default"]),
-                    alt: "bbq",
-                  },
-                }),
-                _vm._v(" "),
-                _c("span", [_vm._v("Стол BBQ")]),
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "col-auto" }, [
-                _c("img", {
-                  style: { width: "20px" },
-                  attrs: {
-                    src: (__webpack_require__(/*! ../../svg/bbq.svg */ "./resources/svg/bbq.svg")["default"]),
-                    alt: "bbq",
-                  },
-                }),
-                _vm._v(" "),
-                _c("span", [_vm._v("Стол BBQ")]),
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "col-auto" }, [
-                _c("img", {
-                  style: { width: "20px" },
-                  attrs: {
-                    src: (__webpack_require__(/*! ../../svg/bbq.svg */ "./resources/svg/bbq.svg")["default"]),
-                    alt: "bbq",
-                  },
-                }),
-                _vm._v(" "),
-                _c("span", [_vm._v("Стол BBQ")]),
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "col-auto" }, [
-                _c("img", {
-                  style: { width: "20px" },
-                  attrs: {
-                    src: (__webpack_require__(/*! ../../svg/bbq.svg */ "./resources/svg/bbq.svg")["default"]),
-                    alt: "bbq",
-                  },
-                }),
-                _vm._v(" "),
-                _c("span", [_vm._v("Стол BBQ")]),
-              ]),
+                },
+                [
+                  _c("div", { staticClass: "col-md-5 col-5 m-0" }, [
+                    _c("img", {
+                      style: { width: "15px" },
+                      attrs: {
+                        src: (__webpack_require__(/*! ../../svg/bbq.svg */ "./resources/svg/bbq.svg")["default"]),
+                        alt: "bbq",
+                      },
+                    }),
+                    _vm._v(" "),
+                    _c("span", [_vm._v("Стол BBQ")]),
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-md-6 col-7 m-0" }, [
+                    _c("img", {
+                      style: { width: "15px" },
+                      attrs: {
+                        src: (__webpack_require__(/*! ../../svg/ruble.svg */ "./resources/svg/ruble.svg")["default"]),
+                        alt: "Ruble",
+                      },
+                    }),
+                    _vm._v(" "),
+                    _c("span", [_vm._v("Есть предоплата")]),
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "w-100" }),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-md-5 col-5" }, [
+                    _c("img", {
+                      style: { width: "15px" },
+                      attrs: {
+                        src: (__webpack_require__(/*! ../../svg/birthday.svg */ "./resources/svg/birthday.svg")["default"]),
+                        alt: "birthday",
+                      },
+                    }),
+                    _vm._v(" "),
+                    _c("span", [_vm._v("День рождения")]),
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-md-7 col-7" }, [
+                    _c("img", {
+                      style: { width: "15px" },
+                      attrs: {
+                        src: (__webpack_require__(/*! ../../svg/heart.svg */ "./resources/svg/heart.svg")["default"]),
+                        alt: "romantic dinner",
+                      },
+                    }),
+                    _vm._v(" "),
+                    _c("span", [_vm._v("Романтический ужин")]),
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "w-100" }),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-5 col-md-7 col-lg-5" }, [
+                    _c("img", {
+                      style: { width: "15px" },
+                      attrs: {
+                        src: (__webpack_require__(/*! ../../svg/family.svg */ "./resources/svg/family.svg")["default"]),
+                        alt: "family dinner",
+                      },
+                    }),
+                    _vm._v(" "),
+                    _c("span", [_vm._v("Семейный ужин")]),
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-md-7 col-7" }, [
+                    _c("img", {
+                      style: { width: "15px" },
+                      attrs: {
+                        src: (__webpack_require__(/*! ../../svg/conflict.svg */ "./resources/svg/conflict.svg")["default"]),
+                        alt: "conflict guest",
+                      },
+                    }),
+                    _vm._v(" "),
+                    _c("span", [_vm._v("Конфликтный гость")]),
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "w-100" }),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-4" }, [
+                    _c("img", {
+                      style: { width: "15px" },
+                      attrs: {
+                        src: (__webpack_require__(/*! ../../svg/morning.svg */ "./resources/svg/morning.svg")["default"]),
+                        alt: "morning time",
+                      },
+                    }),
+                    _vm._v(" "),
+                    _c("span", [_vm._v("9-12 часов")]),
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-4" }, [
+                    _c("img", {
+                      style: { width: "15px" },
+                      attrs: {
+                        src: (__webpack_require__(/*! ../../svg/day.svg */ "./resources/svg/day.svg")["default"]),
+                        alt: "day time",
+                      },
+                    }),
+                    _vm._v(" "),
+                    _c("span", [_vm._v("12-18 часов")]),
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-4" }, [
+                    _c("img", {
+                      style: { width: "15px" },
+                      attrs: {
+                        src: (__webpack_require__(/*! ../../svg/evening.svg */ "./resources/svg/evening.svg")["default"]),
+                        alt: "evening time",
+                      },
+                    }),
+                    _vm._v(" "),
+                    _c("span", [_vm._v("18-23 часов")]),
+                  ]),
+                ]
+              ),
             ]),
           ]),
         ]),
@@ -17126,15 +17696,15 @@ var render = function () {
                 attrs: {
                   layout: _vm.layout,
                   "col-num": 14,
-                  "row-height": 50,
+                  "row-height": 60,
                   "is-draggable": true,
                   "is-resizable": false,
                   "is-mirrored": false,
                   "vertical-compact": false,
                   margin: [20, 20],
                   "use-css-transforms": true,
-                  responsive: true,
-                  cols: { lg: 12, md: 11, sm: 10, xs: 6, xxs: 4 },
+                  responsive: false,
+                  cols: { lg: 12, md: 12, sm: 10, xs: 6, xxs: 4 },
                 },
                 on: {
                   "update:layout": function ($event) {
@@ -17147,6 +17717,7 @@ var render = function () {
                   "grid-item",
                   {
                     key: item.i,
+                    staticClass: "py-1",
                     style: {
                       backgroundColor: "#3E2C41",
                       touchAction: "none",
@@ -17241,22 +17812,32 @@ var render = function () {
                       _vm._v(" "),
                       _c("div", { staticClass: "no-drag text-center" }, [
                         _c("div", { staticClass: "pt-1 align-middle" }, [
-                          _c("span", { style: { color: "white" } }, [
-                            _vm._v(
-                              _vm._s(
-                                Number(item.i) === 0 ? null : Number(item.i)
-                              )
-                            ),
-                          ]),
+                          _c(
+                            "span",
+                            {
+                              style: {
+                                color: "#FFF0F5",
+                                fontWeight: "600",
+                              },
+                            },
+                            [
+                              _vm._v(
+                                _vm._s(
+                                  Number(item.i) === 0 ? null : Number(item.i)
+                                )
+                              ),
+                            ]
+                          ),
                           _vm._v(" "),
                           item.bbq
                             ? _c("img", {
+                                staticClass: "bbq_table",
                                 style: {
                                   width: "15px",
                                   paddingBottom: "3px",
                                 },
                                 attrs: {
-                                  src: (__webpack_require__(/*! ../../svg/bbq.svg */ "./resources/svg/bbq.svg")["default"]),
+                                  src: (__webpack_require__(/*! ../../svg/bbqSign.svg */ "./resources/svg/bbqSign.svg")["default"]),
                                   alt: "bbq",
                                 },
                               })
@@ -17297,38 +17878,73 @@ var render = function () {
                                   },
                                 },
                                 [
-                                  !item.prepayment
-                                    ? _c("img", {
-                                        style: { width: "15px" },
-                                        attrs: {
-                                          src: (__webpack_require__(/*! ../../svg/no.svg */ "./resources/svg/no.svg")["default"]),
-                                          alt: "Ruble",
-                                        },
-                                      })
-                                    : _vm._e(),
-                                  _vm._v(" "),
-                                  item.prepayment
-                                    ? _c("img", {
-                                        style: { width: "15px" },
-                                        attrs: {
-                                          src: (__webpack_require__(/*! ../../svg/ruble.svg */ "./resources/svg/ruble.svg")["default"]),
-                                          alt: "Ruble",
-                                        },
-                                      })
-                                    : _vm._e(),
-                                  _vm._v(" "),
-                                  _c("span", { staticClass: "align-middle" }, [
-                                    _c("b", [
-                                      _vm._v(
-                                        _vm._s(item.time) +
-                                          ". " +
-                                          _vm._s(item.name) +
-                                          " [" +
-                                          _vm._s(item.amount) +
-                                          "] | " +
-                                          _vm._s(item.note)
-                                      ),
-                                    ]),
+                                  _c("div", { style: { padding: "1px" } }, [
+                                    item.prepayment
+                                      ? _c("img", {
+                                          style: { width: "15px" },
+                                          attrs: {
+                                            src: (__webpack_require__(/*! ../../svg/ruble.svg */ "./resources/svg/ruble.svg")["default"]),
+                                            alt: "Ruble",
+                                          },
+                                        })
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    item.visit_type === "День рождения"
+                                      ? _c("img", {
+                                          style: { width: "15px" },
+                                          attrs: {
+                                            src: (__webpack_require__(/*! ../../svg/birthday.svg */ "./resources/svg/birthday.svg")["default"]),
+                                            alt: "Birthday cake",
+                                          },
+                                        })
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    item.visit_type === "Романтический ужин"
+                                      ? _c("img", {
+                                          style: { width: "15px" },
+                                          attrs: {
+                                            src: (__webpack_require__(/*! ../../svg/heart.svg */ "./resources/svg/heart.svg")["default"]),
+                                            alt: "Heart",
+                                          },
+                                        })
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    item.visit_type === "Семейный ужин"
+                                      ? _c("img", {
+                                          style: { width: "15px" },
+                                          attrs: {
+                                            src: (__webpack_require__(/*! ../../svg/family.svg */ "./resources/svg/family.svg")["default"]),
+                                            alt: "Family",
+                                          },
+                                        })
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    item.conflict
+                                      ? _c("img", {
+                                          style: { width: "15px" },
+                                          attrs: {
+                                            src: (__webpack_require__(/*! ../../svg/conflict.svg */ "./resources/svg/conflict.svg")["default"]),
+                                            alt: "Warning!",
+                                          },
+                                        })
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    _c(
+                                      "span",
+                                      { staticClass: "align-middle" },
+                                      [
+                                        _c("b", [
+                                          _vm._v(
+                                            _vm._s(item.time) +
+                                              ". " +
+                                              _vm._s(item.name) +
+                                              " [" +
+                                              _vm._s(item.amount) +
+                                              "]\n                                "
+                                          ),
+                                        ]),
+                                      ]
+                                    ),
                                   ]),
                                 ]
                               )
@@ -17365,11 +17981,9 @@ var render = function () {
           _c("div", { staticClass: "modal-content" }, [
             _vm._m(3),
             _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "modal-body" },
-              [
-                _c("div", { staticClass: "mb-3" }, [
+            _c("div", { staticClass: "modal-body" }, [
+              _c("div", { staticClass: "row" }, [
+                _c("div", { staticClass: "mb-3 col-6" }, [
                   _c(
                     "label",
                     {
@@ -17406,7 +18020,7 @@ var render = function () {
                   }),
                 ]),
                 _vm._v(" "),
-                _c("div", { staticClass: "mb-3" }, [
+                _c("div", { staticClass: "mb-3 col-6" }, [
                   _c(
                     "label",
                     {
@@ -17442,86 +18056,143 @@ var render = function () {
                     },
                   }),
                 ]),
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check mb-3" }, [
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "conflictGuest" },
+                  },
+                  [
+                    _vm._v(
+                      "\n                            Конфликтный гость?\n                        "
+                    ),
+                  ]
+                ),
                 _vm._v(" "),
-                _c("div", { staticClass: "mb-3" }, [
-                  _c(
-                    "label",
+                _c("input", {
+                  directives: [
                     {
-                      staticClass: "form-label",
-                      attrs: { for: "guestPrepaymentAdd" },
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.reservation.conflict,
+                      expression: "reservation.conflict",
                     },
-                    [_vm._v("Предоплата")]
-                  ),
-                  _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.reservation.prepayment,
-                        expression: "reservation.prepayment",
-                      },
-                    ],
-                    staticClass: "form-control",
-                    attrs: {
-                      type: "number",
-                      id: "guestPrepaymentAdd",
-                      placeholder: "Сумма предоплаты",
-                    },
-                    domProps: { value: _vm.reservation.prepayment },
-                    on: {
-                      input: function ($event) {
-                        if ($event.target.composing) {
-                          return
+                  ],
+                  staticClass: "form-check-input",
+                  attrs: { type: "checkbox", value: "", id: "conflictGuest" },
+                  domProps: {
+                    checked: Array.isArray(_vm.reservation.conflict)
+                      ? _vm._i(_vm.reservation.conflict, "") > -1
+                      : _vm.reservation.conflict,
+                  },
+                  on: {
+                    change: function ($event) {
+                      var $$a = _vm.reservation.conflict,
+                        $$el = $event.target,
+                        $$c = $$el.checked ? true : false
+                      if (Array.isArray($$a)) {
+                        var $$v = "",
+                          $$i = _vm._i($$a, $$v)
+                        if ($$el.checked) {
+                          $$i < 0 &&
+                            _vm.$set(
+                              _vm.reservation,
+                              "conflict",
+                              $$a.concat([$$v])
+                            )
+                        } else {
+                          $$i > -1 &&
+                            _vm.$set(
+                              _vm.reservation,
+                              "conflict",
+                              $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                            )
                         }
-                        _vm.$set(
-                          _vm.reservation,
-                          "prepayment",
-                          $event.target.value
-                        )
+                      } else {
+                        _vm.$set(_vm.reservation, "conflict", $$c)
+                      }
+                    },
+                  },
+                }),
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "row" }, [
+                _c("div", { staticClass: "mb-3 col-6" }, [
+                  _c("span", [_vm._v("Мероприятие")]),
+                  _vm._v(" "),
+                  _c(
+                    "select",
+                    {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.reservation.visit_type,
+                          expression: "reservation.visit_type",
+                        },
+                      ],
+                      staticClass: "form-control form-select",
+                      on: {
+                        change: [
+                          function ($event) {
+                            var $$selectedVal = Array.prototype.filter
+                              .call($event.target.options, function (o) {
+                                return o.selected
+                              })
+                              .map(function (o) {
+                                var val = "_value" in o ? o._value : o.value
+                                return val
+                              })
+                            _vm.$set(
+                              _vm.reservation,
+                              "visit_type",
+                              $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            )
+                          },
+                          function ($event) {
+                            _vm.reservation.visit_type = $event.target.value
+                          },
+                        ],
                       },
                     },
-                  }),
+                    [
+                      _c(
+                        "option",
+                        { attrs: { value: "Обычный визит", selected: "" } },
+                        [
+                          _vm._v(
+                            "\n                                    Обычный визит\n                                "
+                          ),
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "День рождения" } }, [
+                        _vm._v(
+                          "\n                                    День рождения\n                                "
+                        ),
+                      ]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "Романтический ужин" } }, [
+                        _vm._v(
+                          "\n                                    Романтический ужин\n                                "
+                        ),
+                      ]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "Семейный ужин" } }, [
+                        _vm._v(
+                          "\n                                    Семейный ужин\n                                "
+                        ),
+                      ]),
+                    ]
+                  ),
                 ]),
                 _vm._v(" "),
-                _c("div", { staticClass: "mb-3" }, [
-                  _c(
-                    "label",
-                    {
-                      staticClass: "form-label",
-                      attrs: { for: "guestNoteAdd" },
-                    },
-                    [_vm._v("Дополнительная информация")]
-                  ),
-                  _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.reservation.note,
-                        expression: "reservation.note",
-                      },
-                    ],
-                    staticClass: "form-control",
-                    attrs: {
-                      type: "text",
-                      id: "guestNoteAdd",
-                      placeholder: "На заметку",
-                    },
-                    domProps: { value: _vm.reservation.note },
-                    on: {
-                      input: function ($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.$set(_vm.reservation, "note", $event.target.value)
-                      },
-                    },
-                  }),
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "mb-3" }, [
+                _c("div", { staticClass: "mb-3 col-6" }, [
                   _c("span", [_vm._v("Количество гостей")]),
                   _vm._v(" "),
                   _c(
@@ -17535,7 +18206,7 @@ var render = function () {
                           expression: "reservation.amount",
                         },
                       ],
-                      style: { width: "50px" },
+                      staticClass: "form-control form-select w-50",
                       on: {
                         change: [
                           function ($event) {
@@ -17578,9 +18249,91 @@ var render = function () {
                     ]
                   ),
                 ]),
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "mb-3" }, [
+                _c(
+                  "label",
+                  { staticClass: "form-label", attrs: { for: "guestNoteAdd" } },
+                  [_vm._v("Дополнительная информация")]
+                ),
                 _vm._v(" "),
-                _c("div", { staticClass: "mb-3" }, [
-                  _c("span", [_vm._v("№ стола")]),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.reservation.note,
+                      expression: "reservation.note",
+                    },
+                  ],
+                  staticClass: "form-control",
+                  attrs: {
+                    type: "text",
+                    id: "guestNoteAdd",
+                    placeholder: "На заметку",
+                  },
+                  domProps: { value: _vm.reservation.note },
+                  on: {
+                    input: function ($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.reservation, "note", $event.target.value)
+                    },
+                  },
+                }),
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "row" }, [
+                _c("div", { staticClass: "mb-3 col-6" }, [
+                  _c(
+                    "label",
+                    {
+                      staticClass: "form-label",
+                      attrs: { for: "guestPrepaymentAdd" },
+                    },
+                    [_vm._v("Предоплата")]
+                  ),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.reservation.prepayment,
+                        expression: "reservation.prepayment",
+                      },
+                    ],
+                    staticClass: "form-control",
+                    attrs: {
+                      type: "number",
+                      id: "guestPrepaymentAdd",
+                      placeholder: "Сумма предоплаты",
+                      step: "100",
+                    },
+                    domProps: { value: _vm.reservation.prepayment },
+                    on: {
+                      input: function ($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.reservation,
+                          "prepayment",
+                          $event.target.value
+                        )
+                      },
+                    },
+                  }),
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "mb-3 col-6" }, [
+                  _c(
+                    "label",
+                    { staticClass: "form-label", attrs: { for: "tables" } },
+                    [_vm._v("№ стола")]
+                  ),
                   _vm._v(" "),
                   _c(
                     "select",
@@ -17593,6 +18346,8 @@ var render = function () {
                           expression: "reservation.table_id",
                         },
                       ],
+                      staticClass: "form-control form-select",
+                      attrs: { id: "selectTables" },
                       on: {
                         change: [
                           function ($event) {
@@ -17628,9 +18383,9 @@ var render = function () {
                         },
                         [
                           _vm._v(
-                            "\n                                " +
+                            "\n                                    " +
                               _vm._s(table.i) +
-                              "\n                            "
+                              "\n                                "
                           ),
                         ]
                       )
@@ -17638,42 +18393,57 @@ var render = function () {
                     0
                   ),
                 ]),
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "row" }, [
+                _c(
+                  "div",
+                  { staticClass: "col-6" },
+                  [
+                    _c("date-picker", {
+                      attrs: {
+                        format: "YYYY-MM-DD",
+                        type: "date",
+                        valueType: "format",
+                      },
+                      model: {
+                        value: _vm.reservation.date,
+                        callback: function ($$v) {
+                          _vm.$set(_vm.reservation, "date", $$v)
+                        },
+                        expression: "reservation.date",
+                      },
+                    }),
+                  ],
+                  1
+                ),
                 _vm._v(" "),
-                _c("date-picker", {
-                  attrs: {
-                    format: "YYYY-MM-DD",
-                    type: "date",
-                    valueType: "format",
-                  },
-                  model: {
-                    value: _vm.reservation.date,
-                    callback: function ($$v) {
-                      _vm.$set(_vm.reservation, "date", $$v)
-                    },
-                    expression: "reservation.date",
-                  },
-                }),
-                _vm._v(" "),
-                _c("date-picker", {
-                  attrs: {
-                    "minute-step": 30,
-                    "hour-options": _vm.hours,
-                    format: "HH:mm",
-                    "value-type": "format",
-                    type: "time",
-                    placeholder: "HH:mm",
-                  },
-                  model: {
-                    value: _vm.reservation.time,
-                    callback: function ($$v) {
-                      _vm.$set(_vm.reservation, "time", $$v)
-                    },
-                    expression: "reservation.time",
-                  },
-                }),
-              ],
-              1
-            ),
+                _c(
+                  "div",
+                  { staticClass: "col-6" },
+                  [
+                    _c("date-picker", {
+                      attrs: {
+                        "minute-step": 30,
+                        "hour-options": _vm.hours,
+                        format: "HH:mm",
+                        "value-type": "format",
+                        type: "time",
+                        placeholder: "HH:mm",
+                      },
+                      model: {
+                        value: _vm.reservation.time,
+                        callback: function ($$v) {
+                          _vm.$set(_vm.reservation, "time", $$v)
+                        },
+                        expression: "reservation.time",
+                      },
+                    }),
+                  ],
+                  1
+                ),
+              ]),
+            ]),
             _vm._v(" "),
             _c("div", { staticClass: "modal-footer" }, [
               _c(
@@ -17684,7 +18454,7 @@ var render = function () {
                 },
                 [
                   _vm._v(
-                    "\n                        Close\n                    "
+                    "\n                        Закрыть\n                    "
                   ),
                 ]
               ),
@@ -17702,7 +18472,7 @@ var render = function () {
                 },
                 [
                   _vm._v(
-                    "\n                        Save changes\n                    "
+                    "\n                        Добавить гостя\n                    "
                   ),
                 ]
               ),
@@ -17757,18 +18527,16 @@ var render = function () {
               }),
             ]),
             _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "modal-body" },
-              [
-                _c("div", { staticClass: "mb-3" }, [
+            _c("div", { staticClass: "modal-body" }, [
+              _c("div", { staticClass: "row" }, [
+                _c("div", { staticClass: "mb-3 col-6" }, [
                   _c(
                     "label",
                     {
                       staticClass: "form-label",
                       attrs: { for: "guestNameUpdate" },
                     },
-                    [_vm._v("Guest name")]
+                    [_vm._v("Имя")]
                   ),
                   _vm._v(" "),
                   _c("input", {
@@ -17798,14 +18566,14 @@ var render = function () {
                   }),
                 ]),
                 _vm._v(" "),
-                _c("div", { staticClass: "mb-3" }, [
+                _c("div", { staticClass: "mb-3 col-6" }, [
                   _c(
                     "label",
                     {
                       staticClass: "form-label",
                       attrs: { for: "guestPhoneUpdate" },
                     },
-                    [_vm._v("Phone number")]
+                    [_vm._v("Телефон")]
                   ),
                   _vm._v(" "),
                   _c("input", {
@@ -17834,86 +18602,147 @@ var render = function () {
                     },
                   }),
                 ]),
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-check mb-3" }, [
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "conflictGuestUpdate" },
+                  },
+                  [
+                    _vm._v(
+                      "\n                            Конфликтный гость?\n                        "
+                    ),
+                  ]
+                ),
                 _vm._v(" "),
-                _c("div", { staticClass: "mb-3" }, [
-                  _c(
-                    "label",
+                _c("input", {
+                  directives: [
                     {
-                      staticClass: "form-label",
-                      attrs: { for: "guestPrepaymentUpdate" },
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.reservation.conflict,
+                      expression: "reservation.conflict",
                     },
-                    [_vm._v("Предоплата")]
-                  ),
-                  _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.reservation.prepayment,
-                        expression: "reservation.prepayment",
-                      },
-                    ],
-                    staticClass: "form-control",
-                    attrs: {
-                      type: "number",
-                      id: "guestPrepaymentUpdate",
-                      placeholder: "Сумма предоплаты",
-                    },
-                    domProps: { value: _vm.reservation.prepayment },
-                    on: {
-                      input: function ($event) {
-                        if ($event.target.composing) {
-                          return
+                  ],
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    value: "",
+                    id: "conflictGuestUpdate",
+                  },
+                  domProps: {
+                    checked: Array.isArray(_vm.reservation.conflict)
+                      ? _vm._i(_vm.reservation.conflict, "") > -1
+                      : _vm.reservation.conflict,
+                  },
+                  on: {
+                    change: function ($event) {
+                      var $$a = _vm.reservation.conflict,
+                        $$el = $event.target,
+                        $$c = $$el.checked ? true : false
+                      if (Array.isArray($$a)) {
+                        var $$v = "",
+                          $$i = _vm._i($$a, $$v)
+                        if ($$el.checked) {
+                          $$i < 0 &&
+                            _vm.$set(
+                              _vm.reservation,
+                              "conflict",
+                              $$a.concat([$$v])
+                            )
+                        } else {
+                          $$i > -1 &&
+                            _vm.$set(
+                              _vm.reservation,
+                              "conflict",
+                              $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                            )
                         }
-                        _vm.$set(
-                          _vm.reservation,
-                          "prepayment",
-                          $event.target.value
-                        )
+                      } else {
+                        _vm.$set(_vm.reservation, "conflict", $$c)
+                      }
+                    },
+                  },
+                }),
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "row" }, [
+                _c("div", { staticClass: "mb-3 col-6" }, [
+                  _c("span", [_vm._v("Мероприятие")]),
+                  _vm._v(" "),
+                  _c(
+                    "select",
+                    {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.reservation.visit_type,
+                          expression: "reservation.visit_type",
+                        },
+                      ],
+                      staticClass: "form-control",
+                      attrs: {
+                        id: "visit_type",
+                        "aria-label": "Visit type select",
+                      },
+                      on: {
+                        change: [
+                          function ($event) {
+                            var $$selectedVal = Array.prototype.filter
+                              .call($event.target.options, function (o) {
+                                return o.selected
+                              })
+                              .map(function (o) {
+                                var val = "_value" in o ? o._value : o.value
+                                return val
+                              })
+                            _vm.$set(
+                              _vm.reservation,
+                              "visit_type",
+                              $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            )
+                          },
+                          function ($event) {
+                            _vm.reservation.visit_type = $event.target.value
+                          },
+                        ],
                       },
                     },
-                  }),
+                    [
+                      _c("option", { attrs: { value: "Обычный визит" } }, [
+                        _vm._v(
+                          "\n                                    Обычный визит\n                                "
+                        ),
+                      ]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "День рождения" } }, [
+                        _vm._v(
+                          "\n                                    День рождения\n                                "
+                        ),
+                      ]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "Романтический ужин" } }, [
+                        _vm._v(
+                          "\n                                    Романтический ужин\n                                "
+                        ),
+                      ]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "Семейный ужин" } }, [
+                        _vm._v(
+                          "\n                                    Семейный ужин\n                                "
+                        ),
+                      ]),
+                    ]
+                  ),
                 ]),
                 _vm._v(" "),
-                _c("div", { staticClass: "mb-3" }, [
-                  _c(
-                    "label",
-                    {
-                      staticClass: "form-label",
-                      attrs: { for: "guestNoteUpdate" },
-                    },
-                    [_vm._v("Note")]
-                  ),
-                  _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.reservation.note,
-                        expression: "reservation.note",
-                      },
-                    ],
-                    staticClass: "form-control",
-                    attrs: {
-                      type: "text",
-                      id: "guestNoteUpdate",
-                      placeholder: "Important information",
-                    },
-                    domProps: { value: _vm.reservation.note },
-                    on: {
-                      input: function ($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.$set(_vm.reservation, "note", $event.target.value)
-                      },
-                    },
-                  }),
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "mb-3" }, [
+                _c("div", { staticClass: "mb-3 col-6" }, [
                   _c("span", [_vm._v("Количество гостей")]),
                   _vm._v(" "),
                   _c(
@@ -17927,6 +18756,7 @@ var render = function () {
                           expression: "reservation.amount",
                         },
                       ],
+                      staticClass: "form-control w-50",
                       on: {
                         change: [
                           function ($event) {
@@ -17966,16 +18796,100 @@ var render = function () {
                       _c("option", { attrs: { value: "5" } }, [_vm._v("5")]),
                       _vm._v(" "),
                       _c("option", { attrs: { value: "6" } }, [_vm._v("6")]),
-                      _vm._v(" "),
-                      _c("option", { attrs: { value: "6+" } }, [
-                        _vm._v("Больше 6"),
-                      ]),
                     ]
                   ),
                 ]),
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "mb-3" }, [
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-label",
+                    attrs: { for: "guestNoteUpdate" },
+                  },
+                  [_vm._v("Дополнительная информация")]
+                ),
                 _vm._v(" "),
-                _c("div", { staticClass: "mb-3" }, [
-                  _c("span", [_vm._v("№ стола")]),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.reservation.note,
+                      expression: "reservation.note",
+                    },
+                  ],
+                  staticClass: "form-control",
+                  attrs: {
+                    type: "text",
+                    id: "guestNoteUpdate",
+                    placeholder: "На заметку",
+                  },
+                  domProps: { value: _vm.reservation.note },
+                  on: {
+                    input: function ($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.reservation, "note", $event.target.value)
+                    },
+                  },
+                }),
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "row" }, [
+                _c("div", { staticClass: "mb-3 col-6" }, [
+                  _c(
+                    "label",
+                    {
+                      staticClass: "form-label",
+                      attrs: { for: "guestPrepaymentUpdate" },
+                    },
+                    [_vm._v("Предоплата")]
+                  ),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.reservation.prepayment,
+                        expression: "reservation.prepayment",
+                      },
+                    ],
+                    staticClass: "form-control",
+                    attrs: {
+                      type: "number",
+                      id: "guestPrepaymentUpdate",
+                      placeholder: "Сумма предоплаты",
+                      step: "100",
+                    },
+                    domProps: { value: _vm.reservation.prepayment },
+                    on: {
+                      input: function ($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.reservation,
+                          "prepayment",
+                          $event.target.value
+                        )
+                      },
+                    },
+                  }),
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "mb-3 col-6" }, [
+                  _c(
+                    "label",
+                    {
+                      staticClass: "form-label",
+                      attrs: { for: "selectTablesUpdate" },
+                    },
+                    [_vm._v("№ стола")]
+                  ),
                   _vm._v(" "),
                   _c(
                     "select",
@@ -17988,6 +18902,8 @@ var render = function () {
                           expression: "reservation.table_id",
                         },
                       ],
+                      staticClass: "form-control",
+                      attrs: { id: "selectTablesUpdate" },
                       on: {
                         change: [
                           function ($event) {
@@ -18016,12 +18932,16 @@ var render = function () {
                     _vm._l(_vm.layout, function (table) {
                       return _c(
                         "option",
-                        { key: table.id, domProps: { value: table.id } },
+                        {
+                          key: table.id,
+                          attrs: { selected: "" },
+                          domProps: { value: table.id },
+                        },
                         [
                           _vm._v(
-                            "\n                                " +
+                            "\n                                    " +
                               _vm._s(table.i) +
-                              "\n                            "
+                              "\n                                "
                           ),
                         ]
                       )
@@ -18029,97 +18949,134 @@ var render = function () {
                     0
                   ),
                 ]),
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "row" }, [
+                _c(
+                  "div",
+                  { staticClass: "col-6" },
+                  [
+                    _c("date-picker", {
+                      attrs: {
+                        format: "YYYY-MM-DD",
+                        type: "date",
+                        valueType: "format",
+                      },
+                      model: {
+                        value: _vm.reservation.date,
+                        callback: function ($$v) {
+                          _vm.$set(_vm.reservation, "date", $$v)
+                        },
+                        expression: "reservation.date",
+                      },
+                    }),
+                  ],
+                  1
+                ),
                 _vm._v(" "),
-                _c("date-picker", {
-                  attrs: {
-                    format: "YYYY-MM-DD",
-                    type: "date",
-                    valueType: "format",
-                  },
-                  model: {
-                    value: _vm.reservation.date,
-                    callback: function ($$v) {
-                      _vm.$set(_vm.reservation, "date", $$v)
-                    },
-                    expression: "reservation.date",
-                  },
-                }),
-                _vm._v(" "),
-                _c("date-picker", {
-                  attrs: {
-                    "minute-step": 30,
-                    "hour-options": _vm.hours,
-                    format: "HH:mm",
-                    "value-type": "format",
-                    type: "time",
-                    placeholder: "HH:mm",
-                  },
-                  model: {
-                    value: _vm.reservation.time,
-                    callback: function ($$v) {
-                      _vm.$set(_vm.reservation, "time", $$v)
-                    },
-                    expression: "reservation.time",
-                  },
-                }),
-              ],
-              1
-            ),
+                _c(
+                  "div",
+                  { staticClass: "col-6" },
+                  [
+                    _c("date-picker", {
+                      attrs: {
+                        "minute-step": 30,
+                        "hour-options": _vm.hours,
+                        format: "HH:mm",
+                        "value-type": "format",
+                        type: "time",
+                        placeholder: "HH:mm",
+                      },
+                      model: {
+                        value: _vm.reservation.time,
+                        callback: function ($$v) {
+                          _vm.$set(_vm.reservation, "time", $$v)
+                        },
+                        expression: "reservation.time",
+                      },
+                    }),
+                  ],
+                  1
+                ),
+              ]),
+            ]),
             _vm._v(" "),
             _c("div", { staticClass: "modal-footer" }, [
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-secondary btn-danger",
-                  attrs: { type: "button", "data-bs-dismiss": "modal" },
-                  on: {
-                    click: function () {
-                      return _vm.deleteGuest()
+              _c("div", { staticClass: "me-auto" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-secondary btn-danger",
+                    attrs: { type: "button", "data-bs-dismiss": "modal" },
+                    on: {
+                      click: function () {
+                        return _vm.deleteReservation()
+                      },
                     },
                   },
-                },
-                [
-                  _vm._v(
-                    "\n                        Удалить гостя\n                    "
-                  ),
-                ]
-              ),
+                  [
+                    _vm._v(
+                      "\n                            Удалить\n                        "
+                    ),
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-secondary btn-success",
+                    attrs: { type: "button", "data-bs-dismiss": "modal" },
+                    on: {
+                      click: function () {
+                        return _vm.completeReservation()
+                      },
+                    },
+                  },
+                  [
+                    _vm._v(
+                      "\n                            Завершить\n                        "
+                    ),
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary",
+                    attrs: { type: "button", "data-bs-dismiss": "modal" },
+                    on: {
+                      click: function () {
+                        return _vm.updateGuest()
+                      },
+                    },
+                  },
+                  [
+                    _vm._v(
+                      "\n                            Обновить\n                        "
+                    ),
+                  ]
+                ),
+              ]),
               _vm._v(" "),
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-secondary",
-                  attrs: { type: "button", "data-bs-dismiss": "modal" },
-                  on: {
-                    click: function () {
-                      return _vm.clearReservationInfo()
+              _c("div", [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-secondary",
+                    attrs: { type: "button", "data-bs-dismiss": "modal" },
+                    on: {
+                      click: function () {
+                        return _vm.clearReservationInfo()
+                      },
                     },
                   },
-                },
-                [
-                  _vm._v(
-                    "\n                        Закрыть\n                    "
-                  ),
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-primary",
-                  attrs: { type: "button", "data-bs-dismiss": "modal" },
-                  on: {
-                    click: function () {
-                      return _vm.updateGuest()
-                    },
-                  },
-                },
-                [
-                  _vm._v(
-                    "\n                        Обновить инфо\n                    "
-                  ),
-                ]
-              ),
+                  [
+                    _vm._v(
+                      "\n                        Закрыть\n                    "
+                    ),
+                  ]
+                ),
+              ]),
             ]),
           ]),
         ]),
@@ -18188,8 +19145,6 @@ var render = function () {
                               _vm._s(item.amount) +
                               "] |\n                            " +
                               _vm._s(item.phone) +
-                              " |\n                            " +
-                              _vm._s(item.note) +
                               "\n                        "
                           ),
                         ]
@@ -18609,6 +19564,87 @@ var render = function () {
           _c("div", { staticClass: "modal-content" }, [
             _vm._m(6),
             _vm._v(" "),
+            _c("div", { staticClass: "modal-body" }, [
+              _c("label", { attrs: { for: "AddTablePasswordCheck" } }, [
+                _vm._v("Введите пароль"),
+              ]),
+              _vm._v(" "),
+              _vm.showPassword
+                ? _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.password,
+                        expression: "password",
+                      },
+                    ],
+                    staticClass: "form-control",
+                    attrs: {
+                      type: "text",
+                      id: "AddTablePasswordCheck",
+                      required: "",
+                    },
+                    domProps: { value: _vm.password },
+                    on: {
+                      input: function ($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.password = $event.target.value
+                      },
+                    },
+                  })
+                : !_vm.showPassword
+                ? _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.password,
+                        expression: "password",
+                      },
+                    ],
+                    staticClass: "form-control",
+                    attrs: {
+                      type: "password",
+                      id: "AddTablePasswordCheck",
+                      required: "",
+                    },
+                    domProps: { value: _vm.password },
+                    on: {
+                      input: function ($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.password = $event.target.value
+                      },
+                    },
+                  })
+                : _vm._e(),
+              _vm._v(" "),
+              _c("div", [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary btn-sm mt-2",
+                    on: {
+                      click: function ($event) {
+                        return _vm.toggleShow()
+                      },
+                    },
+                  },
+                  [
+                    _c("span", { staticClass: "icon is-small is-right" }, [
+                      _vm._v(
+                        "\n                                Показать пароль\n                            "
+                      ),
+                    ]),
+                  ]
+                ),
+              ]),
+            ]),
+            _vm._v(" "),
             _c("div", { staticClass: "modal-footer justify-content-center" }, [
               _c(
                 "button",
@@ -18617,13 +19653,13 @@ var render = function () {
                   attrs: { type: "button", "data-bs-dismiss": "modal" },
                   on: {
                     click: function ($event) {
-                      return _vm.addTable(false)
+                      return _vm.addTable(false, _vm.password)
                     },
                   },
                 },
                 [
                   _vm._v(
-                    "\n                        Add a table\n                    "
+                    "\n                        Добавить обычный стол\n                    "
                   ),
                 ]
               ),
@@ -18635,13 +19671,13 @@ var render = function () {
                   attrs: { type: "button", "data-bs-dismiss": "modal" },
                   on: {
                     click: function ($event) {
-                      return _vm.addTable(true)
+                      return _vm.addTable(true, _vm.password)
                     },
                   },
                 },
                 [
                   _vm._v(
-                    "\n                        Add a table with BBQ\n                    "
+                    "\n                        Добавить стол BBQ\n                    "
                   ),
                 ]
               ),
@@ -18667,6 +19703,87 @@ var render = function () {
           _c("div", { staticClass: "modal-content" }, [
             _vm._m(7),
             _vm._v(" "),
+            _c("div", { staticClass: "modal-body" }, [
+              _c("label", { attrs: { for: "RemoveTablePasswordCheck" } }, [
+                _vm._v("Введите пароль"),
+              ]),
+              _vm._v(" "),
+              _vm.showPassword
+                ? _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.password,
+                        expression: "password",
+                      },
+                    ],
+                    staticClass: "form-control",
+                    attrs: {
+                      type: "text",
+                      id: "RemoveTablePasswordCheck",
+                      required: "",
+                    },
+                    domProps: { value: _vm.password },
+                    on: {
+                      input: function ($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.password = $event.target.value
+                      },
+                    },
+                  })
+                : !_vm.showPassword
+                ? _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.password,
+                        expression: "password",
+                      },
+                    ],
+                    staticClass: "form-control",
+                    attrs: {
+                      type: "password",
+                      id: "RenoveTablePasswordCheck",
+                      required: "",
+                    },
+                    domProps: { value: _vm.password },
+                    on: {
+                      input: function ($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.password = $event.target.value
+                      },
+                    },
+                  })
+                : _vm._e(),
+              _vm._v(" "),
+              _c("div", [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary btn-sm mt-2",
+                    on: {
+                      click: function ($event) {
+                        return _vm.toggleShow()
+                      },
+                    },
+                  },
+                  [
+                    _c("span", { staticClass: "icon is-small is-right" }, [
+                      _vm._v(
+                        "\n                                Показать пароль\n                            "
+                      ),
+                    ]),
+                  ]
+                ),
+              ]),
+            ]),
+            _vm._v(" "),
             _c("div", { staticClass: "modal-footer justify-content-center" }, [
               _c(
                 "button",
@@ -18675,13 +19792,13 @@ var render = function () {
                   attrs: { type: "button", "data-bs-dismiss": "modal" },
                   on: {
                     click: function ($event) {
-                      return _vm.deleteOneTable()
+                      return _vm.deleteOneTable(_vm.password)
                     },
                   },
                 },
                 [
                   _vm._v(
-                    "\n                        Delete a table\n                    "
+                    "\n                        Удалить стол\n                    "
                   ),
                 ]
               ),
@@ -18694,7 +19811,7 @@ var render = function () {
                 },
                 [
                   _vm._v(
-                    "\n                        Close\n                    "
+                    "\n                        Закрыть\n                    "
                   ),
                 ]
               ),
@@ -18825,13 +19942,13 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("p", { staticClass: "p-0 m-0" }, [_c("b", [_vm._v("Дата")])])
+    return _c("p", { staticClass: "p-0 mb-2" }, [_c("b", [_vm._v("Дата")])])
   },
   function () {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", [
+    return _c("div", { staticClass: "mb-2" }, [
       _c(
         "label",
         { staticClass: "place_title", attrs: { for: "place_selector" } },
@@ -18909,7 +20026,7 @@ var staticRenderFns = [
         {
           staticClass: "btn btn-primary",
           attrs: {
-            "data-bs-target": "#sendToWaitingList",
+            "data-bs-target": "#AddGuest",
             "data-bs-toggle": "modal",
             "data-bs-dismiss": "modal",
           },
@@ -18929,7 +20046,7 @@ var staticRenderFns = [
     return _c("div", { staticClass: "modal-header" }, [
       _c("h5", { staticClass: "modal-title", attrs: { id: "addTableModal" } }, [
         _vm._v(
-          "\n                        Do you want to add a table?\n                    "
+          "\n                        Хотите добавить стол?\n                    "
         ),
       ]),
       _vm._v(" "),
@@ -18953,7 +20070,7 @@ var staticRenderFns = [
         { staticClass: "modal-title", attrs: { id: "DeleteTableModal" } },
         [
           _vm._v(
-            "\n                        Are you sure you want to delete a table?\n                    "
+            "\n                        Уверены, что хотите удалить стол?\n                    "
           ),
         ]
       ),

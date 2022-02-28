@@ -95,10 +95,29 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "register",
   data: function data() {
     return {
+      adminPass: "",
+      adminChecked: false,
       name: "",
       kimchiEmail: "@kimchi.ru",
       email: "",
@@ -107,29 +126,44 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    checkPass: function checkPass() {
+      if (this.adminPass === "k1mch1") {
+        this.adminChecked = true;
+      } else {
+        this.adminChecked = false;
+        this.adminPass = "";
+      }
+    },
     register: function register() {
       var _this = this;
 
-      // Отправляем запрос за X-XSRF-TOKEN
-      axios.get("/sanctum/csrf-cookie").then(function (response) {
-        // Получив, отправляем запрос на /register с объектом (данные пользователя)
-        axios.post("/register", {
-          name: _this.name,
-          email: _this.email + _this.kimchiEmail,
-          password: _this.password,
-          password_confirmation: _this.password_confirmation
-        }).then(function (res) {
-          // В локалсторедж сохраняем токен
-          localStorage.setItem("token", res.config.headers["X-XSRF-TOKEN"]);
+      this.checkPass(); // Отправляем запрос за X-XSRF-TOKEN
 
-          _this.$router.push({
-            name: "Home"
+      if (this.adminChecked) {
+        axios.get("/sanctum/csrf-cookie").then(function (response) {
+          // Получив, отправляем запрос на /register с объектом (данные пользователя)
+          axios.post("/register", {
+            name: _this.name,
+            email: _this.email + _this.kimchiEmail,
+            password: _this.password,
+            password_confirmation: _this.password_confirmation
+          }).then(function (res) {
+            // В локалсторедж сохраняем токен
+            localStorage.setItem("token", res.config.headers["X-XSRF-TOKEN"]);
+
+            _this.$router.push({
+              name: "Home"
+            });
+          })["catch"](function (error) {
+            // Объект ошибки для дальнейшей работы
+            console.log(error);
           });
-        })["catch"](function (error) {
-          // Объект ошибки для дальнейшей работы
-          console.log(error);
         });
-      });
+        this.adminPass = "";
+        this.adminChecked = false;
+      } else {
+        alert("Используйте Мастер-пароль Администратора");
+      }
     }
   }
 });
@@ -407,6 +441,51 @@ var render = function () {
           }),
           _vm._v(" "),
           _c("div", { staticClass: "valid-feedback" }, [_vm._v("Looks good!")]),
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-md-4 mx-auto pt-3" }, [
+          _c(
+            "label",
+            { staticClass: "form-label", attrs: { for: "AdminPassRegister" } },
+            [_vm._v("Мастер-Пароль для завершения регистрации")]
+          ),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.adminPass,
+                expression: "adminPass",
+              },
+            ],
+            staticClass: "form-control",
+            attrs: {
+              type: "password",
+              id: "AdminPassRegister",
+              "aria-describedby": "passwordHelpBlock",
+              required: "",
+            },
+            domProps: { value: _vm.adminPass },
+            on: {
+              input: function ($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.adminPass = $event.target.value
+              },
+            },
+          }),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "form-text", attrs: { id: "passwordHelpBlock" } },
+            [
+              _vm._v(
+                "\n                Используйте Мастер-пароль Администратора для завершения\n                регистрации\n            "
+              ),
+            ]
+          ),
         ]),
         _vm._v(" "),
         _vm._m(0),

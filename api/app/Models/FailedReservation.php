@@ -5,10 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Log extends Model
+class FailedReservation extends Model
 {
     use HasFactory;
-    protected $fillable = ['name', 'phone', 'visit_type', 'conflict', 'prepayment', 'amount', 'date', 'time', 'note', 'place_id', 'table_id', 'type', 'text', 'responsible_email', 'responsible_name'];
+
+    protected $casts = [
+        'date' => 'date'
+    ];
+    protected $fillable = ['name', 'phone', 'conflict', 'visit_type', 'amount', 'note',
+    'prepayment', 'table_id', 'place_id', 'date', 'time', 'responsible_email', 'responsible_name'];
 
     public function table() {
         return $this->belongsTo(Table::class);

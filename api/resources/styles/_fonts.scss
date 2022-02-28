@@ -1,0 +1,54 @@
+@use "mixins/font_face";
+
+// Circe Regular
+@include font_face.font(
+    "Circe",
+    normal,
+    normal,
+    "~/resources/fonts/Circe-Regular.woff" "woff"
+);
+
+// Circe ExtraLight
+@include font_face.font(
+    "Circe",
+    normal,
+    200,
+    "~resources/fonts/Circe-ExtraLight.woff",
+    "woff"
+);
+
+// Circe Thin
+@include font_face.font(
+    "Circe",
+    normal,
+    100,
+    "~resources/fonts/Circe-Thin.woff",
+    "woff"
+);
+
+// Circe Light
+@include font_face.font(
+    "Circe",
+    normal,
+    300,
+    "~resources/fonts/Circe-Light.woff",
+    "woff"
+);
+
+// Circe Bold
+@include font_face.font(
+    "Circe",
+    normal,
+    bold,
+    "~resources/fonts/Circe-Bold.woff",
+    "woff"
+);
+
+// Circe ExtraBold
+@include font_face.font(
+    "Circe",
+    normal,
+    800,
+    "~resources/fonts/Circe-ExtraBold.woff",
+    "woff"
+);

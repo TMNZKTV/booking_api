@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Log;
+use App\Models\CompletedReservation;
 use Illuminate\Http\Request;
 
-class LogController extends Controller
+class CompletedReservationController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return Log[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Http\Response
+     * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        return Log::all();
+        return CompletedReservation::all();
     }
 
     /**
@@ -25,7 +25,7 @@ class LogController extends Controller
      */
     public function store(Request $request)
     {
-        return Log::create($request->all());
+        return CompletedReservation::create($request->all());
     }
 
     /**
@@ -48,7 +48,10 @@ class LogController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $reservation = CompletedReservation::findOrFail($id);
+        $reservation->update($request->all());
+
+        return CompletedReservation::findorFail($id);
     }
 
     /**
@@ -59,6 +62,6 @@ class LogController extends Controller
      */
     public function destroy($id)
     {
-        return Log::destroy($id);
+        return CompletedReservation::destroy($id);
     }
 }

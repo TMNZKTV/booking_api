@@ -2471,7 +2471,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "* {\n  font-family: Nunito, system-ui, BlinkMacSystemFont, -apple-system, sans-serif;\n}\n.header {\n  background-image: linear-gradient(0deg, #7e8ea1 0%, #3c4655 100%);\n  background-attachment: fixed;\n}\n.header .header_full {\n  display: none;\n}\n@media (min-width: 767px) {\n.header .header_full {\n    display: flex;\n}\n}\n.link {\n  color: white;\n  text-transform: uppercase;\n  font-weight: 600;\n}\n.main {\n  position: absolute;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  background-color: #eef1f4;\n}\n.button_action {\n  color: white;\n  background-color: #4099de;\n  font-weight: 600;\n  font-size: 16px;\n  padding-left: 10px;\n  padding-right: 10px;\n  border-radius: 8px;\n  display: inline-block;\n  min-width: 70px;\n  border: 1px solid transparent;\n}\n.header_mobile {\n  display: none;\n}\n@media (min-width: 375px) {\n.header_mobile {\n    display: flex;\n}\n}\n@media (min-width: 767px) {\n.header_mobile {\n    display: none;\n}\n}\nul {\n  cursor: pointer;\n}\n.slide-enter-active {\n  transition-duration: 0.3s;\n  transition-timing-function: ease-in;\n}\n.slide-leave-active {\n  transition-duration: 0.3s;\n  transition-timing-function: cubic-bezier(0, 1, 0.5, 1);\n}\n.slide-enter-to,\n.slide-leave {\n  max-height: 100px;\n  overflow: hidden;\n}\n.slide-enter,\n.slide-leave-to {\n  overflow: hidden;\n  max-height: 0;\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "html,\nbody {\n  font-family: Circe, sans-serif;\n  font-size: 14px;\n  font-style: normal;\n  font-weight: 300;\n  line-height: 1.2;\n}\n.header {\n  background-image: linear-gradient(0deg, #7e8ea1 0%, #3c4655 100%);\n  background-attachment: fixed;\n}\n.header .header_full {\n  display: none;\n}\n@media (min-width: 767px) {\n.header .header_full {\n    display: flex;\n}\n}\n.link {\n  color: white;\n  text-transform: uppercase;\n  font-weight: 600;\n}\n.main {\n  position: absolute;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  background-color: #eef1f4;\n}\n.button_action {\n  color: white;\n  background-color: #4099de;\n  font-weight: 600;\n  font-size: 16px;\n  padding-left: 10px;\n  padding-right: 10px;\n  border-radius: 8px;\n  display: inline-block;\n  min-width: 70px;\n  border: 1px solid transparent;\n}\n.header_mobile {\n  display: none;\n}\n@media (min-width: 375px) {\n.header_mobile {\n    display: flex;\n}\n}\n@media (min-width: 767px) {\n.header_mobile {\n    display: none;\n}\n}\nul {\n  cursor: pointer;\n}\n.slide-enter-active {\n  transition-duration: 0.3s;\n  transition-timing-function: ease-in;\n}\n.slide-leave-active {\n  transition-duration: 0.3s;\n  transition-timing-function: cubic-bezier(0, 1, 0.5, 1);\n}\n.slide-enter-to,\n.slide-leave {\n  max-height: 100px;\n  overflow: hidden;\n}\n.slide-enter,\n.slide-leave-to {\n  overflow: hidden;\n  max-height: 0;\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -21383,7 +21383,7 @@ var render = function () {
             : _vm._e(),
         ]),
         _vm._v(" "),
-        _c("div", [_c("router-view")], 1),
+        _c("div", [_c("router-view", { attrs: { user: _vm.user } })], 1),
       ],
       1
     ),

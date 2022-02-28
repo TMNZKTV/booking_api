@@ -27,6 +27,8 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::apiResources([
         'tables' => TableController::class,
         'reservations' => ReservationController::class,
+        'completed_reservations' => CompletedReservationController::class,
+        'failed_reservations' => FailedReservationController::class,
         'logs'=> LogController::class,
         'waiting'=> WaitingUserController::class,
         'user' => UserController::class

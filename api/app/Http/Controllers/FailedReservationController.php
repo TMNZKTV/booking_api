@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Log;
 use Illuminate\Http\Request;
+use App\Models\FailedReservation;
 
-class LogController extends Controller
+class FailedReservationController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return Log[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Http\Response
+     * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        return Log::all();
+        return FailedReservation::all();
     }
 
     /**
@@ -25,7 +25,7 @@ class LogController extends Controller
      */
     public function store(Request $request)
     {
-        return Log::create($request->all());
+        return FailedReservation::create($request->all());
     }
 
     /**
@@ -48,7 +48,10 @@ class LogController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $reservation = FailedReservation::findOrFail($id);
+        $reservation->update($request->all());
+
+        return FailedReservation::findorFail($id);
     }
 
     /**
@@ -59,6 +62,6 @@ class LogController extends Controller
      */
     public function destroy($id)
     {
-        return Log::destroy($id);
+        return FailedReservation::destroy($id);
     }
 }

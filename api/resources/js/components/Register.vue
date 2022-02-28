@@ -69,6 +69,23 @@
                 />
                 <div class="valid-feedback">Looks good!</div>
             </div>
+            <div class="col-md-4 mx-auto pt-3">
+                <label for="AdminPassRegister" class="form-label"
+                    >Мастер-Пароль для завершения регистрации</label
+                >
+                <input
+                    v-model="adminPass"
+                    type="password"
+                    id="AdminPassRegister"
+                    class="form-control"
+                    aria-describedby="passwordHelpBlock"
+                    required
+                />
+                <div id="passwordHelpBlock" class="form-text">
+                    Используйте Мастер-пароль Администратора для завершения
+                    регистрации
+                </div>
+            </div>
             <div class="d-flex justify-content-center pt-3">
                 <button class="btn btn-primary" type="submit">
                     Зарегистрироваться
@@ -87,6 +104,8 @@ export default {
     name: "register",
     data() {
         return {
+            adminPass: "",
+            adminChecked: false,
             name: "",
             kimchiEmail: "@kimchi.ru",
             email: "",
@@ -95,30 +114,45 @@ export default {
         };
     },
     methods: {
+        checkPass() {
+            if (this.adminPass === process.env.MIX_MASTERKEY) {
+                this.adminChecked = true;
+            } else {
+                this.adminChecked = false;
+                this.adminPass = "";
+            }
+        },
         register() {
+            this.checkPass();
             // Отправляем запрос за X-XSRF-TOKEN
-            axios.get("/sanctum/csrf-cookie").then((response) => {
-                // Получив, отправляем запрос на /register с объектом (данные пользователя)
-                axios
-                    .post("/register", {
-                        name: this.name,
-                        email: this.email + this.kimchiEmail,
-                        password: this.password,
-                        password_confirmation: this.password_confirmation,
-                    })
-                    .then((res) => {
-                        // В локалсторедж сохраняем токен
-                        localStorage.setItem(
-                            "token",
-                            res.config.headers["X-XSRF-TOKEN"]
-                        );
-                        this.$router.push({ name: "Home" });
-                    })
-                    .catch((error) => {
-                        // Объект ошибки для дальнейшей работы
-                        console.log(error);
-                    });
-            });
+            if (this.adminChecked) {
+                axios.get("/sanctum/csrf-cookie").then((response) => {
+                    // Получив, отправляем запрос на /register с объектом (данные пользователя)
+                    axios
+                        .post("/register", {
+                            name: this.name,
+                            email: this.email + this.kimchiEmail,
+                            password: this.password,
+                            password_confirmation: this.password_confirmation,
+                        })
+                        .then((res) => {
+                            // В локалсторедж сохраняем токен
+                            localStorage.setItem(
+                                "token",
+                                res.config.headers["X-XSRF-TOKEN"]
+                            );
+                            this.$router.push({ name: "Home" });
+                        })
+                        .catch((error) => {
+                            // Объект ошибки для дальнейшей работы
+                            console.log(error);
+                        });
+                });
+                this.adminPass = "";
+                this.adminChecked = false;
+            } else {
+                alert("Используйте Мастер-пароль Администратора");
+            }
         },
     },
 };

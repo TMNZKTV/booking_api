@@ -114,7 +114,7 @@
             </transition>
 
             <div>
-                <router-view></router-view>
+                <router-view :user="user"></router-view>
             </div>
         </div>
     </div>
@@ -169,9 +169,17 @@ export default {
 </script>
 
 <style lang="scss">
-* {
-    font-family: Nunito, system-ui, BlinkMacSystemFont, -apple-system,
-        sans-serif;
+// * {
+//     font-family: Nunito, system-ui, BlinkMacSystemFont, -apple-system,
+//         sans-serif;
+// }
+html,
+body {
+    font-family: Circe, sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 1.2;
 }
 .header {
     background-image: linear-gradient(0deg, #7e8ea1 0%, #3c4655 100%);

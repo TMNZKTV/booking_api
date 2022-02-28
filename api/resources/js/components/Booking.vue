@@ -2,29 +2,23 @@
     <div>
         <div class="px-4 py-3 mb-5" :style="{ backgroundColor: '#eef1f4' }">
             <div class="row">
-                <div class="xs col-12 col-sm-5 col-md-6 mb-2">
+                <div class="xs col-12 col-sm-4 col-md-6 mb-2">
                     <!-- Календарь -->
                     <div class="row">
                         <div class="col-sm-10 col-md-5 col-lg-5">
-                            <div class="card">
+                            <div
+                                class="card col-md card_md col-lg-6 border border-4"
+                            >
                                 <div
-                                    class="card_content d-flex justify-content-center"
+                                    class="card-body card_content_info text-center"
                                 >
-                                    <div class="card_content_info">
-                                        <p
-                                            class="day_full text-center align-middle p-0 m-0"
-                                        >
-                                            <b>
-                                                {{ dayFilter }}
-                                            </b>
-                                        </p>
+                                    <p class="day_full m-0">
+                                        {{ dayFilter }}
+                                    </p>
 
-                                        <p
-                                            class="date_full text-center p-0 m-0"
-                                        >
-                                            {{ dateFilter }}
-                                        </p>
-                                    </div>
+                                    <p class="date_full m-0">
+                                        {{ dateFilter }}
+                                    </p>
                                 </div>
                             </div>
                             <div>
@@ -36,7 +30,7 @@
 
                         <!-- Дата и Ресторан-->
                         <div class="date_picker_full col-sm-10 col-md-6">
-                            <p class="p-0 m-0"><b>Дата</b></p>
+                            <p class="p-0 mb-2"><b>Дата</b></p>
                             <date-picker
                                 v-model="today"
                                 format="YYYY-MM-DD"
@@ -45,9 +39,9 @@
                                 :style="{ width: '150px' }"
                             ></date-picker>
 
-                            <div class="row">
+                            <div class="row mt-2">
                                 <div class="col-12">
-                                    <div>
+                                    <div class="mb-2">
                                         <label
                                             for="place_selector"
                                             class="place_title"
@@ -58,7 +52,7 @@
 
                                     <div>
                                         <select
-                                            class="form-control form-select w-full place_input"
+                                            class="form-control form-select w-full place_input border border-2"
                                             id="place_selector"
                                             v-model="place"
                                             @change="choosePlace($event)"
@@ -84,7 +78,7 @@
                 </div>
 
                 <!-- Выбор действия -->
-                <div class="xs col-12 col-md-6">
+                <div class="xs col-12 col-sm-8 col-md-6">
                     <!-- 1 ряд -->
                     <div class="row row-cols-2 g-1 mb-1">
                         <!-- Изменить расположение -->
@@ -151,7 +145,7 @@
                                     id="removeTable"
                                 />
                                 <label for="removeTable" class="py-2"
-                                    >Удалить &nbsp; стол</label
+                                    >Удалить стол</label
                                 >
                             </div>
                         </div>
@@ -176,71 +170,108 @@
                     </div>
 
                     <!-- 3 ряд с иконками -->
-                    <div class="row row-cols-2 g-1">
-                        <div class="col-auto">
-                            <img
-                                :src="require('../../svg/bbq.svg').default"
-                                alt="bbq"
-                                :style="{ width: '20px' }"
-                            />
-                            <span>Стол BBQ</span>
-                        </div>
-                        <div class="col-auto">
-                            <img
-                                :src="require('../../svg/no.svg').default"
-                                alt="Ruble"
-                                :style="{ width: '20px' }"
-                            />
-                            <span>Нет предоплаты</span>
-                        </div>
-                        <div class="col-auto">
-                            <img
-                                :src="require('../../svg/ruble.svg').default"
-                                alt="Ruble"
-                                :style="{ width: '20px' }"
-                            />
-                            <span>Есть предоплата</span>
-                        </div>
-                        <div class="col-auto">
-                            <img
-                                :src="require('../../svg/bbq.svg').default"
-                                alt="bbq"
-                                :style="{ width: '20px' }"
-                            />
-                            <span>Стол BBQ</span>
-                        </div>
-                        <div class="w-100"></div>
-                        <div class="col-auto">
-                            <img
-                                :src="require('../../svg/bbq.svg').default"
-                                alt="bbq"
-                                :style="{ width: '20px' }"
-                            />
-                            <span>Стол BBQ</span>
-                        </div>
-                        <div class="col-auto">
-                            <img
-                                :src="require('../../svg/bbq.svg').default"
-                                alt="bbq"
-                                :style="{ width: '20px' }"
-                            />
-                            <span>Стол BBQ</span>
-                        </div>
-                        <div class="col-auto">
-                            <img
-                                :src="require('../../svg/bbq.svg').default"
-                                alt="bbq"
-                                :style="{ width: '20px' }"
-                            />
-                            <span>Стол BBQ</span>
-                        </div>
-                        <div class="col-auto">
-                            <img
-                                :src="require('../../svg/bbq.svg').default"
-                                alt="bbq"
-                                :style="{ width: '20px' }"
-                            />
-                            <span>Стол BBQ</span>
+                    <div class="col-md-12 col-xl-8">
+                        <div
+                            class="row row-cols-2 g-1 mt-3 p-3"
+                            :style="{
+                                backgroundColor: 'white',
+                            }"
+                        >
+                            <div class="col-md-5 col-5 m-0">
+                                <img
+                                    :src="require('../../svg/bbq.svg').default"
+                                    alt="bbq"
+                                    :style="{ width: '15px' }"
+                                />
+                                <span>Стол BBQ</span>
+                            </div>
+
+                            <div class="col-md-6 col-7 m-0">
+                                <img
+                                    :src="
+                                        require('../../svg/ruble.svg').default
+                                    "
+                                    alt="Ruble"
+                                    :style="{ width: '15px' }"
+                                />
+                                <span>Есть предоплата</span>
+                            </div>
+                            <div class="w-100"></div>
+
+                            <div class="col-md-5 col-5">
+                                <img
+                                    :src="
+                                        require('../../svg/birthday.svg')
+                                            .default
+                                    "
+                                    alt="birthday"
+                                    :style="{ width: '15px' }"
+                                />
+                                <span>День рождения</span>
+                            </div>
+                            <div class="col-md-7 col-7">
+                                <img
+                                    :src="
+                                        require('../../svg/heart.svg').default
+                                    "
+                                    alt="romantic dinner"
+                                    :style="{ width: '15px' }"
+                                />
+                                <span>Романтический ужин</span>
+                            </div>
+                            <div class="w-100"></div>
+
+                            <div class="col-5 col-md-7 col-lg-5">
+                                <img
+                                    :src="
+                                        require('../../svg/family.svg').default
+                                    "
+                                    alt="family dinner"
+                                    :style="{ width: '15px' }"
+                                />
+                                <span>Семейный ужин</span>
+                            </div>
+                            <div class="col-md-7 col-7">
+                                <img
+                                    :src="
+                                        require('../../svg/conflict.svg')
+                                            .default
+                                    "
+                                    alt="conflict guest"
+                                    :style="{ width: '15px' }"
+                                />
+                                <span>Конфликтный гость</span>
+                            </div>
+                            <div class="w-100"></div>
+
+                            <div class="col-4">
+                                <img
+                                    :src="
+                                        require('../../svg/morning.svg').default
+                                    "
+                                    alt="morning time"
+                                    :style="{ width: '15px' }"
+                                />
+                                <span>9-12 часов</span>
+                            </div>
+                            <div class="col-4">
+                                <img
+                                    :src="require('../../svg/day.svg').default"
+                                    alt="day time"
+                                    :style="{ width: '15px' }"
+                                />
+                                <span>12-18 часов</span>
+                            </div>
+                            <div class="col-4">
+                                <img
+                                    :src="
+                                        require('../../svg/evening.svg').default
+                                    "
+                                    alt="evening time"
+                                    :style="{ width: '15px' }"
+                                />
+                                <span>18-23 часов</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -261,22 +292,26 @@
                 <span class="visually-hidden">Loading...</span>
             </div>
         </div>
+
         <!-- Схема столов + вывод бронирования -->
         <div v-if="layout !== [] && loading !== true" class="mt-3">
+            <!-- Отключить отзывчивость -> Расположение сохраняется на всех устройствах -->
+            <!-- Если включить, кол-во колонок указывается в :cols -->
             <grid-layout
                 :layout.sync="layout"
                 :col-num="14"
-                :row-height="50"
+                :row-height="60"
                 :is-draggable="true"
                 :is-resizable="false"
                 :is-mirrored="false"
                 :vertical-compact="false"
                 :margin="[20, 20]"
                 :use-css-transforms="true"
-                :responsive="true"
-                :cols="{ lg: 12, md: 11, sm: 10, xs: 6, xxs: 4 }"
+                :responsive="false"
+                :cols="{ lg: 12, md: 12, sm: 10, xs: 6, xxs: 4 }"
             >
                 <grid-item
+                    class="py-1"
                     v-for="item in tables"
                     :style="{
                         backgroundColor: '#3E2C41',
@@ -328,12 +363,23 @@
                         <!-- Номер и иконки стола -->
                         <div class="no-drag text-center">
                             <div class="pt-1 align-middle">
-                                <span :style="{ color: 'white' }">{{
-                                    Number(item.i) === 0 ? null : Number(item.i)
-                                }}</span>
+                                <span
+                                    :style="{
+                                        color: '#FFF0F5',
+                                        fontWeight: '600',
+                                    }"
+                                    >{{
+                                        Number(item.i) === 0
+                                            ? null
+                                            : Number(item.i)
+                                    }}</span
+                                >
                                 <img
+                                    class="bbq_table"
                                     v-if="item.bbq"
-                                    :src="require('../../svg/bbq.svg').default"
+                                    :src="
+                                        require('../../svg/bbqSign.svg').default
+                                    "
                                     alt="bbq"
                                     :style="{
                                         width: '15px',
@@ -369,26 +415,62 @@
                                 borderBottom: '1px solid black',
                             }"
                         >
-                            <img
-                                v-if="!item.prepayment"
-                                :src="require('../../svg/no.svg').default"
-                                alt="Ruble"
-                                :style="{ width: '15px' }"
-                            />
-                            <img
-                                v-if="item.prepayment"
-                                :src="require('../../svg/ruble.svg').default"
-                                alt="Ruble"
-                                :style="{ width: '15px' }"
-                            />
-
-                            <span class="align-middle">
-                                <b
-                                    >{{ item.time }}. {{ item.name }} [{{
-                                        item.amount
-                                    }}] | {{ item.note }}</b
-                                >
-                            </span>
+                            <div :style="{ padding: '1px' }">
+                                <!-- Иконка предоплаты -->
+                                <img
+                                    v-if="item.prepayment"
+                                    :src="
+                                        require('../../svg/ruble.svg').default
+                                    "
+                                    alt="Ruble"
+                                    :style="{ width: '15px' }"
+                                />
+                                <!-- Тип визита -->
+                                <img
+                                    v-if="item.visit_type === 'День рождения'"
+                                    :src="
+                                        require('../../svg/birthday.svg')
+                                            .default
+                                    "
+                                    alt="Birthday cake"
+                                    :style="{ width: '15px' }"
+                                />
+                                <img
+                                    v-if="
+                                        item.visit_type === 'Романтический ужин'
+                                    "
+                                    :src="
+                                        require('../../svg/heart.svg').default
+                                    "
+                                    alt="Heart"
+                                    :style="{ width: '15px' }"
+                                />
+                                <img
+                                    v-if="item.visit_type === 'Семейный ужин'"
+                                    :src="
+                                        require('../../svg/family.svg').default
+                                    "
+                                    alt="Family"
+                                    :style="{ width: '15px' }"
+                                />
+                                <!-- Конфликтный гость -->
+                                <img
+                                    v-if="item.conflict"
+                                    :src="
+                                        require('../../svg/conflict.svg')
+                                            .default
+                                    "
+                                    alt="Warning!"
+                                    :style="{ width: '15px' }"
+                                />
+                                <span class="align-middle">
+                                    <b
+                                        >{{ item.time }}. {{ item.name }} [{{
+                                            item.amount
+                                        }}]
+                                    </b>
+                                </span>
+                            </div>
                         </li>
                     </div>
                 </grid-item>
@@ -419,42 +501,96 @@
                         ></button>
                     </div>
                     <div class="modal-body">
-                        <div class="mb-3">
-                            <label for="guestNameAdd" class="form-label"
-                                >Имя</label
-                            >
+                        <!-- Имя и Телефон -->
+                        <div class="row">
+                            <!-- Имя -->
+                            <div class="mb-3 col-6">
+                                <label for="guestNameAdd" class="form-label"
+                                    >Имя</label
+                                >
+                                <input
+                                    v-model="reservation.name"
+                                    type="text"
+                                    class="form-control"
+                                    id="guestNameAdd"
+                                    placeholder="Иван Иванов"
+                                />
+                            </div>
+                            <!-- Телефон -->
+                            <div class="mb-3 col-6">
+                                <label for="guestPhoneAdd" class="form-label"
+                                    >Телефон</label
+                                >
+                                <input
+                                    v-model="reservation.phone"
+                                    type="text"
+                                    class="form-control"
+                                    id="guestPhoneAdd"
+                                    placeholder="+7(xxx)xxx-xx-xx"
+                                />
+                            </div>
+                        </div>
+                        <!-- Вредный гость? -->
+                        <div class="form-check mb-3">
+                            <label class="form-check-label" for="conflictGuest">
+                                Конфликтный гость?
+                            </label>
+
                             <input
-                                v-model="reservation.name"
-                                type="text"
-                                class="form-control"
-                                id="guestNameAdd"
-                                placeholder="Иван Иванов"
+                                v-model="reservation.conflict"
+                                class="form-check-input"
+                                type="checkbox"
+                                value=""
+                                id="conflictGuest"
                             />
                         </div>
-                        <div class="mb-3">
-                            <label for="guestPhoneAdd" class="form-label"
-                                >Телефон</label
-                            >
-                            <input
-                                v-model="reservation.phone"
-                                type="text"
-                                class="form-control"
-                                id="guestPhoneAdd"
-                                placeholder="+7(xxx)xxx-xx-xx"
-                            />
+                        <!-- Мероприятие и Кол-во гостей -->
+                        <div class="row">
+                            <!-- Мероприятие -->
+                            <div class="mb-3 col-6">
+                                <span>Мероприятие</span>
+                                <select
+                                    class="form-control form-select"
+                                    v-model="reservation.visit_type"
+                                    @change="
+                                        reservation.visit_type =
+                                            $event.target.value
+                                    "
+                                >
+                                    <option value="Обычный визит" selected>
+                                        Обычный визит
+                                    </option>
+                                    <option value="День рождения">
+                                        День рождения
+                                    </option>
+                                    <option value="Романтический ужин">
+                                        Романтический ужин
+                                    </option>
+                                    <option value="Семейный ужин">
+                                        Семейный ужин
+                                    </option>
+                                </select>
+                            </div>
+                            <!-- Кол-во гостей -->
+                            <div class="mb-3 col-6">
+                                <span>Количество гостей</span>
+                                <select
+                                    class="form-control form-select w-50"
+                                    v-model="reservation.amount"
+                                    @change="
+                                        reservation.amount = $event.target.value
+                                    "
+                                >
+                                    <option value="1" selected>1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                </select>
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="guestPrepaymentAdd" class="form-label"
-                                >Предоплата</label
-                            >
-                            <input
-                                v-model="reservation.prepayment"
-                                type="number"
-                                class="form-control"
-                                id="guestPrepaymentAdd"
-                                placeholder="Сумма предоплаты"
-                            />
-                        </div>
+                        <!-- Доп.инфо -->
                         <div class="mb-3">
                             <label for="guestNoteAdd" class="form-label"
                                 >Дополнительная информация</label
@@ -467,56 +603,74 @@
                                 placeholder="На заметку"
                             />
                         </div>
-                        <div class="mb-3">
-                            <span>Количество гостей</span>
-                            <select
-                                v-model="reservation.amount"
-                                @change="
-                                    reservation.amount = $event.target.value
-                                "
-                                :style="{ width: '50px' }"
-                            >
-                                <option value="1" selected>1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <span>№ стола</span>
-                            <select
-                                v-model="reservation.table_id"
-                                @change="
-                                    reservation.table_id = $event.target.value
-                                "
-                            >
-                                <option
-                                    v-for="table in layout"
-                                    :value="table.id"
-                                    :key="table.id"
-                                    selected
+                        <!-- Предоплата и Стол -->
+                        <div class="row">
+                            <!-- Предоплата -->
+                            <div class="mb-3 col-6">
+                                <label
+                                    for="guestPrepaymentAdd"
+                                    class="form-label"
+                                    >Предоплата</label
                                 >
-                                    {{ table.i }}
-                                </option>
-                            </select>
+                                <input
+                                    v-model="reservation.prepayment"
+                                    type="number"
+                                    class="form-control"
+                                    id="guestPrepaymentAdd"
+                                    placeholder="Сумма предоплаты"
+                                    step="100"
+                                />
+                            </div>
+                            <!-- Стол -->
+                            <div class="mb-3 col-6">
+                                <label class="form-label" for="tables"
+                                    >№ стола</label
+                                >
+                                <select
+                                    id="selectTables"
+                                    class="form-control form-select"
+                                    v-model="reservation.table_id"
+                                    @change="
+                                        reservation.table_id =
+                                            $event.target.value
+                                    "
+                                >
+                                    <option
+                                        v-for="table in layout"
+                                        :value="table.id"
+                                        :key="table.id"
+                                        selected
+                                    >
+                                        {{ table.i }}
+                                    </option>
+                                </select>
+                            </div>
                         </div>
-                        <date-picker
-                            v-model="reservation.date"
-                            format="YYYY-MM-DD"
-                            type="date"
-                            valueType="format"
-                        ></date-picker>
-                        <date-picker
-                            v-model="reservation.time"
-                            :minute-step="30"
-                            :hour-options="hours"
-                            format="HH:mm"
-                            value-type="format"
-                            type="time"
-                            placeholder="HH:mm"
-                        ></date-picker>
+                        <!-- Дата и Время -->
+                        <div class="row">
+                            <!-- Дата -->
+                            <div class="col-6">
+                                <date-picker
+                                    v-model="reservation.date"
+                                    format="YYYY-MM-DD"
+                                    type="date"
+                                    valueType="format"
+                                >
+                                </date-picker>
+                            </div>
+                            <!-- Время -->
+                            <div class="col-6">
+                                <date-picker
+                                    v-model="reservation.time"
+                                    :minute-step="30"
+                                    :hour-options="hours"
+                                    format="HH:mm"
+                                    value-type="format"
+                                    type="time"
+                                    placeholder="HH:mm"
+                                ></date-picker>
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button
@@ -524,7 +678,7 @@
                             class="btn btn-secondary"
                             data-bs-dismiss="modal"
                         >
-                            Close
+                            Закрыть
                         </button>
                         <button
                             type="button"
@@ -532,7 +686,7 @@
                             @click="() => addGuest()"
                             data-bs-dismiss="modal"
                         >
-                            Save changes
+                            Добавить гостя
                         </button>
                     </div>
                 </div>
@@ -563,116 +717,214 @@
                         ></button>
                     </div>
                     <div class="modal-body">
-                        <div class="mb-3">
-                            <label for="guestNameUpdate" class="form-label"
-                                >Guest name</label
-                            >
-                            <input
-                                v-model="reservation.name"
-                                type="text"
-                                class="form-control"
-                                id="guestNameUpdate"
-                                placeholder="Brad Pitt"
-                            />
+                        <!-- Имя и Телефон -->
+                        <div class="row">
+                            <!-- Имя -->
+                            <div class="mb-3 col-6">
+                                <label for="guestNameUpdate" class="form-label"
+                                    >Имя</label
+                                >
+                                <input
+                                    v-model="reservation.name"
+                                    type="text"
+                                    class="form-control"
+                                    id="guestNameUpdate"
+                                    placeholder="Brad Pitt"
+                                />
+                            </div>
+                            <!-- Телефон -->
+                            <div class="mb-3 col-6">
+                                <label for="guestPhoneUpdate" class="form-label"
+                                    >Телефон</label
+                                >
+                                <input
+                                    v-model="reservation.phone"
+                                    type="number"
+                                    class="form-control"
+                                    id="guestPhoneUpdate"
+                                    placeholder="+7(xxx)xxx-xx-xx"
+                                />
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="guestPhoneUpdate" class="form-label"
-                                >Phone number</label
-                            >
-                            <input
-                                v-model="reservation.phone"
-                                type="number"
-                                class="form-control"
-                                id="guestPhoneUpdate"
-                                placeholder="+7(xxx)xxx-xx-xx"
-                            />
-                        </div>
-                        <div class="mb-3">
+                        <!-- Вредный гость? -->
+                        <div class="form-check mb-3">
                             <label
-                                for="guestPrepaymentUpdate"
-                                class="form-label"
-                                >Предоплата</label
+                                class="form-check-label"
+                                for="conflictGuestUpdate"
                             >
+                                Конфликтный гость?
+                            </label>
+
                             <input
-                                v-model="reservation.prepayment"
-                                type="number"
-                                class="form-control"
-                                id="guestPrepaymentUpdate"
-                                placeholder="Сумма предоплаты"
+                                v-model="reservation.conflict"
+                                class="form-check-input"
+                                type="checkbox"
+                                value=""
+                                id="conflictGuestUpdate"
                             />
                         </div>
+                        <!-- Мероприятие и Кол-во гостей -->
+                        <div class="row">
+                            <!-- Мероприятие -->
+                            <div class="mb-3 col-6">
+                                <span>Мероприятие</span>
+                                <select
+                                    id="visit_type"
+                                    class="form-control"
+                                    aria-label="Visit type select"
+                                    v-model="reservation.visit_type"
+                                    @change="
+                                        reservation.visit_type =
+                                            $event.target.value
+                                    "
+                                >
+                                    <option value="Обычный визит">
+                                        Обычный визит
+                                    </option>
+                                    <option value="День рождения">
+                                        День рождения
+                                    </option>
+                                    <option value="Романтический ужин">
+                                        Романтический ужин
+                                    </option>
+                                    <option value="Семейный ужин">
+                                        Семейный ужин
+                                    </option>
+                                </select>
+                            </div>
+                            <!-- Кол-во гостей -->
+                            <div class="mb-3 col-6">
+                                <span>Количество гостей</span>
+                                <select
+                                    v-model="reservation.amount"
+                                    @change="
+                                        reservation.amount = $event.target.value
+                                    "
+                                    class="form-control w-50"
+                                >
+                                    <option value="1" selected>1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                </select>
+                            </div>
+                        </div>
+                        <!-- Доп.инфо -->
                         <div class="mb-3">
                             <label for="guestNoteUpdate" class="form-label"
-                                >Note</label
+                                >Дополнительная информация</label
                             >
                             <input
                                 v-model="reservation.note"
                                 type="text"
                                 class="form-control"
                                 id="guestNoteUpdate"
-                                placeholder="Important information"
+                                placeholder="На заметку"
                             />
                         </div>
-                        <div class="mb-3">
-                            <span>Количество гостей</span>
-                            <select
-                                v-model="reservation.amount"
-                                @change="
-                                    reservation.amount = $event.target.value
-                                "
-                            >
-                                <option value="1" selected>1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                                <option value="6+">Больше 6</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <span>№ стола</span>
-                            <select
-                                v-model="reservation.table_id"
-                                @change="
-                                    reservation.table_id = $event.target.value
-                                "
-                            >
-                                <option
-                                    v-for="table in layout"
-                                    :value="table.id"
-                                    :key="table.id"
+                        <!-- Предоплата и Стол -->
+                        <div class="row">
+                            <!-- Предоплата -->
+                            <div class="mb-3 col-6">
+                                <label
+                                    for="guestPrepaymentUpdate"
+                                    class="form-label"
+                                    >Предоплата</label
                                 >
-                                    {{ table.i }}
-                                </option>
-                            </select>
+                                <input
+                                    v-model="reservation.prepayment"
+                                    type="number"
+                                    class="form-control"
+                                    id="guestPrepaymentUpdate"
+                                    placeholder="Сумма предоплаты"
+                                    step="100"
+                                />
+                            </div>
+                            <!-- Стол -->
+                            <div class="mb-3 col-6">
+                                <label
+                                    class="form-label"
+                                    for="selectTablesUpdate"
+                                    >№ стола</label
+                                >
+                                <select
+                                    id="selectTablesUpdate"
+                                    class="form-control"
+                                    v-model="reservation.table_id"
+                                    @change="
+                                        reservation.table_id =
+                                            $event.target.value
+                                    "
+                                >
+                                    <option
+                                        v-for="table in layout"
+                                        :value="table.id"
+                                        :key="table.id"
+                                        selected
+                                    >
+                                        {{ table.i }}
+                                    </option>
+                                </select>
+                            </div>
                         </div>
-                        <date-picker
-                            v-model="reservation.date"
-                            format="YYYY-MM-DD"
-                            type="date"
-                            valueType="format"
-                        ></date-picker>
-                        <date-picker
-                            v-model="reservation.time"
-                            :minute-step="30"
-                            :hour-options="hours"
-                            format="HH:mm"
-                            value-type="format"
-                            type="time"
-                            placeholder="HH:mm"
-                        ></date-picker>
+                        <!-- Дата и Время -->
+                        <div class="row">
+                            <!-- Дата -->
+                            <div class="col-6">
+                                <date-picker
+                                    v-model="reservation.date"
+                                    format="YYYY-MM-DD"
+                                    type="date"
+                                    valueType="format"
+                                >
+                                </date-picker>
+                            </div>
+                            <!-- Время -->
+                            <div class="col-6">
+                                <date-picker
+                                    v-model="reservation.time"
+                                    :minute-step="30"
+                                    :hour-options="hours"
+                                    format="HH:mm"
+                                    value-type="format"
+                                    type="time"
+                                    placeholder="HH:mm"
+                                ></date-picker>
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
-                        <button
-                            type="button"
-                            class="btn btn-secondary btn-danger"
-                            data-bs-dismiss="modal"
-                            @click="() => deleteGuest()"
-                        >
-                            Удалить гостя
-                        </button>
-                        <button
+                        <div class="me-auto">
+                            <button
+                                type="button"
+                                class="btn btn-secondary btn-danger"
+                                data-bs-dismiss="modal"
+                                @click="() => deleteReservation()"
+                            >
+                                Удалить
+                            </button>
+                            <button
+                                type="button"
+                                class="btn btn-secondary btn-success"
+                                data-bs-dismiss="modal"
+                                @click="() => completeReservation()"
+                            >
+                                Завершить
+                            </button>
+
+                            <button
+                                type="button"
+                                class="btn btn-primary"
+                                @click="() => updateGuest()"
+                                data-bs-dismiss="modal"
+                            >
+                                Обновить
+                            </button>
+                        </div>
+                        <div>
+                            <button
                             type="button"
                             class="btn btn-secondary"
                             data-bs-dismiss="modal"
@@ -680,14 +932,8 @@
                         >
                             Закрыть
                         </button>
-                        <button
-                            type="button"
-                            class="btn btn-primary"
-                            @click="() => updateGuest()"
-                            data-bs-dismiss="modal"
-                        >
-                            Обновить инфо
-                        </button>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -744,15 +990,14 @@
                                           )
                                         : null
                                 }}. {{ item.name }} [{{ item.amount }}] |
-                                {{ item.phone }} |
-                                {{ item.note }}
+                                {{ item.phone }}
                             </li>
                         </ul>
                     </div>
                     <div class="modal-footer">
                         <button
                             class="btn btn-primary"
-                            data-bs-target="#sendToWaitingList"
+                            data-bs-target="#AddGuest"
                             data-bs-toggle="modal"
                             data-bs-dismiss="modal"
                         >
@@ -762,7 +1007,8 @@
                 </div>
             </div>
         </div>
-        <!-- Модалка для листа ожидания -->
+
+        <!-- Использую модалку Добавления Гостяя, а не отдальную. Пока не удалять. -->
         <div
             class="modal fade"
             data-bs-backdrop="static"
@@ -906,6 +1152,7 @@
                 </div>
             </div>
         </div>
+
         <!-- Модалка для добавления стола-->
         <div
             class="modal fade"
@@ -918,7 +1165,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="addTableModal">
-                            Do you want to add a table?
+                            Хотите добавить стол?
                         </h5>
                         <button
                             type="button"
@@ -927,22 +1174,53 @@
                             aria-label="Close"
                         ></button>
                     </div>
+                    <div class="modal-body">
+                        <label for="AddTablePasswordCheck"
+                            >Введите пароль</label
+                        >
+                        <input
+                            v-if="showPassword"
+                            class="form-control"
+                            v-model="password"
+                            type="text"
+                            id="AddTablePasswordCheck"
+                            required
+                        />
+                        <input
+                            v-else-if="!showPassword"
+                            class="form-control"
+                            v-model="password"
+                            type="password"
+                            id="AddTablePasswordCheck"
+                            required
+                        />
+                        <div>
+                            <button
+                                class="btn btn-primary btn-sm mt-2"
+                                @click="toggleShow()"
+                            >
+                                <span class="icon is-small is-right">
+                                    Показать пароль
+                                </span>
+                            </button>
+                        </div>
+                    </div>
                     <div class="modal-footer justify-content-center">
                         <button
                             type="button"
                             class="btn btn-primary"
                             data-bs-dismiss="modal"
-                            @click="addTable(false)"
+                            @click="addTable(false, password)"
                         >
-                            Add a table
+                            Добавить обычный стол
                         </button>
                         <button
                             type="button"
                             class="btn btn-warning"
                             data-bs-dismiss="modal"
-                            @click="addTable(true)"
+                            @click="addTable(true, password)"
                         >
-                            Add a table with BBQ
+                            Добавить стол BBQ
                         </button>
                     </div>
                 </div>
@@ -960,7 +1238,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="DeleteTableModal">
-                            Are you sure you want to delete a table?
+                            Уверены, что хотите удалить стол?
                         </h5>
                         <button
                             type="button"
@@ -969,21 +1247,52 @@
                             aria-label="Close"
                         ></button>
                     </div>
+                    <div class="modal-body">
+                        <label for="RemoveTablePasswordCheck"
+                            >Введите пароль</label
+                        >
+                        <input
+                            v-if="showPassword"
+                            class="form-control"
+                            v-model="password"
+                            type="text"
+                            id="RemoveTablePasswordCheck"
+                            required
+                        />
+                        <input
+                            v-else-if="!showPassword"
+                            class="form-control"
+                            v-model="password"
+                            type="password"
+                            id="RenoveTablePasswordCheck"
+                            required
+                        />
+                        <div>
+                            <button
+                                class="btn btn-primary btn-sm mt-2"
+                                @click="toggleShow()"
+                            >
+                                <span class="icon is-small is-right">
+                                    Показать пароль
+                                </span>
+                            </button>
+                        </div>
+                    </div>
                     <div class="modal-footer justify-content-center">
                         <button
                             type="button"
                             class="btn btn-secondary"
                             data-bs-dismiss="modal"
-                            @click="deleteOneTable()"
+                            @click="deleteOneTable(password)"
                         >
-                            Delete a table
+                            Удалить стол
                         </button>
                         <button
                             type="button"
                             class="btn btn-primary"
                             data-bs-dismiss="modal"
                         >
-                            Close
+                            Закрыть
                         </button>
                     </div>
                 </div>
@@ -1062,6 +1371,7 @@ import "vue2-datepicker/scss/index.scss";
 
 export default {
     name: "Booking",
+    props: ["user"],
     components: {
         GridLayout: VueGridLayout.GridLayout,
         GridItem: VueGridLayout.GridItem,
@@ -1080,7 +1390,7 @@ export default {
             selected: "Ожидание",
             waitingList: null,
             logs: [],
-            colors: ["#FFFF8F", "#19DF01", "#FE6126"],
+            colors: ["#FFFF8F", "#19DF01", "#EE4B2B"],
             loading: true,
             error: null,
             showModal: false,
@@ -1095,18 +1405,35 @@ export default {
             reservation: {
                 name: "",
                 phone: "",
+                conflict: false,
+                visit_type: "Обычный визит",
+                amount: 1,
                 note: "",
                 prepayment: 0,
-                amount: 1,
-                date: new Date(),
-                time: "",
                 table_id: null,
                 place_id: null,
+                date: new Date(),
+                time: "",
+                responsible_email: "",
+                responsible_name: "",
             },
         };
     },
     async mounted() {
+        console.log(this.user);
         this.loading = false;
+
+        axios
+            .get("api/user")
+            .then((response) => {
+                this.reservation.responsible_name = response.data.name;
+                this.reservation.responsible_email = response.data.email;
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+
+        console.log(this.reservation);
     },
     computed: {
         tables() {
@@ -1164,10 +1491,10 @@ export default {
             let M = this.addLeadingZero(date.getMonth() + 1);
             let D = this.addLeadingZero(date.getDate());
             let d = days[date.getDay()];
-            let h = this.addLeadingZero(date.getHours());
-            let m = this.addLeadingZero(date.getMinutes());
+            // let h = this.addLeadingZero(date.getHours());
+            // let m = this.addLeadingZero(date.getMinutes());
 
-            return `${Y}.${M}.${D} ${h}:${m} (${d})`;
+            return `${Y}.${M}.${D} (${d})`;
         },
         getExactTime(date) {
             return (
@@ -1183,7 +1510,7 @@ export default {
                 return "#19DF01";
             }
             if (newValue >= 17) {
-                return "#FE6126";
+                return "#EE4B2B";
             }
         },
         choosePlace(event) {
@@ -1195,30 +1522,35 @@ export default {
             this.table.id = item.id;
         },
         clearReservationInfo() {
-            this.reservation = {
-                name: "",
-                phone: "",
-                note: "",
-                prepayment: 0,
-                amount: null,
-                date: null,
-                time: "",
-                table: null,
-                place_id: null,
-            };
+            this.reservation.name = "";
+            this.reservation.phone = "";
+            this.reservation.conflict = false;
+            this.reservation.visit_type = "Обычный визит";
+            this.reservation.amount = 1;
+            this.reservation.note = "";
+            this.reservation.prepayment = 0;
+            this.reservation.table_id = null;
+            this.reservation.place_id = null;
+            this.reservation.date = null;
+            this.reservation.time = "";
+            // Не очищаю имя и почту ответственного, чтобы использовать на всех 3-х точках
         },
         updateGuestInfo(item) {
             this.reservation = {
                 id: item.id,
                 name: item.name,
                 phone: item.phone,
-                note: item.note,
+                conflict: item.conflict,
+                visit_type: item.visit_type,
                 prepayment: item.prepayment,
                 amount: item.amount,
-                date: item.date,
-                time: item.time,
+                note: item.note,
                 table_id: item.table_id,
                 place_id: item.place_id,
+                date: item.date,
+                time: item.time,
+                responsible_email: this.reservation.responsible_email,
+                responsible_name: this.reservation.responsible_name,
             };
         },
         checkPass(value) {
@@ -1335,37 +1667,52 @@ export default {
                 const newReservation = {
                     name: this.reservation.name,
                     phone: this.reservation.phone,
-                    prepayment: this.reservation.prepayment,
+                    conflict: this.reservation.conflict,
+                    visit_type: this.reservation.visit_type,
                     amount: this.reservation.amount,
                     note: this.reservation.note,
+                    prepayment: this.reservation.prepayment,
+                    table_id: this.reservation.table_id,
+                    place_id: 1,
                     date: this.reservation.date,
                     time: this.reservation.time,
-                    table_id: this.table.id,
-                    place_id: 1,
+                    responsible_email: this.reservation.responsible_email,
+                    responsible_name: this.reservation.responsible_name,
                 };
 
-                await axios.post(
-                    `http://booking-api.test/api/reservations`,
-                    newReservation
-                );
-                const newLog = {
-                    text: `Стол №${newReservation.table_id} был забронирован.`,
-                    type: "Бронирование",
-                    ...newReservation,
-                };
-                await axios.post(`http://booking-api.test/api/logs`, newLog);
+                try {
+                    await axios.post(
+                        `http://booking-api.test/api/reservations`,
+                        newReservation
+                    );
+                    const newLog = {
+                        text: `Стол №${newReservation.table_id} был забронирован.`,
+                        type: "Бронирование",
+                        ...newReservation,
+                    };
+                    await axios.post(
+                        `http://booking-api.test/api/logs`,
+                        newLog
+                    );
+                } catch (error) {
+                    console.log(error.message);
+                }
             }
             if (this.place === "place_2") {
                 const newReservation = {
                     name: this.reservation.name,
                     phone: this.reservation.phone,
-                    prepayment: this.reservation.prepayment,
+                    conflict: this.reservation.conflict,
+                    visit_type: this.reservation.visit_type,
                     amount: this.reservation.amount,
                     note: this.reservation.note,
+                    prepayment: this.reservation.prepayment,
+                    table_id: this.reservation.table_id,
+                    place_id: 2,
                     date: this.reservation.date,
                     time: this.reservation.time,
-                    table_id: this.table.id,
-                    place_id: 2,
+                    responsible_email: this.reservation.responsible_email,
+                    responsible_name: this.reservation.responsible_name,
                 };
                 await axios.post(
                     `http://booking-api.test/api/reservations`,
@@ -1382,13 +1729,17 @@ export default {
                 const newReservation = {
                     name: this.reservation.name,
                     phone: this.reservation.phone,
-                    prepayment: this.reservation.prepayment,
+                    conflict: this.reservation.conflict,
+                    visit_type: this.reservation.visit_type,
                     amount: this.reservation.amount,
                     note: this.reservation.note,
+                    prepayment: this.reservation.prepayment,
+                    table_id: this.reservation.table_id,
+                    place_id: 3,
                     date: this.reservation.date,
                     time: this.reservation.time,
-                    table_id: this.table.id,
-                    place_id: 3,
+                    responsible_email: this.reservation.responsible_email,
+                    responsible_name: this.reservation.responsible_name,
                 };
                 await axios.post(
                     `http://booking-api.test/api/reservations`,
@@ -1411,8 +1762,8 @@ export default {
                     this.reservation
                 );
                 const newLog = {
-                    text: `Обновлены данные гостя.`,
-                    type: "Обновление данных",
+                    text: `Новые данные гостя.`,
+                    type: "Обновление",
                     ...this.reservation,
                 };
                 await axios.post(`http://booking-api.test/api/logs`, newLog);
@@ -1423,8 +1774,8 @@ export default {
                     this.reservation
                 );
                 const newLog = {
-                    text: `Обновлены данные гостя.`,
-                    type: "Обновление данных",
+                    text: `Новые данные гостя.`,
+                    type: "Обновление",
                     ...this.reservation,
                 };
                 await axios.post(`http://booking-api.test/api/logs`, newLog);
@@ -1435,8 +1786,8 @@ export default {
                     this.reservation
                 );
                 const newLog = {
-                    text: `Обновлены данные гостя.`,
-                    type: "Обновление данных",
+                    text: `Новые данные гостя.`,
+                    type: "Обновление",
                     ...this.reservation,
                 };
                 await axios.post(`http://booking-api.test/api/logs`, newLog);
@@ -1445,18 +1796,30 @@ export default {
             await this.fetchTables();
         },
         async fetchWaitingList() {
-            console.log(this.waitingList);
+            const response = await axios.get(
+                "http://booking-api.test/api/tables"
+            );
             if (this.place === "place_1") {
-                const response = await axios.get(
-                    "http://booking-api.test/api/tables"
-                );
                 this.waitingList = response.data.data.find((table) => {
                     if (table.id === 100) {
                         return table;
                     }
                 });
             }
-            console.log("WaitingList: ", this.waitingList);
+            if (this.place === "place_2") {
+                this.waitingList = response.data.data.find((table) => {
+                    if (table.id === 101) {
+                        return table;
+                    }
+                });
+            }
+            if (this.place === "place_3") {
+                this.waitingList = response.data.data.find((table) => {
+                    if (table.id === 102) {
+                        return table;
+                    }
+                });
+            }
         },
         async addToWaitingList() {
             if (this.place === "place_1") {
@@ -1473,6 +1836,8 @@ export default {
                             : this.reservation.time,
                     table_id: 100,
                     place_id: 1,
+                    responsible_email: this.reservation.responsible_email,
+                    responsible_name: this.reservation.responsible_name,
                 };
                 await axios.post(
                     `http://booking-api.test/api/reservations`,
@@ -1500,6 +1865,8 @@ export default {
                             : this.reservation.time,
                     table_id: 101,
                     place_id: 2,
+                    responsible_email: this.reservation.responsible_email,
+                    responsible_name: this.reservation.responsible_name,
                 };
                 await axios.post(
                     `http://booking-api.test/api/reservations`,
@@ -1527,6 +1894,8 @@ export default {
                             : this.reservation.time,
                     table_id: 102,
                     place_id: 3,
+                    responsible_email: this.reservation.responsible_email,
+                    responsible_name: this.reservation.responsible_name,
                 };
                 await axios.post(
                     `http://booking-api.test/api/reservations`,
@@ -1542,24 +1911,66 @@ export default {
             }
             this.clearReservationInfo();
         },
-        async deleteGuest() {
-            await axios.delete(
-                `http://booking-api.test/api/reservations/${this.reservation.id}`
-            );
+        async deleteReservation() {
+            try {
+                await axios.post(
+                    `http://booking-api.test/api/failed_reservations`,
+                    this.reservation
+                );
+            } catch (error) {
+                console.log(error);
+            }
+
+            try {
+                await axios.delete(
+                    `http://booking-api.test/api/reservations/${this.reservation.id}`
+                );
+            } catch (error) {
+                console.log(error);
+            }
+
             const newLog = {
-                text: "Гость был удален.",
-                type: "Отмена бронирования",
+                text: "Бронирование удалено.",
+                type: "Отмена",
+                ...this.reservation,
+            };
+
+            await axios.post(`http://booking-api.test/api/logs`, newLog);
+            await this.fetchTables();
+        },
+        async completeReservation() {
+            try {
+                await axios.post(
+                    `http://booking-api.test/api/completed_reservations`,
+                    this.reservation
+                );
+            } catch (error) {
+                console.log(error);
+            }
+
+            try {
+                await axios.delete(
+                    `http://booking-api.test/api/reservations/${this.reservation.id}`
+                );
+            } catch (error) {
+                console.log(error);
+            }
+
+            const newLog = {
+                text: "Бронирование завершено.",
+                type: "Завершено",
                 ...this.reservation,
             };
             await axios.post(`http://booking-api.test/api/logs`, newLog);
             await this.fetchTables();
         },
-        async addTable(type) {
+        async addTable(type, password) {
+            this.checkPass(password);
             const response = await axios.get(
                 "http://booking-api.test/api/tables"
             );
 
-            if (this.place === "place_1") {
+            if (this.place === "place_1" && this.passCheck) {
                 const newTable = {
                     ...this.table,
                     place_id: 1,
@@ -1571,7 +1982,7 @@ export default {
                     newTable
                 );
             }
-            if (this.place === "place_2") {
+            if (this.place === "place_2" && this.passCheck) {
                 const newTable = {
                     ...this.table,
                     place_id: 2,
@@ -1583,7 +1994,7 @@ export default {
                     newTable
                 );
             }
-            if (this.place === "place_3") {
+            if (this.place === "place_3" && this.passCheck) {
                 const newTable = {
                     ...this.table,
                     place_id: 3,
@@ -1600,8 +2011,10 @@ export default {
             await this.fetchTables();
             this.loading = false;
         },
-        async deleteOneTable() {
-            if (this.place === "place_1") {
+        async deleteOneTable(password) {
+            this.checkPass(password);
+
+            if (this.place === "place_1" && this.passCheck) {
                 const table = await axios.get(
                     `http://booking-api.test/api/tables/${this.table.id}`
                 );
@@ -1609,12 +2022,12 @@ export default {
                     `http://booking-api.test/api/tables/${this.table.id}`
                 );
             }
-            if (this.place === "place_2") {
+            if (this.place === "place_2" && this.passCheck) {
                 await axios.delete(
                     `http://booking-api.test/api/tables/${this.table}`
                 );
             }
-            if (this.place === "place_3") {
+            if (this.place === "place_3" && this.passCheck) {
                 await axios.delete(
                     `http://booking-api.test/api/tables/${this.table}`
                 );
@@ -1663,6 +2076,7 @@ export default {
     cursor: pointer;
 }
 .button_action {
+    padding: 2px 5px 2px 5px;
     color: white;
     background-color: #4099de;
     font-weight: 600;
@@ -1692,40 +2106,62 @@ export default {
     border: none;
     /* border-color: #bacad6; */
 }
+// .card_md {
+//     width: 15rem;
+//     height: 15rem;
+// }
 .card {
-    width: 18vw;
-    height: 18vw;
+    width: 70px;
+    height: 70px;
+    // width: 18vw;
+    // height: 18vw;
     /* width: 100%;
     height: 0;
     padding-top: 100%;
     background-color: white;
     position: relative; */
-}
-
-.card_content {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-}
-.card_content_info {
     @media (min-width: 576px) {
-        padding: 10px 5px 0 5px;
+        width: 74px;
+        height: 74px;
     }
     @media (min-width: 767px) {
-        padding-top: 5px;
+        width: 136px;
+        height: 136px;
     }
     @media (min-width: 992px) {
-        padding: 10px 5px 0 5px;
+        min-width: 182px;
+        min-height: 182px;
     }
     @media (min-width: 1200px) {
-        padding: 30px 10px 0 10px;
+        min-width: 257px;
+        min-height: 257px;
+    }
+}
+
+// .card_content {
+//     width: 100%;
+//     height: 100%;
+//     position: absolute;
+//     top: 0;
+//     left: 0;
+// }
+.card_content_info {
+    @media (min-width: 576px) {
+        padding: 15px 5px 15px 5px;
+    }
+    @media (min-width: 767px) {
+        padding: 20px 5px 20px 5px;
+    }
+    @media (min-width: 992px) {
+        padding: 20px 5px 20px 5px;
+    }
+    @media (min-width: 1200px) {
+        padding: 30px 10px 15px 10px;
     }
 }
 .day_full {
     @media (min-width: 375px) {
-        font-size: 46px;
+        font-size: 30px;
     }
     @media (min-width: 576px) {
         font-size: 30px;
@@ -1733,32 +2169,41 @@ export default {
     @media (min-width: 767px) {
         font-size: 40px;
     }
-    @media (min-width: 992px) {
-        font-size: 48px;
+    @media (min-width: 998px) {
+        font-size: 60px;
+    }
+    @media (min-width: 1203px) {
+        font-size: 80px;
     }
 }
 
 .date_full {
+    font-weight: bold;
+
     @media (min-width: 375px) {
         display: none;
     }
-    @media (min-width: 576px) {
-        display: block;
-        font-size: 10px;
-        font-weight: 600;
-    }
+    // @media (min-width: 576px) {
+    //     display: block;
+    //     font-size: 10px;
+    //     font-weight: 600;
+    // }
     @media (min-width: 767px) {
+        display: block;
         font-size: 15px;
     }
     @media (min-width: 992px) {
-        font-size: 24px;
+        font-size: 20px;
+    }
+    @media (min-width: 1440px) {
+        font-size: 28px;
     }
 }
 .date_full_mobile {
-    @media (min-width: 375px) and (max-width: 576px) {
+    @media (min-width: 375px) and (max-width: 767px) {
         display: block;
     }
-    @media (min-width: 577px) {
+    @media (min-width: 768px) {
         display: none;
     }
 }
@@ -1773,5 +2218,9 @@ export default {
     @media (min-width: 375px) and (max-width: 576px) {
         margin: 0 0 10px 0;
     }
+}
+.bbq_table path {
+    fill: #fff;
+    stroke: #fff;
 }
 </style>
