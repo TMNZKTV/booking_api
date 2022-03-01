@@ -436,7 +436,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context.prev = _context.next) {
               case 0:
                 if (!(_this.place === "place_1")) {
-                  _context.next = 15;
+                  _context.next = 13;
                   break;
                 }
 
@@ -461,29 +461,25 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return axios.post("http://booking-api.test/api/reservations", newReservation);
 
               case 5:
-                _context.next = 7;
-                return axios["delete"]("http://booking-api.test/api/logs/".concat(log.id));
-
-              case 7:
                 newLog = _objectSpread({
                   text: "\u0421\u0442\u043E\u043B \u2116".concat(newReservation.table_id, " \u0431\u044B\u043B \u0437\u0430\u0431\u0440\u043E\u043D\u0438\u0440\u043E\u0432\u0430\u043D."),
                   type: "Восстановление"
                 }, newReservation);
-                _context.next = 10;
+                _context.next = 8;
                 return axios.post("http://booking-api.test/api/logs", newLog);
 
-              case 10:
-                _context.next = 15;
+              case 8:
+                _context.next = 13;
                 break;
 
-              case 12:
-                _context.prev = 12;
+              case 10:
+                _context.prev = 10;
                 _context.t0 = _context["catch"](2);
                 console.log(_context.t0.message);
 
-              case 15:
+              case 13:
                 if (!(_this.place === "place_2")) {
-                  _context.next = 30;
+                  _context.next = 26;
                   break;
                 }
 
@@ -503,34 +499,30 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   responsible_email: log.responsible_email,
                   responsible_name: log.responsible_name
                 };
-                _context.prev = 17;
-                _context.next = 20;
+                _context.prev = 15;
+                _context.next = 18;
                 return axios.post("http://booking-api.test/api/reservations", _newReservation);
 
-              case 20:
-                _context.next = 22;
-                return axios["delete"]("http://booking-api.test/api/logs/".concat(log.id));
-
-              case 22:
+              case 18:
                 _newLog = _objectSpread({
                   text: "\u0421\u0442\u043E\u043B \u2116".concat(_newReservation.table_id, " \u0431\u044B\u043B \u0437\u0430\u0431\u0440\u043E\u043D\u0438\u0440\u043E\u0432\u0430\u043D."),
                   type: "Восстановление"
                 }, _newReservation);
-                _context.next = 25;
+                _context.next = 21;
                 return axios.post("http://booking-api.test/api/logs", _newLog);
 
-              case 25:
-                _context.next = 30;
+              case 21:
+                _context.next = 26;
                 break;
 
-              case 27:
-                _context.prev = 27;
-                _context.t1 = _context["catch"](17);
+              case 23:
+                _context.prev = 23;
+                _context.t1 = _context["catch"](15);
                 console.log(_context.t1);
 
-              case 30:
+              case 26:
                 if (!(_this.place === "place_3")) {
-                  _context.next = 45;
+                  _context.next = 39;
                   break;
                 }
 
@@ -550,40 +542,36 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   responsible_email: log.responsible_email,
                   responsible_name: log.responsible_name
                 };
-                _context.prev = 32;
-                _context.next = 35;
+                _context.prev = 28;
+                _context.next = 31;
                 return axios.post("http://booking-api.test/api/reservations", _newReservation2);
 
-              case 35:
-                _context.next = 37;
-                return axios["delete"]("http://booking-api.test/api/logs/".concat(log.id));
-
-              case 37:
+              case 31:
                 _newLog2 = _objectSpread({
                   text: "\u0421\u0442\u043E\u043B \u2116".concat(_newReservation2.table_id, " \u0431\u044B\u043B \u0437\u0430\u0431\u0440\u043E\u043D\u0438\u0440\u043E\u0432\u0430\u043D."),
                   type: "Восстановление"
                 }, _newReservation2);
-                _context.next = 40;
+                _context.next = 34;
                 return axios.post("http://booking-api.test/api/logs", _newLog2);
 
-              case 40:
-                _context.next = 45;
+              case 34:
+                _context.next = 39;
                 break;
 
-              case 42:
-                _context.prev = 42;
-                _context.t2 = _context["catch"](32);
+              case 36:
+                _context.prev = 36;
+                _context.t2 = _context["catch"](28);
                 console.log(_context.t2);
 
-              case 45:
+              case 39:
                 _this.fetchLogs();
 
-              case 46:
+              case 40:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[2, 12], [17, 27], [32, 42]]);
+        }, _callee, null, [[2, 10], [15, 23], [28, 36]]);
       }))();
     },
     fetchLogs: function fetchLogs() {

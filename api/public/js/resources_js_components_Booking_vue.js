@@ -1395,12 +1395,184 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Booking",
-  props: ["user"],
+  // props: ["user"],
   components: {
     GridLayout: (vue_grid_layout__WEBPACK_IMPORTED_MODULE_1___default().GridLayout),
     GridItem: (vue_grid_layout__WEBPACK_IMPORTED_MODULE_1___default().GridItem),
@@ -1429,6 +1601,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         y: 9,
         w: 2,
         h: 3
+      },
+      restriction: {
+        date: new Date(),
+        from: "",
+        to: ""
       },
       hours: Array.from({
         length: 23
@@ -2409,6 +2586,24 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           }
         }, _callee12);
       }))();
+    },
+    addRestriction: function addRestriction() {
+      var _this14 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee13() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee13$(_context13) {
+          while (1) {
+            switch (_context13.prev = _context13.next) {
+              case 0:
+                console.log("Restriction: ", _this14.restriction);
+
+              case 1:
+              case "end":
+                return _context13.stop();
+            }
+          }
+        }, _callee13);
+      }))();
     }
   }
 });
@@ -3306,6 +3501,36 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/heart.svg?f94958ae358bacade8d6108e4499d10a");
+
+/***/ }),
+
+/***/ "./resources/svg/lock.svg":
+/*!********************************!*\
+  !*** ./resources/svg/lock.svg ***!
+  \********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/lock.svg?ce3e9d76048ba15ede5c96b69cf44734");
+
+/***/ }),
+
+/***/ "./resources/svg/lockSign.svg":
+/*!************************************!*\
+  !*** ./resources/svg/lockSign.svg ***!
+  \************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/lockSign.svg?8cb80054637fdc86f35d14f6e0c85a38");
 
 /***/ }),
 
@@ -17417,6 +17642,45 @@ var render = function () {
                   ),
                 ]
               ),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-sm-3 col-md-4 col-lg-auto" }, [
+                _c(
+                  "div",
+                  { staticClass: "btn btn-outline-info button_action" },
+                  [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.actionType,
+                          expression: "actionType",
+                        },
+                      ],
+                      staticClass: "btn-check",
+                      attrs: {
+                        type: "radio",
+                        value: "addTable",
+                        "data-bs-toggle": "modal",
+                        "data-bs-target": "#AddOneTable",
+                        id: "addTable",
+                      },
+                      domProps: { checked: _vm._q(_vm.actionType, "addTable") },
+                      on: {
+                        change: function ($event) {
+                          _vm.actionType = "addTable"
+                        },
+                      },
+                    }),
+                    _vm._v(" "),
+                    _c(
+                      "label",
+                      { staticClass: "py-2", attrs: { for: "addTable" } },
+                      [_vm._v("Добавить стол")]
+                    ),
+                  ]
+                ),
+              ]),
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "row row-cols-2 g-1 mb-1" }, [
@@ -17542,6 +17806,45 @@ var render = function () {
                   ]
                 ),
               ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-sm-3 col-md-4 col-lg-auto" }, [
+                _c(
+                  "div",
+                  { staticClass: "btn btn-outline-warning button_action" },
+                  [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.actionType,
+                          expression: "actionType",
+                        },
+                      ],
+                      staticClass: "btn-check",
+                      attrs: {
+                        type: "radio",
+                        value: "addRestriction",
+                        id: "addRestriction",
+                      },
+                      domProps: {
+                        checked: _vm._q(_vm.actionType, "addRestriction"),
+                      },
+                      on: {
+                        change: function ($event) {
+                          _vm.actionType = "addRestriction"
+                        },
+                      },
+                    }),
+                    _vm._v(" "),
+                    _c(
+                      "label",
+                      { staticClass: "py-2", attrs: { for: "addRestriction" } },
+                      [_vm._v("Выставить ограничение")]
+                    ),
+                  ]
+                ),
+              ]),
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "col-md-12 col-xl-8" }, [
@@ -17628,6 +17931,18 @@ var render = function () {
                     }),
                     _vm._v(" "),
                     _c("span", [_vm._v("Конфликтный гость")]),
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-md-7 col-7" }, [
+                    _c("img", {
+                      style: { width: "15px" },
+                      attrs: {
+                        src: (__webpack_require__(/*! ../../svg/lock.svg */ "./resources/svg/lock.svg")["default"]),
+                        alt: "restrictions",
+                      },
+                    }),
+                    _vm._v(" "),
+                    _c("span", [_vm._v("Ограничения по времени")]),
                   ]),
                   _vm._v(" "),
                   _c("div", { staticClass: "w-100" }),
@@ -17810,7 +18125,53 @@ var render = function () {
                           ])
                         : _vm._e(),
                       _vm._v(" "),
+                      _vm.actionType === "addRestriction"
+                        ? _c("div", [
+                            _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-light btn-sm add_guest",
+                                attrs: {
+                                  type: "button",
+                                  "data-bs-toggle": "modal",
+                                  "data-bs-target": "#AddRestriction",
+                                },
+                                on: {
+                                  click: function ($event) {
+                                    return _vm.chooseTable(item)
+                                  },
+                                },
+                              },
+                              [
+                                _vm._v(
+                                  "\n                            !\n                        "
+                                ),
+                              ]
+                            ),
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
                       _c("div", { staticClass: "no-drag text-center" }, [
+                        item.restriction
+                          ? _c("div", [
+                              _c("img", {
+                                style: {
+                                  width: "15px",
+                                  paddingBottom: "3px",
+                                  marginLeft: "auto",
+                                },
+                                attrs: {
+                                  src: (__webpack_require__(/*! ../../svg/lockSign.svg */ "./resources/svg/lockSign.svg")["default"]),
+                                  alt: "restriction",
+                                },
+                              }),
+                              _vm._v(" "),
+                              _c("span", { style: { color: "white" } }, [
+                                _vm._v("c 16:00"),
+                              ]),
+                            ])
+                          : _vm._e(),
+                        _vm._v(" "),
                         _c("div", { staticClass: "pt-1 align-middle" }, [
                           _c(
                             "span",
@@ -19072,7 +19433,7 @@ var render = function () {
                   },
                   [
                     _vm._v(
-                      "\n                        Закрыть\n                    "
+                      "\n                            Закрыть\n                        "
                     ),
                   ]
                 ),
@@ -19935,6 +20296,204 @@ var render = function () {
         ]),
       ]
     ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          "data-bs-backdrop": "static",
+          "data-bs-keyboard": "false",
+          id: "AddRestriction",
+          tabindex: "-1",
+          "aria-labelledby": "addRestrictionModal",
+          "aria-hidden": "true",
+        },
+      },
+      [
+        _c("div", { staticClass: "modal-dialog" }, [
+          _c("div", { staticClass: "modal-content" }, [
+            _vm._m(9),
+            _vm._v(" "),
+            _c("div", { staticClass: "modal-body" }, [
+              _c("div", { staticClass: "mb-3" }, [
+                _c(
+                  "label",
+                  { staticClass: "form-label", attrs: { for: "tables" } },
+                  [_vm._v("№ стола")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "select",
+                  {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.reservation.table_id,
+                        expression: "reservation.table_id",
+                      },
+                    ],
+                    staticClass: "form-control form-select",
+                    attrs: { id: "selectTables" },
+                    on: {
+                      change: [
+                        function ($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function (o) {
+                              return o.selected
+                            })
+                            .map(function (o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.$set(
+                            _vm.reservation,
+                            "table_id",
+                            $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          )
+                        },
+                        function ($event) {
+                          _vm.reservation.table_id = $event.target.value
+                        },
+                      ],
+                    },
+                  },
+                  _vm._l(_vm.layout, function (table) {
+                    return _c(
+                      "option",
+                      {
+                        key: table.id,
+                        attrs: { selected: "" },
+                        domProps: { value: table.id },
+                      },
+                      [
+                        _vm._v(
+                          "\n                                " +
+                            _vm._s(table.i) +
+                            "\n                            "
+                        ),
+                      ]
+                    )
+                  }),
+                  0
+                ),
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "row" }, [
+                _c(
+                  "div",
+                  [
+                    _c("date-picker", {
+                      attrs: {
+                        format: "YYYY-MM-DD",
+                        type: "date",
+                        valueType: "format",
+                      },
+                      model: {
+                        value: _vm.restriction.date,
+                        callback: function ($$v) {
+                          _vm.$set(_vm.restriction, "date", $$v)
+                        },
+                        expression: "restriction.date",
+                      },
+                    }),
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  [
+                    _c("span", [_vm._v("C")]),
+                    _vm._v(" "),
+                    _c("date-picker", {
+                      attrs: {
+                        "minute-step": 30,
+                        "hour-options": _vm.hours,
+                        format: "HH:mm",
+                        "value-type": "format",
+                        type: "time",
+                        placeholder: "HH:mm",
+                      },
+                      model: {
+                        value: _vm.restriction.from,
+                        callback: function ($$v) {
+                          _vm.$set(_vm.restriction, "from", $$v)
+                        },
+                        expression: "restriction.from",
+                      },
+                    }),
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  [
+                    _c("span", [_vm._v("До")]),
+                    _vm._v(" "),
+                    _c("date-picker", {
+                      attrs: {
+                        "minute-step": 30,
+                        "hour-options": _vm.hours,
+                        format: "HH:mm",
+                        "value-type": "format",
+                        type: "time",
+                        placeholder: "HH:mm",
+                      },
+                      model: {
+                        value: _vm.restriction.to,
+                        callback: function ($$v) {
+                          _vm.$set(_vm.restriction, "to", $$v)
+                        },
+                        expression: "restriction.to",
+                      },
+                    }),
+                  ],
+                  1
+                ),
+              ]),
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "modal-footer" }, [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-secondary",
+                  attrs: { type: "button", "data-bs-dismiss": "modal" },
+                },
+                [
+                  _vm._v(
+                    "\n                        Закрыть\n                    "
+                  ),
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-primary",
+                  attrs: { type: "button", "data-bs-dismiss": "modal" },
+                  on: {
+                    click: function () {
+                      return _vm.addRestriction()
+                    },
+                  },
+                },
+                [
+                  _vm._v(
+                    "\n                        Добавить ограничение\n                    "
+                  ),
+                ]
+              ),
+            ]),
+          ]),
+        ]),
+      ]
+    ),
   ])
 }
 var staticRenderFns = [
@@ -20096,6 +20655,31 @@ var staticRenderFns = [
         [
           _vm._v(
             "\n                        Мастер-пароль\n                    "
+          ),
+        ]
+      ),
+      _vm._v(" "),
+      _c("button", {
+        staticClass: "btn-close",
+        attrs: {
+          type: "button",
+          "data-bs-dismiss": "modal",
+          "aria-label": "Close",
+        },
+      }),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c(
+        "h5",
+        { staticClass: "modal-title", attrs: { id: "addRestrictionModal" } },
+        [
+          _vm._v(
+            "\n                        Ограничение по времени\n                    "
           ),
         ]
       ),
