@@ -23,6 +23,7 @@ class TableSeeder extends Seeder
                 'h' => 3,
                 'i' => $i + 1,
                 'bbq' => rand(0, 1),
+                'restriction' => rand(0, 1),
             ]);
         for($i = 0; $i < 14; $i++)
             DB::table('tables')->insert([
@@ -33,6 +34,8 @@ class TableSeeder extends Seeder
                 'h' => 3,
                 'i' => $i + 1,
                 'bbq' => rand(0, 1),
+                'restriction' => rand(0, 1),
+
             ]);
         for($i = 0; $i < 14; $i++)
             DB::table('tables')->insert([
@@ -43,6 +46,7 @@ class TableSeeder extends Seeder
                 'h' => 3,
                 'i' => $i + 1,
                 'bbq' => rand(0, 1),
+                'restriction' => rand(0, 1),
             ]);
 
         for($i = 100; $i < 101; $i++)

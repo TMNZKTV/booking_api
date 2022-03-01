@@ -113,6 +113,24 @@
                                 >
                             </div>
                         </div>
+
+                        <!-- Добавить стол -->
+                        <div class="col-sm-3 col-md-4 col-lg-auto">
+                            <div class="btn btn-outline-info button_action">
+                                <input
+                                    type="radio"
+                                    value="addTable"
+                                    v-model="actionType"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#AddOneTable"
+                                    class="btn-check"
+                                    id="addTable"
+                                />
+                                <label for="addTable" class="py-2"
+                                    >Добавить стол</label
+                                >
+                            </div>
+                        </div>
                     </div>
 
                     <!-- 2 ряд -->
@@ -164,6 +182,21 @@
                                 />
                                 <label for="waitingListButton" class="py-2"
                                     >Лист ожидания</label
+                                >
+                            </div>
+                        </div>
+                        <!-- Ограничение по бронированию -->
+                        <div class="col-sm-3 col-md-4 col-lg-auto">
+                            <div class="btn btn-outline-warning button_action">
+                                <input
+                                    type="radio"
+                                    value="addRestriction"
+                                    v-model="actionType"
+                                    class="btn-check"
+                                    id="addRestriction"
+                                />
+                                <label for="addRestriction" class="py-2"
+                                    >Выставить ограничение</label
                                 >
                             </div>
                         </div>
@@ -241,6 +274,14 @@
                                     :style="{ width: '15px' }"
                                 />
                                 <span>Конфликтный гость</span>
+                            </div>
+                            <div class="col-md-7 col-7">
+                                <img
+                                    :src="require('../../svg/lock.svg').default"
+                                    alt="restrictions"
+                                    :style="{ width: '15px' }"
+                                />
+                                <span>Ограничения по времени</span>
                             </div>
                             <div class="w-100"></div>
 
@@ -360,8 +401,34 @@
                                 -
                             </button>
                         </div>
+                        <div v-if="actionType === 'addRestriction'">
+                            <button
+                                type="button"
+                                class="btn btn-light btn-sm add_guest"
+                                data-bs-toggle="modal"
+                                data-bs-target="#AddRestriction"
+                                @click="chooseTable(item)"
+                            >
+                                !
+                            </button>
+                        </div>
                         <!-- Номер и иконки стола -->
                         <div class="no-drag text-center">
+                            <div v-if="item.restriction">
+                                <img
+                                    :src="
+                                        require('../../svg/lockSign.svg')
+                                            .default
+                                    "
+                                    alt="restriction"
+                                    :style="{
+                                        width: '15px',
+                                        paddingBottom: '3px',
+                                        marginLeft: 'auto',
+                                    }"
+                                />
+                                <span :style="{ color: 'white' }">c 16:00</span>
+                            </div>
                             <div class="pt-1 align-middle">
                                 <span
                                     :style="{
@@ -925,15 +992,14 @@
                         </div>
                         <div>
                             <button
-                            type="button"
-                            class="btn btn-secondary"
-                            data-bs-dismiss="modal"
-                            @click="() => clearReservationInfo()"
-                        >
-                            Закрыть
-                        </button>
+                                type="button"
+                                class="btn btn-secondary"
+                                data-bs-dismiss="modal"
+                                @click="() => clearReservationInfo()"
+                            >
+                                Закрыть
+                            </button>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -1007,7 +1073,6 @@
                 </div>
             </div>
         </div>
-
         <!-- Использую модалку Добавления Гостяя, а не отдальную. Пока не удалять. -->
         <div
             class="modal fade"
@@ -1361,6 +1426,113 @@
                 </div>
             </div>
         </div>
+        <!-- Модалка для ограничения по времени -->
+        <div
+            class="modal fade"
+            data-bs-backdrop="static"
+            data-bs-keyboard="false"
+            id="AddRestriction"
+            tabindex="-1"
+            aria-labelledby="addRestrictionModal"
+            aria-hidden="true"
+        >
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addRestrictionModal">
+                            Ограничение по времени
+                        </h5>
+                        <button
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                        ></button>
+                    </div>
+                    <div class="modal-body">
+                        <!--Стол -->
+                        <div class="mb-3">
+                            <label class="form-label" for="tables"
+                                >№ стола</label
+                            >
+                            <select
+                                id="selectTables"
+                                class="form-control form-select"
+                                v-model="reservation.table_id"
+                                @change="
+                                    reservation.table_id = $event.target.value
+                                "
+                            >
+                                <option
+                                    v-for="table in layout"
+                                    :value="table.id"
+                                    :key="table.id"
+                                    selected
+                                >
+                                    {{ table.i }}
+                                </option>
+                            </select>
+                        </div>
+
+                        <!-- Дата и Время -->
+                        <div class="row">
+                            <!-- Дата -->
+                            <div>
+                                <date-picker
+                                    v-model="restriction.date"
+                                    format="YYYY-MM-DD"
+                                    type="date"
+                                    valueType="format"
+                                >
+                                </date-picker>
+                            </div>
+                            <!-- Время -->
+                            <div>
+                                <span>C</span>
+                                <date-picker
+                                    v-model="restriction.from"
+                                    :minute-step="30"
+                                    :hour-options="hours"
+                                    format="HH:mm"
+                                    value-type="format"
+                                    type="time"
+                                    placeholder="HH:mm"
+                                ></date-picker>
+                            </div>
+                            <div>
+                                <span>До</span>
+                                <date-picker
+                                    v-model="restriction.to"
+                                    :minute-step="30"
+                                    :hour-options="hours"
+                                    format="HH:mm"
+                                    value-type="format"
+                                    type="time"
+                                    placeholder="HH:mm"
+                                ></date-picker>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button
+                            type="button"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal"
+                        >
+                            Закрыть
+                        </button>
+                        <button
+                            type="button"
+                            class="btn btn-primary"
+                            @click="() => addRestriction()"
+                            data-bs-dismiss="modal"
+                        >
+                            Добавить ограничение
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -1371,7 +1543,7 @@ import "vue2-datepicker/scss/index.scss";
 
 export default {
     name: "Booking",
-    props: ["user"],
+    // props: ["user"],
     components: {
         GridLayout: VueGridLayout.GridLayout,
         GridItem: VueGridLayout.GridItem,
@@ -1400,6 +1572,11 @@ export default {
                 y: 9,
                 w: 2,
                 h: 3,
+            },
+            restriction: {
+                date: new Date(),
+                from: "",
+                to: "",
             },
             hours: Array.from({ length: 23 }).map((_, i) => i + 9),
             reservation: {
@@ -2035,6 +2212,9 @@ export default {
             this.loading = true;
             await this.fetchTables();
             this.loading = false;
+        },
+        async addRestriction() {
+            console.log("Restriction: ", this.restriction);
         },
     },
 };

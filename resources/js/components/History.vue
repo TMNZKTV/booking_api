@@ -435,9 +435,6 @@ export default {
                         `http://booking-api.test/api/reservations`,
                         newReservation
                     );
-                    await axios.delete(
-                        `http://booking-api.test/api/logs/${log.id}`
-                    );
                     const newLog = {
                         text: `Стол №${newReservation.table_id} был забронирован.`,
                         type: "Восстановление",
@@ -473,9 +470,7 @@ export default {
                         `http://booking-api.test/api/reservations`,
                         newReservation
                     );
-                    await axios.delete(
-                        `http://booking-api.test/api/logs/${log.id}`
-                    );
+
                     const newLog = {
                         text: `Стол №${newReservation.table_id} был забронирован.`,
                         type: "Восстановление",
@@ -510,9 +505,6 @@ export default {
                     await axios.post(
                         `http://booking-api.test/api/reservations`,
                         newReservation
-                    );
-                    await axios.delete(
-                        `http://booking-api.test/api/logs/${log.id}`
                     );
                     const newLog = {
                         text: `Стол №${newReservation.table_id} был забронирован.`,
