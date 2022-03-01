@@ -134,9 +134,10 @@ export default {
             this.user = null;
             if (this.token !== null) {
                 axios
-                    .get("api/user")
+                    .get("/user")
                     .then((response) => {
-                        this.user = response.data.name;
+                        console.log("This is user: ", response);
+                        // this.user = response.data.name;
                     })
                     .catch((err) => {
                         console.log(err);

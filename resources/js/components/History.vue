@@ -432,7 +432,7 @@ export default {
                 };
                 try {
                     await axios.post(
-                        `http://booking-api.test/api/reservations`,
+                        `http://booking-api.test/reservations`,
                         newReservation
                     );
                     const newLog = {
@@ -440,10 +440,7 @@ export default {
                         type: "Восстановление",
                         ...newReservation,
                     };
-                    await axios.post(
-                        `http://booking-api.test/api/logs`,
-                        newLog
-                    );
+                    await axios.post(`http://booking-api.test/logs`, newLog);
                 } catch (error) {
                     console.log(error.message);
                 }
@@ -467,7 +464,7 @@ export default {
                 };
                 try {
                     await axios.post(
-                        `http://booking-api.test/api/reservations`,
+                        `http://booking-api.test/reservations`,
                         newReservation
                     );
 
@@ -476,10 +473,7 @@ export default {
                         type: "Восстановление",
                         ...newReservation,
                     };
-                    await axios.post(
-                        `http://booking-api.test/api/logs`,
-                        newLog
-                    );
+                    await axios.post(`http://booking-api.test/logs`, newLog);
                 } catch (error) {
                     console.log(error);
                 }
@@ -503,7 +497,7 @@ export default {
                 };
                 try {
                     await axios.post(
-                        `http://booking-api.test/api/reservations`,
+                        `http://booking-api.test/reservations`,
                         newReservation
                     );
                     const newLog = {
@@ -511,10 +505,7 @@ export default {
                         type: "Восстановление",
                         ...newReservation,
                     };
-                    await axios.post(
-                        `http://booking-api.test/api/logs`,
-                        newLog
-                    );
+                    await axios.post(`http://booking-api.test/logs`, newLog);
                 } catch (error) {
                     console.log(error);
                 }
@@ -525,7 +516,7 @@ export default {
             if (this.place === "place_1") {
                 this.loading = true;
                 const response = await axios.get(
-                    "http://booking-api.test/api/logs"
+                    "http://booking-api.test/logs"
                 );
                 const logs = response.data.filter((log) => {
                     if (log.place_id === 1) {
@@ -538,7 +529,7 @@ export default {
             if (this.place === "place_2") {
                 this.loading = true;
                 const response = await axios.get(
-                    "http://booking-api.test/api/logs"
+                    "http://booking-api.test/logs"
                 );
                 const logs = response.data.filter((log) => {
                     if (log.place_id === 2) {
@@ -551,7 +542,7 @@ export default {
             if (this.place === "place_3") {
                 this.loading = true;
                 const response = await axios.get(
-                    "http://booking-api.test/api/logs"
+                    "http://booking-api.test/logs"
                 );
                 const logs = response.data.filter((log) => {
                     if (log.place_id === 3) {
