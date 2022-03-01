@@ -91,10 +91,6 @@
                     Зарегистрироваться
                 </button>
             </div>
-            <div class="d-flex justify-content-center pt-3 align-items-center">
-                <span class="me-2">Есть аккаунта?</span>
-                <router-link to="/login"> Войти </router-link>
-            </div>
         </form>
     </div>
 </template>

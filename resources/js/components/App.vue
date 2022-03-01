@@ -10,7 +10,7 @@
                                     class="nav-link px-0 py-3 link active"
                                     :to="{ name: 'Home' }"
                                 >
-                                    Главная
+                                    Главна
                                 </router-link>
                             </li>
                             <li class="nav-item me-3">

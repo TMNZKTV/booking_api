@@ -11,7 +11,7 @@
                     required
                     placeholder="Type in your email..."
                 />
-                <div class="valid-feedback">Looks good!</div>
+                <div class="valid-feedback">Looks good!!!</div>
             </div>
             <div class="col-md-4 mx-auto pt-3">
                 <label for="password" class="form-label">Пароль</label>
