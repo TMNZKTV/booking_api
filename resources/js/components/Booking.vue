@@ -276,11 +276,11 @@
                                 <span>Конфликтный гость</span>
                             </div>
                             <div class="col-md-7 col-7">
-                                <img
+                                <!-- <img
                                     :src="require('../../svg/lock.svg').default"
                                     alt="restrictions"
                                     :style="{ width: '15px' }"
-                                />
+                                /> -->
                                 <span>Ограничения по времени</span>
                             </div>
                             <div class="w-100"></div>
@@ -414,7 +414,7 @@
                         </div>
                         <!-- Номер и иконки стола -->
                         <div class="no-drag text-center">
-                            <div v-if="item.restriction">
+                            <!-- <div v-if="item.restriction">
                                 <img
                                     :src="
                                         require('../../svg/lockSign.svg')
@@ -428,7 +428,7 @@
                                     }"
                                 />
                                 <span :style="{ color: 'white' }">c 16:00</span>
-                            </div>
+                            </div> -->
                             <div class="pt-1 align-middle">
                                 <span
                                     :style="{
