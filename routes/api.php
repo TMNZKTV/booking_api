@@ -18,11 +18,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::middleware('auth:sanctum')->get('user', function (Request $request) {
-//     return $request->user();
-// });
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});
 
 // Защитил все роуты миддлвером от Laravel Sanctum
+// 2.03.2022 - Роуты не работают, т.к. unauthenticated - видимо не срабатывает проверка от Sanctum
 Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::apiResources([
         'tables' => TableController::class,
@@ -31,7 +32,6 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
         'failed_reservations' => FailedReservationController::class,
         'logs'=> LogController::class,
         'waiting'=> WaitingUserController::class,
-        'user' => UserController::class
+        // 'user' => UserController::class
     ]);
 });
-

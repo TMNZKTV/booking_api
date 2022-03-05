@@ -10,7 +10,7 @@
                                     class="nav-link px-0 py-3 link active"
                                     :to="{ name: 'Home' }"
                                 >
-                                    Главна
+                                    Главная
                                 </router-link>
                             </li>
                             <li class="nav-item me-3">
@@ -134,7 +134,7 @@ export default {
             this.user = null;
             if (this.token !== null) {
                 axios
-                    .get("/user")
+                    .get("/api/user")
                     .then((response) => {
                         console.log("This is user: ", response);
                         // this.user = response.data.name;
