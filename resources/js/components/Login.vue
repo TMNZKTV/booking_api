@@ -1,6 +1,6 @@
 <template>
     <div>
-        <form class="g-3 needs-validation" novalidate @submit.prevent="login">
+        <form class="g-3 needs-validation" validate @submit.prevent="login">
             <div class="col-md-4 mx-auto pt-3">
                 <label for="email" class="form-label">Email</label>
                 <input
@@ -49,6 +49,7 @@ export default {
         async login() {
             // Сначала получаем cookie на /csrf-cookie
             await axios.get("/sanctum/csrf-cookie").then((response) => {
+                console.log("Запрос за куки: ", response);
                 // Вместе с TOKEN логинимся
                 axios
                     .post("/login", {
@@ -61,6 +62,7 @@ export default {
                             "token",
                             res.config.headers["X-XSRF-TOKEN"]
                         );
+                        console.log(res);
                         this.$router.push({ name: "Home" });
                     })
                     .catch((err) => {
