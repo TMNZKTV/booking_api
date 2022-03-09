@@ -23,7 +23,7 @@ jobs:
         uses: tarunjangra/ssh-remote-cmd@v1
         with:
           # Command to execute on the remote server.
-          command: sh /var/www/www-root/data/deploy_app.sh
+          command: sh /var/www/www-root/data/deploy_booking.sh
           # Hostname or IP address of the server.
           host: ${{ secrets.HOST }}
           # Username for authentication.
