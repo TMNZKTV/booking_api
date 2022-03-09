@@ -414,7 +414,13 @@
                         </div>
                         <!-- Номер и иконки стола -->
                         <div class="no-drag text-center">
-                            <div v-if="item.restriction">
+                            <!-- Вывод инфо об ограничении по времени -->
+                            <div v-for="(item, idx) in item.restrictions" :key="idx"
+                                 data-bs-toggle="modal"
+                                 data-bs-target="#UpdateRestriction"
+                                 :style="{cursor: 'pointer'}"
+                                 @click="updateRestrictionInfo(item)"
+                            >
                                 <img
                                     :src="
                                         require('../../svg/lockSign.svg')
@@ -427,7 +433,7 @@
                                         marginLeft: 'auto',
                                     }"
                                 />
-                                <span :style="{ color: 'white' }">c 16:00</span>
+                                <span :style="{ color: 'white' }">{{item.from}}-{{item.to}}</span>
                             </div>
                             <div class="pt-1 align-middle">
                                 <span
@@ -1450,34 +1456,32 @@
                         ></button>
                     </div>
                     <div class="modal-body">
-                        <!--Стол -->
-                        <div class="mb-3">
-                            <label class="form-label" for="tables"
+                        <!--Стол и Дата -->
+                        <div class="row">
+                            <div class="mb-3 col-6">
+                                <label class="form-label" for="selectTables"
                                 >№ стола</label
-                            >
-                            <select
-                                id="selectTables"
-                                class="form-control form-select"
-                                v-model="reservation.table_id"
-                                @change="
+                                >
+                                <select
+                                    id="selectTables"
+                                    class="form-control form-select w-75"
+                                    v-model="restriction.table_id"
+                                    @change="
                                     reservation.table_id = $event.target.value
                                 "
-                            >
-                                <option
-                                    v-for="table in layout"
-                                    :value="table.id"
-                                    :key="table.id"
-                                    selected
                                 >
-                                    {{ table.i }}
-                                </option>
-                            </select>
-                        </div>
-
-                        <!-- Дата и Время -->
-                        <div class="row">
-                            <!-- Дата -->
-                            <div>
+                                    <option
+                                        v-for="table in layout"
+                                        :value="table.id"
+                                        :key="table.id"
+                                        selected
+                                    >
+                                        {{ table.i }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="col-6">
+                                Дата
                                 <date-picker
                                     v-model="restriction.date"
                                     format="YYYY-MM-DD"
@@ -1486,38 +1490,41 @@
                                 >
                                 </date-picker>
                             </div>
-                            <!-- Время -->
-                            <div>
-                                <span>C</span>
-                                <date-picker
-                                    v-model="restriction.from"
-                                    :minute-step="30"
-                                    :hour-options="hours"
-                                    format="HH:mm"
-                                    value-type="format"
-                                    type="time"
-                                    placeholder="HH:mm"
-                                ></date-picker>
-                            </div>
-                            <div>
-                                <span>До</span>
-                                <date-picker
-                                    v-model="restriction.to"
-                                    :minute-step="30"
-                                    :hour-options="hours"
-                                    format="HH:mm"
-                                    value-type="format"
-                                    type="time"
-                                    placeholder="HH:mm"
-                                ></date-picker>
-                            </div>
                         </div>
+                            <!-- Время -->
+                            <div class="row">
+                                <div class="col-6">
+                                    <span>От</span>
+                                    <date-picker
+                                        v-model="restriction.from"
+                                        :minute-step="30"
+                                        :hour-options="hours"
+                                        format="HH:mm"
+                                        value-type="format"
+                                        type="time"
+                                        placeholder="HH:mm"
+                                    ></date-picker>
+                                </div>
+                                <div class="col-6">
+                                    <span>До</span>
+                                    <date-picker
+                                        v-model="restriction.to"
+                                        :minute-step="30"
+                                        :hour-options="hours"
+                                        format="HH:mm"
+                                        value-type="format"
+                                        type="time"
+                                        placeholder="HH:mm"
+                                    ></date-picker>
+                                </div>
+                            </div>
                     </div>
                     <div class="modal-footer">
                         <button
                             type="button"
                             class="btn btn-secondary"
                             data-bs-dismiss="modal"
+                            @click="() => clearRestrictionInfo()"
                         >
                             Закрыть
                         </button>
@@ -1533,6 +1540,122 @@
                 </div>
             </div>
         </div>
+        <!-- Модалка для обновления ограничения по времени -->
+        <div
+        class="modal fade"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+        id="UpdateRestriction"
+        tabindex="-1"
+        aria-labelledby="UpdateRestrictionModal"
+        aria-hidden="true"
+    >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="UpdateRestrictionModal">
+                        Ограничение по времени
+                    </h5>
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                    ></button>
+                </div>
+                <div class="modal-body">
+                    <!--Стол и Дата -->
+                    <div class="row">
+                        <div class="mb-3 col-6">
+                            <label class="form-label" for="selectTables"
+                            >№ стола</label
+                            >
+                            <select
+                                id="selectTables"
+                                class="form-control form-select w-75"
+                                v-model="restriction.table_id"
+                                @change="
+                                    restriction.table_id = $event.target.value
+                                "
+                            >
+                                <option
+                                    v-for="table in layout"
+                                    :value="table.id"
+                                    :key="table.id"
+                                    selected
+                                >
+                                    {{ table.i }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            Дата
+                            <date-picker
+                                v-model="restriction.date"
+                                format="YYYY-MM-DD"
+                                type="date"
+                                valueType="format"
+                            >
+                            </date-picker>
+                        </div>
+                    </div>
+                    <!-- Время -->
+                    <div class="row">
+                        <div class="col-6">
+                            <span>От</span>
+                            <date-picker
+                                v-model="restriction.from"
+                                :minute-step="30"
+                                :hour-options="hours"
+                                format="HH:mm"
+                                value-type="format"
+                                type="time"
+                                placeholder="HH:mm"
+                            ></date-picker>
+                        </div>
+                        <div class="col-6">
+                            <span>До</span>
+                            <date-picker
+                                v-model="restriction.to"
+                                :minute-step="30"
+                                :hour-options="hours"
+                                format="HH:mm"
+                                value-type="format"
+                                type="time"
+                                placeholder="HH:mm"
+                            ></date-picker>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button
+                        type="button"
+                        class="btn btn-danger me-auto"
+                        @click="() => deleteRestriction()"
+                        data-bs-dismiss="modal"
+                    >
+                        Удалить
+                    </button>
+                    <button
+                        type="button"
+                        class="btn btn-primary"
+                        @click="() => updateRestriction()"
+                        data-bs-dismiss="modal"
+                    >
+                        Обновить
+                    </button>
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                        @click="() => clearRestrictionInfo()"
+                    >
+                        Закрыть
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
     </div>
 </template>
 
@@ -1577,6 +1700,7 @@ export default {
                 date: new Date(),
                 from: "",
                 to: "",
+                table_id: null
             },
             hours: Array.from({ length: 23 }).map((_, i) => i + 9),
             reservation: {
@@ -1601,7 +1725,7 @@ export default {
         this.loading = false;
 
         axios
-            .get("/user")
+            .get("/api/user")
             .then((response) => {
                 this.reservation.responsible_name = response.data.name;
                 this.reservation.responsible_email = response.data.email;
@@ -1612,6 +1736,7 @@ export default {
     },
     computed: {
         tables() {
+            // Все столы, кроме Ожидания
             if (this.place === "place_1") {
                 return this.layout.filter(
                     (table) => table.id !== 100 && table.place_id === 1
@@ -1694,6 +1819,7 @@ export default {
         },
         chooseTable(item) {
             this.reservation.table_id = item.id;
+            this.restriction.table_id = item.id;
             this.table.id = item.id;
         },
         clearReservationInfo() {
@@ -1709,6 +1835,12 @@ export default {
             this.reservation.date = null;
             this.reservation.time = "";
             // Не очищаю имя и почту ответственного, чтобы использовать на всех 3-х точках
+        },
+        clearRestrictionInfo() {
+            this.restriction.date = new Date();
+            this.restriction.from = '';
+            this.restriction.to = '';
+            this.restriction.table_id = null;
         },
         updateGuestInfo(item) {
             this.reservation = {
@@ -1742,10 +1874,17 @@ export default {
         toggleShow() {
             this.showPassword = !this.showPassword;
         },
+        updateRestrictionInfo(item) {
+            this.restriction = {
+                ...item,
+            }
+        },
         async fetchLogs() {
             this.layout = null;
             this.loading = true;
-            const response = await axios.get("http://booking-api.test/logs");
+            const response = await axios.get(
+                "http://booking-api.test/api/logs"
+            );
             this.logs = response.data;
             this.loading = false;
         },
@@ -1934,6 +2073,7 @@ export default {
                     `http://booking-api.test/api/reservations/${this.reservation.id}`,
                     this.reservation
                 );
+                console.log(this.reservation.id)
                 const newLog = {
                     text: `Новые данные гостя.`,
                     type: "Обновление",
@@ -2210,8 +2350,107 @@ export default {
             this.loading = false;
         },
         async addRestriction() {
-            console.log("Restriction: ", this.restriction);
+            if (this.place === "place_1") {
+                const restriction = {
+                    ...this.restriction,
+                    table_id: this.table.id,
+                    place_id: 1
+                };
+                try {
+                    await axios.post(
+                        "http://booking-api.test/api/restrictions",
+                        restriction
+                    );
+                } catch (error) {
+                    alert("Error appeared while posting restriction");
+                }
+            }
+            if (this.place === "place_2") {
+                const restriction = {
+                    ...this.restriction,
+                    table_id: this.table.id,
+                    place_id: 2
+                };
+                try {
+                    await axios.post(
+                        "http://booking-api.test/api/restrictions",
+                        restriction
+                    );
+                } catch (error) {
+                    alert("Error appeared while posting restriction");
+                }
+            }
+            if (this.place === "place_3") {
+                const restriction = {
+                    ...this.restriction,
+                    table_id: this.table.id,
+                    place_id: 3
+                };
+                try {
+                    await axios.post(
+                        "http://booking-api.test/api/restrictions",
+                        restriction
+                    );
+                } catch (error) {
+                    alert("Error appeared while posting restriction");
+                }
+            }
+            await this.fetchTables();
         },
+        async updateRestriction() {
+            if (this.place === "place_1") {
+                const restriction = {
+                    ...this.restriction
+                };
+
+                try {
+                    await axios.put(
+                        `http://booking-api.test/api/restrictions/${this.restriction.id}`,
+                        restriction
+                    );
+                } catch (error) {
+                    alert("Error appeared while posting restriction");
+                }
+            }
+            if (this.place === "place_2") {
+                const restriction = {
+                    ...this.restriction,
+                };
+                try {
+                    await axios.put(
+                        `http://booking-api.test/api/restrictions/${this.restriction.id}`,
+                        restriction
+                    );
+                } catch (error) {
+                    alert("Error appeared while posting restriction");
+                }
+            }
+            if (this.place === "place_3") {
+                const restriction = {
+                    ...this.restriction,
+                };
+                try {
+                    await axios.put(
+                        `http://booking-api.test/api/restrictions/${this.restriction.id}`,
+                        restriction
+                    );
+                } catch (error) {
+                    alert("Error appeared while posting restriction");
+                }
+            }
+            await this.fetchTables();
+        },
+        async deleteRestriction() {
+            try {
+                await axios.delete(
+                    `http://booking-api.test/api/restrictions/${this.restriction.id}`
+                );
+            } catch (error) {
+                console.log(error);
+            }
+            await this.fetchTables();
+        }
+
     },
 };
 </script>

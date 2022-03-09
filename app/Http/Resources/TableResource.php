@@ -25,7 +25,7 @@ class TableResource extends JsonResource
             'bbq' => $this->bbq,
             'place_id' => $this->place_id,
             'reservations'=> ReservationResource::collection($this->reservations),
-            'restriction'=>$this->restriction
+            'restrictions'=>$this->restrictions
         ];
     }
 }

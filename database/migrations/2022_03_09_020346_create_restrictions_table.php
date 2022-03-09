@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTablesTable extends Migration
+class CreateRestrictionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,14 @@ class CreateTablesTable extends Migration
      */
     public function up()
     {
-        Schema::create('tables', function (Blueprint $table) {
+        Schema::create('restrictions', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->date('date');
+            $table->string('from')->nullable();
+            $table->string('to')->nullable();
+            $table->foreignId('table_id')->constrained();
             $table->foreignId('place_id')->constrained();
-            $table->bigInteger('x')->unsigned()->default('0');
-            $table->bigInteger('y')->unsigned()->default('0');;
-            $table->bigInteger('w')->unsigned()->default('1');;
-            $table->bigInteger('h')->unsigned()->default('2');;
-            $table->string('i', );
-            $table->boolean('bbq')->default(false);
         });
     }
 
@@ -33,6 +31,6 @@ class CreateTablesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tables');
+        Schema::dropIfExists('restrictions');
     }
 }

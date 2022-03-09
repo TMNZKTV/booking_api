@@ -137,7 +137,7 @@ export default {
                     .get("/api/user")
                     .then((response) => {
                         console.log("This is user: ", response);
-                        // this.user = response.data.name;
+                        this.user = response.data.name;
                     })
                     .catch((err) => {
                         console.log(err);
