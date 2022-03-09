@@ -1883,7 +1883,7 @@ export default {
             this.layout = null;
             this.loading = true;
             const response = await axios.get(
-                "http://booking-api.test/api/logs"
+                "/api/logs"
             );
             this.logs = response.data;
             this.loading = false;
@@ -1894,7 +1894,7 @@ export default {
                     try {
                         this.loading = true;
                         const response = await axios.get(
-                            "http://booking-api.test/api/tables"
+                            "/api/tables"
                         );
                         this.layout = response.data.data.filter((table) => {
                             if (table.place_id === 1) {
@@ -1910,7 +1910,7 @@ export default {
                     try {
                         this.loading = true;
                         const response = await axios.get(
-                            "http://booking-api.test/api/tables"
+                            "/api/tables"
                         );
                         this.layout = response.data.data.filter((table) => {
                             if (table.place_id === 2) {
@@ -1926,7 +1926,7 @@ export default {
                     try {
                         this.loading = true;
                         const response = await axios.get(
-                            "http://booking-api.test/api/tables"
+                            "/api/tables"
                         );
                         this.layout = response.data.data.filter((table) => {
                             if (table.place_id === 3) {
@@ -1946,7 +1946,7 @@ export default {
             if (this.place === "place_1") {
                 try {
                     await axios.put(
-                        `http://booking-api.test/api/tables/${item.id}`,
+                        `/api/tables/${item.id}`,
                         item
                     );
                 } catch (error) {
@@ -1956,7 +1956,7 @@ export default {
             if (this.place === "place_2") {
                 try {
                     await axios.put(
-                        `http://booking-api.test/api/tables/${item.id}`,
+                        `/api/tables/${item.id}`,
                         item
                     );
                 } catch (error) {
@@ -1966,7 +1966,7 @@ export default {
             if (this.place === "place_3") {
                 try {
                     await axios.put(
-                        `http://booking-api.test/api/tables/${item.id}`,
+                        `/api/tables/${item.id}`,
                         item
                     );
                 } catch (error) {
@@ -1994,7 +1994,7 @@ export default {
 
                 try {
                     await axios.post(
-                        `http://booking-api.test/api/reservations`,
+                        `/api/reservations`,
                         newReservation
                     );
                     const newLog = {
@@ -2003,7 +2003,7 @@ export default {
                         ...newReservation,
                     };
                     await axios.post(
-                        `http://booking-api.test/api/logs`,
+                        `/api/logs`,
                         newLog
                     );
                 } catch (error) {
@@ -2027,7 +2027,7 @@ export default {
                     responsible_name: this.reservation.responsible_name,
                 };
                 await axios.post(
-                    `http://booking-api.test/api/reservations`,
+                    `/api/reservations`,
                     newReservation
                 );
                 const newLog = {
@@ -2035,7 +2035,7 @@ export default {
                     type: "Бронирование",
                     ...newReservation,
                 };
-                await axios.post(`http://booking-api.test/api/logs`, newLog);
+                await axios.post(`/api/logs`, newLog);
             }
             if (this.place === "place_3") {
                 const newReservation = {
@@ -2054,7 +2054,7 @@ export default {
                     responsible_name: this.reservation.responsible_name,
                 };
                 await axios.post(
-                    `http://booking-api.test/api/reservations`,
+                    `/api/reservations`,
                     newReservation
                 );
                 const newLog = {
@@ -2062,7 +2062,7 @@ export default {
                     type: "Бронирование",
                     ...newReservation,
                 };
-                await axios.post(`http://booking-api.test/api/logs`, newLog);
+                await axios.post(`/api/logs`, newLog);
             }
             this.clearReservationInfo();
             await this.fetchTables();
@@ -2070,7 +2070,7 @@ export default {
         async updateGuest() {
             if (this.place === "place_1") {
                 await axios.put(
-                    `http://booking-api.test/api/reservations/${this.reservation.id}`,
+                    `/api/reservations/${this.reservation.id}`,
                     this.reservation
                 );
                 console.log(this.reservation.id)
@@ -2079,11 +2079,11 @@ export default {
                     type: "Обновление",
                     ...this.reservation,
                 };
-                await axios.post(`http://booking-api.test/api/logs`, newLog);
+                await axios.post(`/api/logs`, newLog);
             }
             if (this.place === "place_2") {
                 await axios.put(
-                    `http://booking-api.test/api/reservations/${this.reservation.id}`,
+                    `/api/reservations/${this.reservation.id}`,
                     this.reservation
                 );
                 const newLog = {
@@ -2091,11 +2091,11 @@ export default {
                     type: "Обновление",
                     ...this.reservation,
                 };
-                await axios.post(`http://booking-api.test/api/logs`, newLog);
+                await axios.post(`/api/logs`, newLog);
             }
             if (this.place === "place_3") {
                 await axios.put(
-                    `http://booking-api.test/api/reservations/${this.reservation.id}`,
+                    `/api/reservations/${this.reservation.id}`,
                     this.reservation
                 );
                 const newLog = {
@@ -2103,14 +2103,14 @@ export default {
                     type: "Обновление",
                     ...this.reservation,
                 };
-                await axios.post(`http://booking-api.test/api/logs`, newLog);
+                await axios.post(`/api/logs`, newLog);
             }
             this.clearReservationInfo();
             await this.fetchTables();
         },
         async fetchWaitingList() {
             const response = await axios.get(
-                "http://booking-api.test/api/tables"
+                "/api/tables"
             );
             if (this.place === "place_1") {
                 this.waitingList = response.data.data.find((table) => {
@@ -2153,7 +2153,7 @@ export default {
                     responsible_name: this.reservation.responsible_name,
                 };
                 await axios.post(
-                    `http://booking-api.test/api/reservations`,
+                    `/api/reservations`,
                     waitingGuest
                 );
 
@@ -2162,7 +2162,7 @@ export default {
                     type: "Ожидание",
                     ...waitingGuest,
                 };
-                await axios.post(`http://booking-api.test/api/logs`, newLog);
+                await axios.post(`/api/logs`, newLog);
             }
             if (this.place === "place_2") {
                 const waitingGuest = {
@@ -2182,7 +2182,7 @@ export default {
                     responsible_name: this.reservation.responsible_name,
                 };
                 await axios.post(
-                    `http://booking-api.test/api/reservations`,
+                    `/api/reservations`,
                     waitingGuest
                 );
 
@@ -2191,7 +2191,7 @@ export default {
                     type: "Ожидание",
                     ...waitingGuest,
                 };
-                await axios.post(`http://booking-api.test/api/logs`, newLog);
+                await axios.post(`/api/logs`, newLog);
             }
             if (this.place === "place_3") {
                 const waitingGuest = {
@@ -2211,7 +2211,7 @@ export default {
                     responsible_name: this.reservation.responsible_name,
                 };
                 await axios.post(
-                    `http://booking-api.test/api/reservations`,
+                    `/api/reservations`,
                     waitingGuest
                 );
 
@@ -2220,14 +2220,14 @@ export default {
                     type: "Ожидание",
                     ...waitingGuest,
                 };
-                await axios.post(`http://booking-api.test/api/logs`, newLog);
+                await axios.post(`/api/logs`, newLog);
             }
             this.clearReservationInfo();
         },
         async deleteReservation() {
             try {
                 await axios.post(
-                    `http://booking-api.test/api/failed_reservations`,
+                    `/api/failed_reservations`,
                     this.reservation
                 );
             } catch (error) {
@@ -2236,7 +2236,7 @@ export default {
 
             try {
                 await axios.delete(
-                    `http://booking-api.test/api/reservations/${this.reservation.id}`
+                    `/api/reservations/${this.reservation.id}`
                 );
             } catch (error) {
                 console.log(error);
@@ -2248,13 +2248,13 @@ export default {
                 ...this.reservation,
             };
 
-            await axios.post(`http://booking-api.test/api/logs`, newLog);
+            await axios.post(`/api/logs`, newLog);
             await this.fetchTables();
         },
         async completeReservation() {
             try {
                 await axios.post(
-                    `http://booking-api.test/api/completed_reservations`,
+                    `/api/completed_reservations`,
                     this.reservation
                 );
             } catch (error) {
@@ -2263,7 +2263,7 @@ export default {
 
             try {
                 await axios.delete(
-                    `http://booking-api.test/api/reservations/${this.reservation.id}`
+                    `/api/reservations/${this.reservation.id}`
                 );
             } catch (error) {
                 console.log(error);
@@ -2274,13 +2274,13 @@ export default {
                 type: "Завершено",
                 ...this.reservation,
             };
-            await axios.post(`http://booking-api.test/api/logs`, newLog);
+            await axios.post(`/api/logs`, newLog);
             await this.fetchTables();
         },
         async addTable(type, password) {
             this.checkPass(password);
             const response = await axios.get(
-                "http://booking-api.test/api/tables"
+                "/api/tables"
             );
 
             if (this.place === "place_1" && this.passCheck) {
@@ -2291,7 +2291,7 @@ export default {
                     bbq: type,
                 };
                 await axios.post(
-                    "http://booking-api.test/api/tables",
+                    "/api/tables",
                     newTable
                 );
             }
@@ -2303,7 +2303,7 @@ export default {
                     bbq: type,
                 };
                 await axios.post(
-                    "http://booking-api.test/api/tables",
+                    "/api/tables",
                     newTable
                 );
             }
@@ -2315,7 +2315,7 @@ export default {
                     bbq: type,
                 };
                 await axios.post(
-                    "http://booking-api.test/api/tables",
+                    "/api/tables",
                     newTable
                 );
             }
@@ -2329,20 +2329,20 @@ export default {
 
             if (this.place === "place_1" && this.passCheck) {
                 const table = await axios.get(
-                    `http://booking-api.test/api/tables/${this.table.id}`
+                    `/api/tables/${this.table.id}`
                 );
                 await axios.delete(
-                    `http://booking-api.test/api/tables/${this.table.id}`
+                    `/api/tables/${this.table.id}`
                 );
             }
             if (this.place === "place_2" && this.passCheck) {
                 await axios.delete(
-                    `http://booking-api.test/api/tables/${this.table}`
+                    `/api/tables/${this.table}`
                 );
             }
             if (this.place === "place_3" && this.passCheck) {
                 await axios.delete(
-                    `http://booking-api.test/api/tables/${this.table}`
+                    `/api/tables/${this.table}`
                 );
             }
             this.loading = true;
@@ -2358,7 +2358,7 @@ export default {
                 };
                 try {
                     await axios.post(
-                        "http://booking-api.test/api/restrictions",
+                        "/api/restrictions",
                         restriction
                     );
                 } catch (error) {
@@ -2373,7 +2373,7 @@ export default {
                 };
                 try {
                     await axios.post(
-                        "http://booking-api.test/api/restrictions",
+                        "/api/restrictions",
                         restriction
                     );
                 } catch (error) {
@@ -2388,7 +2388,7 @@ export default {
                 };
                 try {
                     await axios.post(
-                        "http://booking-api.test/api/restrictions",
+                        "/api/restrictions",
                         restriction
                     );
                 } catch (error) {
@@ -2405,7 +2405,7 @@ export default {
 
                 try {
                     await axios.put(
-                        `http://booking-api.test/api/restrictions/${this.restriction.id}`,
+                        `/api/restrictions/${this.restriction.id}`,
                         restriction
                     );
                 } catch (error) {
@@ -2418,7 +2418,7 @@ export default {
                 };
                 try {
                     await axios.put(
-                        `http://booking-api.test/api/restrictions/${this.restriction.id}`,
+                        `/api/restrictions/${this.restriction.id}`,
                         restriction
                     );
                 } catch (error) {
@@ -2431,7 +2431,7 @@ export default {
                 };
                 try {
                     await axios.put(
-                        `http://booking-api.test/api/restrictions/${this.restriction.id}`,
+                        `/api/restrictions/${this.restriction.id}`,
                         restriction
                     );
                 } catch (error) {
@@ -2443,7 +2443,7 @@ export default {
         async deleteRestriction() {
             try {
                 await axios.delete(
-                    `http://booking-api.test/api/restrictions/${this.restriction.id}`
+                    `/api/restrictions/${this.restriction.id}`
                 );
             } catch (error) {
                 console.log(error);
