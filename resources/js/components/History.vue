@@ -432,7 +432,7 @@ export default {
                 };
                 try {
                     await axios.post(
-                        `http://booking-api.test/api/reservations`,
+                        `/api/reservations`,
                         newReservation
                     );
                     const newLog = {
@@ -441,7 +441,7 @@ export default {
                         ...newReservation,
                     };
                     await axios.post(
-                        `http://booking-api.test/api/logs`,
+                        `/api/logs`,
                         newLog
                     );
                 } catch (error) {
@@ -467,7 +467,7 @@ export default {
                 };
                 try {
                     await axios.post(
-                        `http://booking-api.test/api/reservations`,
+                        `/api/reservations`,
                         newReservation
                     );
 
@@ -477,7 +477,7 @@ export default {
                         ...newReservation,
                     };
                     await axios.post(
-                        `http://booking-api.test/api/logs`,
+                        `/api/logs`,
                         newLog
                     );
                 } catch (error) {
@@ -503,7 +503,7 @@ export default {
                 };
                 try {
                     await axios.post(
-                        `http://booking-api.test/api/reservations`,
+                        `/api/reservations`,
                         newReservation
                     );
                     const newLog = {
@@ -512,7 +512,7 @@ export default {
                         ...newReservation,
                     };
                     await axios.post(
-                        `http://booking-api.test/api/logs`,
+                        `/api/logs`,
                         newLog
                     );
                 } catch (error) {
@@ -525,7 +525,7 @@ export default {
             if (this.place === "place_1") {
                 this.loading = true;
                 const response = await axios.get(
-                    "http://booking-api.test/api/logs"
+                    "/api/logs"
                 );
                 const logs = response.data.filter((log) => {
                     if (log.place_id === 1) {
@@ -538,7 +538,7 @@ export default {
             if (this.place === "place_2") {
                 this.loading = true;
                 const response = await axios.get(
-                    "http://booking-api.test/api/logs"
+                    "/api/logs"
                 );
                 const logs = response.data.filter((log) => {
                     if (log.place_id === 2) {
@@ -551,7 +551,7 @@ export default {
             if (this.place === "place_3") {
                 this.loading = true;
                 const response = await axios.get(
-                    "http://booking-api.test/api/logs"
+                    "/api/logs"
                 );
                 const logs = response.data.filter((log) => {
                     if (log.place_id === 3) {
