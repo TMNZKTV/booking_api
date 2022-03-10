@@ -207,19 +207,18 @@ body {
     bottom: 0;
     background-color: #eef1f4;
 }
-.button_action {
-    color: white;
-    background-color: #4099de;
-    font-weight: 600;
-    font-size: 16px;
-    padding-left: 10px;
-    padding-right: 10px;
-    border-radius: 8px;
-    display: inline-block;
-    min-width: 70px;
-    border: 1px solid transparent;
-}
-
+//.button_action {
+//    color: white;
+//    background-color: #4099de;
+//    font-weight: 600;
+//    font-size: 16px;
+//    padding-left: 10px;
+//    padding-right: 10px;
+//    border-radius: 8px;
+//    display: inline-block;
+//    min-width: 70px;
+//    border: 1px solid transparent;
+//}
 .header_mobile {
     display: none;
     @media (min-width: 375px) {

@@ -37,6 +37,7 @@
                                 type="format"
                                 valueType="date"
                                 :style="{ width: '150px' }"
+
                             ></date-picker>
 
                             <div class="row mt-2">
@@ -82,8 +83,8 @@
                     <!-- 1 ряд -->
                     <div class="row row-cols-2 g-1 mb-1">
                         <!-- Изменить расположение -->
-                        <div class="col-xs-auto col-sm-4 col-md-4 col-lg-auto">
-                            <div class="btn btn-outline-primary button_action">
+                        <div class="col-auto">
+                            <div class="btn btn-primary p-2 button_action">
                                 <input
                                     type="radio"
                                     value="changeLayout"
@@ -93,14 +94,15 @@
                                     data-bs-target="#passwordCheck"
                                     id="changeLayout"
                                 />
-                                <label for="changeLayout" class="py-2"
+                                <label for="changeLayout"
                                     >Изменить порядок</label
                                 >
                             </div>
                         </div>
                         <!-- Добавить посетителя -->
-                        <div class="col-xs-auto col-sm-4 col-md-4 col-lg-auto">
-                            <div class="btn btn-outline-success button_action">
+<!--                        class="col-xs-auto col-sm-4 col-md-4 col-lg-auto" -->
+                        <div class="col-auto">
+                            <div class="btn btn-success p-2 button_action">
                                 <input
                                     type="radio"
                                     value="addGuest"
@@ -108,68 +110,14 @@
                                     class="btn-check"
                                     id="forAddGuest"
                                 />
-                                <label for="forAddGuest" class="py-2"
-                                    >Добавить посетителя</label
+                                <label for="forAddGuest"
+                                    >Добавить гостя</label
                                 >
                             </div>
                         </div>
-
-                        <!-- Добавить стол -->
-                        <div class="col-sm-3 col-md-4 col-lg-auto">
-                            <div class="btn btn-outline-info button_action">
-                                <input
-                                    type="radio"
-                                    value="addTable"
-                                    v-model="actionType"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#AddOneTable"
-                                    class="btn-check"
-                                    id="addTable"
-                                />
-                                <label for="addTable" class="py-2"
-                                    >Добавить стол</label
-                                >
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 2 ряд -->
-                    <div class="row row-cols-2 g-1 mb-1">
-                        <!-- Добавить стол -->
-                        <div class="col-sm-3 col-md-4 col-lg-auto">
-                            <div class="btn btn-outline-info button_action">
-                                <input
-                                    type="radio"
-                                    value="addTable"
-                                    v-model="actionType"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#AddOneTable"
-                                    class="btn-check"
-                                    id="addTable"
-                                />
-                                <label for="addTable" class="py-2"
-                                    >Добавить стол</label
-                                >
-                            </div>
-                        </div>
-                        <!-- Удалить стол -->
-                        <div class="col-sm-3 col-md-4 col-lg-auto">
-                            <div class="btn btn-outline-danger button_action">
-                                <input
-                                    type="radio"
-                                    value="removeTable"
-                                    v-model="actionType"
-                                    class="btn-check"
-                                    id="removeTable"
-                                />
-                                <label for="removeTable" class="py-2"
-                                    >Удалить стол</label
-                                >
-                            </div>
-                        </div>
-                        <!-- Лист ожидания -->
-                        <div class="col-sm-3 col-md-4 col-lg-auto">
-                            <div class="btn btn-outline-warning button_action">
+                        <!-- Ожидание -->
+                        <div class="col-auto">
+                            <div class="btn btn-warning p-2 button_action">
                                 <input
                                     type="radio"
                                     value="waitingList"
@@ -180,37 +128,74 @@
                                     id="waitingListButton"
                                     @click="fetchWaitingList"
                                 />
-                                <label for="waitingListButton" class="py-2"
-                                    >Лист ожидания</label
-                                >
-                            </div>
-                        </div>
-                        <!-- Ограничение по бронированию -->
-                        <div class="col-sm-3 col-md-4 col-lg-auto">
-                            <div class="btn btn-outline-warning button_action">
-                                <input
-                                    type="radio"
-                                    value="addRestriction"
-                                    v-model="actionType"
-                                    class="btn-check"
-                                    id="addRestriction"
-                                />
-                                <label for="addRestriction" class="py-2"
-                                    >Выставить ограничение</label
+                                <label for="waitingListButton"
+                                >Ожидание</label
                                 >
                             </div>
                         </div>
                     </div>
 
+                    <!-- 2 ряд -->
+                    <div class="row row-cols-2 g-1 mb-1">
+                        <!-- Добавить стол -->
+                        <div class="col-auto">
+                            <div class="btn btn-info p-2 button_action">
+                                <input
+                                    type="radio"
+                                    value="addTable"
+                                    v-model="actionType"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#AddOneTable"
+                                    class="btn-check"
+                                    id="addTable"
+                                />
+                                <label for="addTable"
+                                    >Добавить стол</label
+                                >
+                            </div>
+                        </div>
+                        <!-- Удалить стол -->
+                        <div class="col-auto">
+                            <div class="btn btn-danger p-2 button_action">
+                                <input
+                                    type="radio"
+                                    value="removeTable"
+                                    v-model="actionType"
+                                    class="btn-check"
+                                    id="removeTable"
+                                />
+                                <label for="removeTable"
+                                    >Удалить стол</label
+                                >
+                            </div>
+                        </div>
+                        <!-- Ограничение по бронированию -->
+<!--                        <div class="col-sm-3 col-md-4 col-lg-auto">-->
+<!--                            <div class="btn btn-outline-warning button_action">-->
+<!--                                <input-->
+<!--                                    type="radio"-->
+<!--                                    value="addRestriction"-->
+<!--                                    v-model="actionType"-->
+<!--                                    class="btn-check"-->
+<!--                                    id="addRestriction"-->
+<!--                                />-->
+<!--                                <label for="addRestriction" class="py-2"-->
+<!--                                    >Выставить ограничение</label-->
+<!--                                >-->
+<!--                            </div>-->
+<!--                        </div>-->
+                    </div>
+
                     <!-- 3 ряд с иконками -->
-                    <div class="col-md-12 col-xl-8">
-                        <div
-                            class="row row-cols-2 g-1 mt-3 p-3"
-                            :style="{
+                    <div class="col-md-12 col-xl-8 mt-3 border border-4"
+                         :style="{
                                 backgroundColor: 'white',
-                            }"
+                            }">
+                        <div
+                            class="row row-cols-2 g-2 p-2"
                         >
-                            <div class="col-md-5 col-5 m-0">
+<!--                            class="col-md-5 col-5 m-0"-->
+                            <div class="col-auto">
                                 <img
                                     :src="require('../../svg/bbq.svg').default"
                                     alt="bbq"
@@ -219,7 +204,7 @@
                                 <span>Стол BBQ</span>
                             </div>
 
-                            <div class="col-md-6 col-7 m-0">
+                            <div class="col-auto offset-md-1">
                                 <img
                                     :src="
                                         require('../../svg/ruble.svg').default
@@ -231,7 +216,7 @@
                             </div>
                             <div class="w-100"></div>
 
-                            <div class="col-md-5 col-5">
+                            <div class="col-auto">
                                 <img
                                     :src="
                                         require('../../svg/birthday.svg')
@@ -242,7 +227,7 @@
                                 />
                                 <span>День рождения</span>
                             </div>
-                            <div class="col-md-7 col-7">
+                            <div class="col-auto">
                                 <img
                                     :src="
                                         require('../../svg/heart.svg').default
@@ -254,7 +239,7 @@
                             </div>
                             <div class="w-100"></div>
 
-                            <div class="col-5 col-md-7 col-lg-5">
+                            <div class="col-auto">
                                 <img
                                     :src="
                                         require('../../svg/family.svg').default
@@ -264,7 +249,7 @@
                                 />
                                 <span>Семейный ужин</span>
                             </div>
-                            <div class="col-md-7 col-7">
+                            <div class="col-auto">
                                 <img
                                     :src="
                                         require('../../svg/conflict.svg')
@@ -275,7 +260,8 @@
                                 />
                                 <span>Конфликтный гость</span>
                             </div>
-                            <div class="col-md-7 col-7">
+                            <div class="w-100"></div>
+                            <div class="col-auto">
                                 <img
                                     :src="require('../../svg/lock.svg').default"
                                     alt="restrictions"
@@ -285,7 +271,7 @@
                             </div>
                             <div class="w-100"></div>
 
-                            <div class="col-4">
+                            <div class="col-auto">
                                 <img
                                     :src="
                                         require('../../svg/morning.svg').default
@@ -295,7 +281,7 @@
                                 />
                                 <span>9-12 часов</span>
                             </div>
-                            <div class="col-4">
+                            <div class="col-auto">
                                 <img
                                     :src="require('../../svg/day.svg').default"
                                     alt="day time"
@@ -303,7 +289,7 @@
                                 />
                                 <span>12-18 часов</span>
                             </div>
-                            <div class="col-4">
+                            <div class="col-auto">
                                 <img
                                     :src="
                                         require('../../svg/evening.svg').default
@@ -356,8 +342,7 @@
                     v-for="item in tables"
                     :style="{
                         backgroundColor: '#3E2C41',
-                        touchAction: 'none',
-                        borderRadius: '10px',
+                        touchAction: 'none'
                     }"
                     :x="item.x"
                     :y="item.y"
@@ -1663,6 +1648,8 @@
 import VueGridLayout from "vue-grid-layout";
 import DatePicker from "vue2-datepicker";
 import "vue2-datepicker/scss/index.scss";
+import 'vue2-datepicker/locale/ru';
+import '../../styles/datepicker.scss';
 
 export default {
     name: "Booking",
@@ -1679,7 +1666,7 @@ export default {
             password: "",
             passCheck: false,
             place: "",
-            actionType: "",
+            actionType: "addGuest",
             today: new Date(),
             layout: [],
             selected: "Ожидание",
@@ -2469,10 +2456,11 @@ export default {
     cursor: pointer;
 }
 .add_guest {
+    border-radius: 0;
     position: absolute;
     width: 20px;
-    top: 0;
-    right: 0;
+    top: 2px;
+    right: 2px;
     padding: 0;
     background-origin: content-box;
     background-color: white;
@@ -2480,10 +2468,11 @@ export default {
     cursor: pointer;
 }
 .delete_table {
+    border-radius: 0;
     position: absolute;
     width: 20px;
-    top: 0;
-    right: 0;
+    top: 2px;
+    right: 2px;
     padding: 0;
     background-origin: content-box;
     background-color: white;
@@ -2491,15 +2480,7 @@ export default {
     cursor: pointer;
 }
 .button_action {
-    padding: 2px 5px 2px 5px;
-    color: white;
-    background-color: #4099de;
-    font-weight: 600;
-    font-size: 16px;
-    border-radius: 8px;
-    display: inline-block;
     min-width: 70px;
-    border: 1px solid transparent;
     transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 .size {
@@ -2514,11 +2495,11 @@ export default {
         0px 2px 2px rgba(0, 0, 0, 0.12);
 }
 .place_input {
+    height: 50px;
     font-weight: 600;
     color: #3c4655;
     background-color: white;
-    border-width: 1px;
-    border: none;
+    border: 1px none;
     /* border-color: #bacad6; */
 }
 // .card_md {
@@ -2540,8 +2521,8 @@ export default {
         height: 74px;
     }
     @media (min-width: 767px) {
-        width: 136px;
-        height: 136px;
+        width: 150px;
+        height: 157px;
     }
     @media (min-width: 992px) {
         min-width: 182px;
