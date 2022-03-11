@@ -253,6 +253,7 @@
                                     <div class="mb-3 row">
                                         <!-- Дата -->
                                         <div class="col-6">
+                                            <p class="mb-2">Дата</p>
                                             <date-picker
                                                 v-model="log.date"
                                                 format="YYYY-MM-DD"
@@ -264,15 +265,31 @@
                                         </div>
                                         <!-- Время -->
                                         <div class="col-6">
+                                            <p class="mb-2">Начало</p>
                                             <date-picker
-                                                v-model="log.time"
+                                                v-model="log.from"
                                                 :minute-step="30"
                                                 :hour-options="hours"
                                                 format="HH:mm"
                                                 value-type="format"
                                                 type="time"
-                                                placeholder="HH:mm"
+                                                placeholder="Час:минута"
                                                 disabled
+                                            ></date-picker>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col offset-6">
+                                            <p class="mb-2">Конец</p>
+                                            <date-picker
+                                                v-model="log.to"
+                                                :minute-step="30"
+                                                :hour-options="hours"
+                                                format="HH:mm"
+                                                value-type="format"
+                                                type="time"
+                                                placeholder="Ч:м"
+                                                disabled=""
                                             ></date-picker>
                                         </div>
                                     </div>
@@ -359,7 +376,8 @@ export default {
                 table_id: null,
                 place_id: null,
                 date: new Date(),
-                time: "",
+                from: "",
+                to: "",
                 responsible_email: "",
                 responsible_name: "",
             },
@@ -426,7 +444,8 @@ export default {
                     table_id: log.table_id,
                     place_id: 1,
                     date: log.date,
-                    time: log.time,
+                    from: log.from,
+                    to: log.to,
                     responsible_email: log.responsible_email,
                     responsible_name: log.responsible_name,
                 };
@@ -461,7 +480,8 @@ export default {
                     table_id: log.table_id,
                     place_id: 2,
                     date: log.date,
-                    time: log.time,
+                    from: log.from,
+                    to: log.to,
                     responsible_email: log.responsible_email,
                     responsible_name: log.responsible_name,
                 };
@@ -497,7 +517,8 @@ export default {
                     table_id: log.table_id,
                     place_id: 3,
                     date: log.date,
-                    time: log.time,
+                    from: log.from,
+                    to: log.to,
                     responsible_email: log.responsible_email,
                     responsible_name: log.responsible_name,
                 };
