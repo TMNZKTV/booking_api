@@ -263,7 +263,7 @@
                             <div class="w-100"></div>
                             <div class="col-auto">
                                 <img
-                                    :src="require('../../svg/lock.svg').default"
+                                    :src="require('../../svg/finish.svg').default"
                                     alt="restrictions"
                                     :style="{ width: '15px' }"
                                 />
@@ -466,7 +466,7 @@
                                 listStyle: 'none',
                                 padding: '0',
                                 margin: '0',
-                                backgroundColor: colorByTime(item.time),
+                                backgroundColor: item.from !== null ? colorByTime(item.from) : '',
                                 color: '',
                                 fontSize: '9px',
                                 cursor: 'pointer',
@@ -521,9 +521,19 @@
                                     alt="Warning!"
                                     :style="{ width: '15px' }"
                                 />
+                                <!-- Ограниченный визит -->
+                                <img
+                                    v-if="item.to"
+                                    :src="
+                                        require('../../svg/finish.svg')
+                                            .default
+                                    "
+                                    alt="Warning!"
+                                    :style="{ width: '15px' }"
+                                />
                                 <span class="align-middle">
                                     <b
-                                        >{{ item.time }}. {{ item.name }} [{{
+                                        >{{ item.from }}. {{ item.name }} [{{
                                             item.amount
                                         }}]
                                     </b>
@@ -534,7 +544,11 @@
                 </grid-item>
             </grid-layout>
         </div>
-
+        <div v-if="error">
+            <h2 class="text-center my-5">
+                Что-то пошло не так!
+            </h2>
+        </div>
         <!-- Модалка для добавления гостя -->
         <div
             class="modal fade"
@@ -662,9 +676,9 @@
                             />
                         </div>
                         <!-- Предоплата и Стол -->
-                        <div class="row">
+                        <div class="row mb-3">
                             <!-- Предоплата -->
-                            <div class="mb-3 col-6">
+                            <div class="col-6">
                                 <label
                                     for="guestPrepaymentAdd"
                                     class="form-label"
@@ -680,7 +694,7 @@
                                 />
                             </div>
                             <!-- Стол -->
-                            <div class="mb-3 col-6">
+                            <div class="col-6">
                                 <label class="form-label" for="tables"
                                     >№ стола</label
                                 >
@@ -705,9 +719,10 @@
                             </div>
                         </div>
                         <!-- Дата и Время -->
-                        <div class="row">
+                        <div class="row mb-3">
                             <!-- Дата -->
                             <div class="col-6">
+                                <p class="mb-2">Дата</p>
                                 <date-picker
                                     v-model="reservation.date"
                                     format="YYYY-MM-DD"
@@ -718,14 +733,29 @@
                             </div>
                             <!-- Время -->
                             <div class="col-6">
+                                <p class="mb-2">Начало</p>
                                 <date-picker
-                                    v-model="reservation.time"
+                                    v-model="reservation.from"
                                     :minute-step="30"
                                     :hour-options="hours"
                                     format="HH:mm"
                                     value-type="format"
                                     type="time"
-                                    placeholder="HH:mm"
+                                    placeholder="Ч:м"
+                                ></date-picker>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col offset-6">
+                                <p class="mb-2">Конец</p>
+                                <date-picker
+                                    v-model="reservation.to"
+                                    :minute-step="30"
+                                    :hour-options="hours"
+                                    format="HH:mm"
+                                    value-type="format"
+                                    type="time"
+                                    placeholder="Ч:м"
                                 ></date-picker>
                             </div>
                         </div>
@@ -928,9 +958,10 @@
                             </div>
                         </div>
                         <!-- Дата и Время -->
-                        <div class="row">
+                        <div class="row mb-3">
                             <!-- Дата -->
                             <div class="col-6">
+                                <p class="mb-1">Дата</p>
                                 <date-picker
                                     v-model="reservation.date"
                                     format="YYYY-MM-DD"
@@ -941,14 +972,29 @@
                             </div>
                             <!-- Время -->
                             <div class="col-6">
+                                <p class="mb-1">Начало</p>
                                 <date-picker
-                                    v-model="reservation.time"
+                                    v-model="reservation.from"
                                     :minute-step="30"
                                     :hour-options="hours"
                                     format="HH:mm"
                                     value-type="format"
                                     type="time"
-                                    placeholder="HH:mm"
+                                    placeholder="Ч:м"
+                                ></date-picker>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col offset-6">
+                                <p class="mb-1">Конец</p>
+                                <date-picker
+                                    v-model="reservation.to"
+                                    :minute-step="30"
+                                    :hour-options="hours"
+                                    format="HH:mm"
+                                    value-type="format"
+                                    type="time"
+                                    placeholder="Ч:м"
                                 ></date-picker>
                             </div>
                         </div>
@@ -1337,7 +1383,7 @@
                     <div class="modal-footer justify-content-center">
                         <button
                             type="button"
-                            class="btn btn-secondary"
+                            class="btn btn-danger"
                             data-bs-dismiss="modal"
                             @click="deleteOneTable(password)"
                         >
@@ -1377,43 +1423,43 @@
                             aria-label="Close"
                         ></button>
                     </div>
-                    <div class="modal-body">
-                        <label for="passwordCheckInput">Введите пароль</label>
-                        <input
-                            v-if="showPassword"
-                            class="form-control"
-                            v-model="password"
-                            type="text"
-                            id="passwordCheckInput"
-                        />
-                        <input
-                            v-else-if="!showPassword"
-                            class="form-control"
-                            v-model="password"
-                            type="password"
-                            id="passwordCheckInput"
-                        />
-                        <div>
-                            <button
-                                class="btn btn-primary btn-sm mt-2"
-                                @click="toggleShow()"
-                            >
+                     <div class="modal-body">
+                            <label for="passwordCheckInput">Введите пароль</label>
+                            <input
+                                v-if="showPassword"
+                                class="form-control"
+                                v-model="password"
+                                type="text"
+                                id="passwordCheckInput"
+                            />
+                            <input
+                                v-else-if="!showPassword"
+                                class="form-control"
+                                v-model="password"
+                                type="password"
+                                id="passwordCheckInput"
+                            />
+                            <div>
+                                <button
+                                    class="btn btn-primary btn-sm mt-2"
+                                    @click="toggleShow()"
+                                >
                                 <span class="icon is-small is-right">
                                     Показать пароль
                                 </span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button
+                                type="button"
+                                class="btn btn-primary"
+                                data-bs-dismiss="modal"
+                                @click="checkPass(password)"
+                            >
+                                Проверить
                             </button>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button
-                            type="button"
-                            class="btn btn-primary"
-                            @click="checkPass(password)"
-                            data-bs-dismiss="modal"
-                        >
-                            Проверить
-                        </button>
-                    </div>
                 </div>
             </div>
         </div>
@@ -1701,14 +1747,14 @@ export default {
                 table_id: null,
                 place_id: null,
                 date: new Date(),
-                time: "",
+                from: "",
+                to: "",
                 responsible_email: "",
                 responsible_name: "",
             },
         };
     },
     async mounted() {
-        console.log(this.user);
         this.loading = false;
 
         axios
@@ -1820,7 +1866,8 @@ export default {
             this.reservation.table_id = null;
             this.reservation.place_id = null;
             this.reservation.date = null;
-            this.reservation.time = "";
+            this.reservation.from = "";
+            this.reservation.to = "";
             // Не очищаю имя и почту ответственного, чтобы использовать на всех 3-х точках
         },
         clearRestrictionInfo() {
@@ -1842,7 +1889,8 @@ export default {
                 table_id: item.table_id,
                 place_id: item.place_id,
                 date: item.date,
-                time: item.time,
+                from: item.from,
+                to: item.to,
                 responsible_email: this.reservation.responsible_email,
                 responsible_name: this.reservation.responsible_name,
             };
@@ -1855,6 +1903,9 @@ export default {
                 this.timer = setTimeout(() => {
                     this.passCheck = false;
                 }, 20000);
+            }
+            if(this.password !== process.env.MIX_MASTERKEY) {
+                alert('Неправильный пароль')
             }
             this.password = "";
         },
@@ -1869,11 +1920,15 @@ export default {
         async fetchLogs() {
             this.layout = null;
             this.loading = true;
-            const response = await axios.get(
-                "/api/logs"
-            );
-            this.logs = response.data;
-            this.loading = false;
+            try {
+                const response = await axios.get(
+                    "/api/logs"
+                );
+                this.logs = response.data;
+                this.loading = false;
+            } catch (error) {
+                console.log(error)
+            }
         },
         async fetchTables() {
             switch (this.place) {
@@ -1890,6 +1945,7 @@ export default {
                         });
                         this.loading = false;
                     } catch (error) {
+                        this.loading = false;
                         this.error = error;
                     }
                     break;
@@ -1906,6 +1962,7 @@ export default {
                         });
                         this.loading = false;
                     } catch (error) {
+                        this.loading = false;
                         this.error = error;
                     }
                     break;
@@ -1922,6 +1979,7 @@ export default {
                         });
                         this.loading = false;
                     } catch (error) {
+                        this.loading = false;
                         this.error = error;
                     }
                     break;
@@ -1974,7 +2032,8 @@ export default {
                     table_id: this.reservation.table_id,
                     place_id: 1,
                     date: this.reservation.date,
-                    time: this.reservation.time,
+                    from: this.reservation.from,
+                    to: this.reservation.to,
                     responsible_email: this.reservation.responsible_email,
                     responsible_name: this.reservation.responsible_name,
                 };
@@ -2009,7 +2068,8 @@ export default {
                     table_id: this.reservation.table_id,
                     place_id: 2,
                     date: this.reservation.date,
-                    time: this.reservation.time,
+                    from: this.reservation.from,
+                    to: this.reservation.to,
                     responsible_email: this.reservation.responsible_email,
                     responsible_name: this.reservation.responsible_name,
                 };
@@ -2036,7 +2096,8 @@ export default {
                     table_id: this.reservation.table_id,
                     place_id: 3,
                     date: this.reservation.date,
-                    time: this.reservation.time,
+                    from: this.reservation.from,
+                    to: this.reservation.to,
                     responsible_email: this.reservation.responsible_email,
                     responsible_name: this.reservation.responsible_name,
                 };
@@ -2130,10 +2191,11 @@ export default {
                     amount: this.reservation.amount,
                     note: this.reservation.note,
                     date: this.reservation.date,
-                    time:
-                        this.reservation.time === ""
+                    from:
+                        this.reservation.from === ""
                             ? "Ожидание"
-                            : this.reservation.time,
+                            : this.reservation.from,
+                    to: this.reservation.to,
                     table_id: 100,
                     place_id: 1,
                     responsible_email: this.reservation.responsible_email,
@@ -2159,10 +2221,11 @@ export default {
                     amount: this.reservation.amount,
                     note: this.reservation.note,
                     date: this.reservation.date,
-                    time:
-                        this.reservation.time === ""
+                    from:
+                        this.reservation.from === ""
                             ? "Ожидание"
-                            : this.reservation.time,
+                            : this.reservation.from,
+                    to: this.reservation.to,
                     table_id: 101,
                     place_id: 2,
                     responsible_email: this.reservation.responsible_email,
@@ -2188,10 +2251,11 @@ export default {
                     amount: this.reservation.amount,
                     note: this.reservation.note,
                     date: this.reservation.date,
-                    time:
-                        this.reservation.time === ""
+                    from:
+                        this.reservation.from === ""
                             ? "Ожидание"
-                            : this.reservation.time,
+                            : this.reservation.from,
+                    to: this.reservation.to,
                     table_id: 102,
                     place_id: 3,
                     responsible_email: this.reservation.responsible_email,

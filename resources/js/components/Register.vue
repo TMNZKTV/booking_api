@@ -2,7 +2,7 @@
     <div>
         <form
             class="g-3 needs-validation"
-            novalidate
+            validate
             @submit.prevent="register"
         >
             <!-- Имя -->
@@ -23,7 +23,7 @@
                 <label for="register_email" class="form-label">Email</label>
                 <div class="d-flex flex-row">
                     <input
-                        type="email"
+                        type="text"
                         class="form-control"
                         id="register_email"
                         v-model="email"
@@ -100,6 +100,7 @@ export default {
     name: "register",
     data() {
         return {
+            errored: false,
             adminPass: "",
             adminChecked: false,
             name: "",
@@ -116,6 +117,7 @@ export default {
             } else {
                 this.adminChecked = false;
                 this.adminPass = "";
+                alert('Неправильный мастер-пароль!')
             }
         },
         register() {
@@ -142,12 +144,13 @@ export default {
                         .catch((error) => {
                             // Объект ошибки для дальнейшей работы
                             console.log(error);
+                            alert('Такие данные уже используются!')
                         });
                 });
                 this.adminPass = "";
                 this.adminChecked = false;
             } else {
-                alert("Используйте Мастер-пароль Администратора");
+                alert('Что-то пошло не так!')
             }
         },
     },

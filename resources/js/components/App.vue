@@ -103,10 +103,9 @@
                             <div class="px-0 py-3">
                                 <a
                                     type="button"
-                                    class="btn btn-primary btn-sm button_action"
+                                    class="btn btn-primary btn-sm button_logout"
                                     @click.prevent="logout"
-                                    >ВЫЙТИ</a
-                                >
+                                    >ВЫЙТИ</a>
                             </div>
                         </div>
                     </div>
@@ -136,7 +135,6 @@ export default {
                 axios
                     .get("/api/user")
                     .then((response) => {
-                        console.log("This is user: ", response);
                         this.user = response.data.name;
                     })
                     .catch((err) => {
@@ -207,18 +205,9 @@ body {
     bottom: 0;
     background-color: #eef1f4;
 }
-//.button_action {
-//    color: white;
-//    background-color: #4099de;
-//    font-weight: 600;
-//    font-size: 16px;
-//    padding-left: 10px;
-//    padding-right: 10px;
-//    border-radius: 8px;
-//    display: inline-block;
-//    min-width: 70px;
-//    border: 1px solid transparent;
-//}
+.button_logout {
+    font-size: 14px;
+}
 .header_mobile {
     display: none;
     @media (min-width: 375px) {

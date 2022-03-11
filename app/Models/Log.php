@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Log extends Model
 {
     use HasFactory;
-    protected $fillable = ['name', 'phone', 'visit_type', 'conflict', 'prepayment', 'amount', 'date', 'time', 'note', 'place_id', 'table_id', 'type', 'text', 'responsible_email', 'responsible_name'];
+    protected $fillable = ['name', 'phone', 'visit_type', 'conflict', 'prepayment', 'amount', 'date', 'from', 'to', 'note', 'place_id', 'table_id', 'type', 'text', 'responsible_email', 'responsible_name'];
 
     public function table() {
         return $this->belongsTo(Table::class);

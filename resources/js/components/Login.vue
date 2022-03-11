@@ -47,9 +47,9 @@ export default {
     },
     methods: {
         async login() {
+
             // Сначала получаем cookie на /csrf-cookie
             await axios.get("/sanctum/csrf-cookie").then((response) => {
-                console.log("Запрос за куки: ", response);
                 // Вместе с TOKEN логинимся
                 axios
                     .post("/login", {
@@ -62,11 +62,11 @@ export default {
                             "token",
                             res.config.headers["X-XSRF-TOKEN"]
                         );
-                        console.log(res);
                         this.$router.push({ name: "Home" });
                     })
                     .catch((err) => {
                         // Объект для последующей работы
+                        alert('Что-то не так с данными!')
                         console.log(err);
                     });
             });

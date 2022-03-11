@@ -27,7 +27,8 @@ class CreateReservationsTable extends Migration
             $table->foreignId('table_id')->constrained();
             $table->foreignId('place_id')->constrained();
             $table->date('date');
-            $table->string('time')->nullable();
+            $table->string('from')->nullable();
+            $table->string('to')->nullable();
             $table->string('responsible_email')->nullable();
             $table->string('responsible_name')->nullable();
 
