@@ -40,14 +40,14 @@
 
                             ></date-picker>
 
-                            <div class="row mt-2">
+                            <div class="row mt-md-2 mt-xl-4">
                                 <div class="col-12">
                                     <div class="mb-2">
                                         <label
                                             for="place_selector"
                                             class="place_title"
                                         >
-                                            <b>Ресторан на </b>
+                                            <b>Ресторан на</b>
                                         </label>
                                     </div>
 
@@ -195,7 +195,7 @@
                             class="row row-cols-2 g-2 p-2"
                         >
 <!--                            class="col-md-5 col-5 m-0"-->
-                            <div class="col-auto">
+                            <div class="col-auto col-lg-4 col-xl-5">
                                 <img
                                     :src="require('../../svg/bbq.svg').default"
                                     alt="bbq"
@@ -204,7 +204,7 @@
                                 <span>Стол BBQ</span>
                             </div>
 
-                            <div class="col-auto offset-md-1">
+                            <div class="col-auto col-lg-4 col-xl-5">
                                 <img
                                     :src="
                                         require('../../svg/ruble.svg').default
@@ -216,7 +216,7 @@
                             </div>
                             <div class="w-100"></div>
 
-                            <div class="col-auto">
+                            <div class="col-auto col-lg-4 col-xl-5">
                                 <img
                                     :src="
                                         require('../../svg/birthday.svg')
@@ -227,7 +227,7 @@
                                 />
                                 <span>День рождения</span>
                             </div>
-                            <div class="col-auto">
+                            <div class="col-auto col-lg-5 col-xl-5">
                                 <img
                                     :src="
                                         require('../../svg/heart.svg').default
@@ -239,7 +239,7 @@
                             </div>
                             <div class="w-100"></div>
 
-                            <div class="col-auto">
+                            <div class="col-auto col-lg-4 col-xl-5">
                                 <img
                                     :src="
                                         require('../../svg/family.svg').default
@@ -249,7 +249,7 @@
                                 />
                                 <span>Семейный ужин</span>
                             </div>
-                            <div class="col-auto">
+                            <div class="col-auto col-lg-5 col-xl-5">
                                 <img
                                     :src="
                                         require('../../svg/conflict.svg')
@@ -261,7 +261,7 @@
                                 <span>Конфликтный гость</span>
                             </div>
                             <div class="w-100"></div>
-                            <div class="col-auto">
+                            <div class="col-auto col-lg-4 col-xl-5">
                                 <img
                                     :src="require('../../svg/finish.svg').default"
                                     alt="restrictions"
@@ -271,7 +271,7 @@
                             </div>
                             <div class="w-100"></div>
 
-                            <div class="col-auto">
+                            <div class="col-auto col-lg-4 col-xl-4">
                                 <img
                                     :src="
                                         require('../../svg/morning.svg').default
@@ -281,7 +281,7 @@
                                 />
                                 <span>9-12 часов</span>
                             </div>
-                            <div class="col-auto">
+                            <div class="col-auto col-lg-4 col-xl-4">
                                 <img
                                     :src="require('../../svg/day.svg').default"
                                     alt="day time"
@@ -289,7 +289,7 @@
                                 />
                                 <span>12-18 часов</span>
                             </div>
-                            <div class="col-auto">
+                            <div class="col-auto col-lg-4 col-xl-4">
                                 <img
                                     :src="
                                         require('../../svg/evening.svg').default
@@ -2546,6 +2546,9 @@ export default {
 .button_action {
     min-width: 70px;
     transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    @media (min-width: 2560px) {
+        font-size: 25px;
+    }
 }
 .size {
     width: 200px;
@@ -2565,6 +2568,9 @@ export default {
     background-color: white;
     border: 1px none;
     /* border-color: #bacad6; */
+    @media (min-width: 2560px) {
+        font-size: 20px;
+    }
 }
 // .card_md {
 //     width: 15rem;
@@ -2592,9 +2598,13 @@ export default {
         min-width: 182px;
         min-height: 182px;
     }
-    @media (min-width: 1200px) {
+    @media (min-width: 1200px) and (max-width: 1500px) {
         min-width: 257px;
         min-height: 257px;
+    }
+    @media (min-width: 1570px) {
+        min-width: 420px;
+        min-height: 300px;
     }
 }
 
@@ -2618,8 +2628,12 @@ export default {
     @media (min-width: 1200px) {
         padding: 30px 10px 15px 10px;
     }
+    @media (min-width: 2559px) {
+        padding: 60px 10px 15px 10px;
+    }
 }
 .day_full {
+    font-weight: 500;
     @media (min-width: 375px) {
         font-size: 30px;
     }
@@ -2638,7 +2652,6 @@ export default {
 }
 
 .date_full {
-    font-weight: bold;
 
     @media (min-width: 375px) {
         display: none;
@@ -2658,6 +2671,9 @@ export default {
     @media (min-width: 1440px) {
         font-size: 28px;
     }
+    @media (min-width: 2560px) {
+        font-size: 40px;
+    }
 }
 .date_full_mobile {
     @media (min-width: 375px) and (max-width: 767px) {
@@ -2667,9 +2683,27 @@ export default {
         display: none;
     }
 }
+.date_picker_full {
+    @media (min-width: 1440px) {
+        margin-top: 20px;
+    }
+    @media (min-width: 2559px) {
+        margin-top: 45px;
+    }
+    p {
+        font-weight: 500;
+        @media (min-width: 2560px) {
+            font-size: 25px;
+        }
+    }
+}
 .place_title {
-    width: 150px;
+    width: 160px;
+    font-weight: 500;
     color: #3c4655;
+    @media (min-width: 2560px) {
+        font-size: 25px;
+    }
 }
 .card_time {
     color: #3c4655;

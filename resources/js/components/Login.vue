@@ -1,6 +1,6 @@
 <template>
     <div>
-        <form class="g-3 needs-validation" validate @submit.prevent="login">
+        <form class="g-3 needs-validation" @submit.prevent="login()">
             <div class="col-md-4 mx-auto pt-3">
                 <label for="email" class="form-label">Email</label>
                 <input
@@ -9,7 +9,7 @@
                     id="email"
                     v-model="email"
                     required
-                    placeholder="Type in your email..."
+                    placeholder="Введите почту..."
                 />
                 <div class="valid-feedback">Looks good!!!</div>
             </div>
@@ -21,7 +21,7 @@
                     id="password"
                     v-model="password"
                     required
-                    placeholder="Type in your password..."
+                    placeholder="Введите ваш пароль..."
                 />
                 <div class="valid-feedback">Looks good!</div>
             </div>
@@ -36,6 +36,7 @@
     </div>
 </template>
 
+
 <script>
 export default {
     name: "login",
@@ -47,7 +48,6 @@ export default {
     },
     methods: {
         async login() {
-
             // Сначала получаем cookie на /csrf-cookie
             await axios.get("/sanctum/csrf-cookie").then((response) => {
                 // Вместе с TOKEN логинимся

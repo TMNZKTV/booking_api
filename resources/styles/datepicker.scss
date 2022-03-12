@@ -2,6 +2,10 @@ $namespace: 'mx'; // change the 'mx' to 'xmx'. then <date-picker prefix-class="x
 
 .#{$namespace}-input {
     height: 50px!important;
+
+    @media(min-width: 2560px) {
+        font-size: 20px!important;
+    }
 }
 
 @import '~vue2-datepicker/scss/index.scss';
