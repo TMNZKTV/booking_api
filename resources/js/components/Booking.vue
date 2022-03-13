@@ -2081,7 +2081,7 @@ export default {
                         newReservation
                     );
                     const newLog = {
-                        text: `Стол №${newReservation.table_id === 100 ? 'ОЖИДАНИЕ' : newReservation.table_id === 101 ? 'Бар' : newReservation.table_id } был забронирован.`,
+                        text: `Стол №${newReservation.table_id === 100 ? 'ОЖИДАНИЕ' : newReservation.table_id === 101 ? 'Бар' : newReservation.table_id } на Марата был забронирован.`,
                         type: "Бронирование",
                         ...newReservation,
                     };
@@ -2143,7 +2143,7 @@ export default {
                     newReservation
                 );
                 const newLog = {
-                    text: `Стол №${newReservation.table_id === 104 ? 'ОЖИДАНИЕ' : newReservation.table_id === 105 ? 'Бар' : newReservation.table_id} на Байкальской был забронирован.`,
+                    text: `Стол №${newReservation.table_id === 104 ? 'ОЖИДАНИЕ' : newReservation.table_id === 105 ? 'Бар' : newReservation.table_id} на Горной был забронирован.`,
                     type: "Бронирование",
                     ...newReservation,
                 };
