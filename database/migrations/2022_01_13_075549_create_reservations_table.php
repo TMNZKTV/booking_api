@@ -24,7 +24,7 @@ class CreateReservationsTable extends Migration
             $table->bigInteger('amount')->unsigned()->default('1');
             $table->string('note')->nullable();
             $table->bigInteger('prepayment')->unsigned()->default('0');
-            $table->foreignId('table_id')->constrained();
+            $table->foreignId('table_id')->constrained()->references('id')->on('tables')->onDelete('cascade');
             $table->foreignId('place_id')->constrained();
             $table->date('date');
             $table->string('from')->nullable();

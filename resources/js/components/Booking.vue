@@ -126,7 +126,7 @@
                                     data-bs-target="#waitingList"
                                     class="btn-check"
                                     id="waitingListButton"
-                                    @click="fetchWaitingList"
+                                    @click="fetchWaitingList(); chooseWaitingTable();"
                                 />
                                 <label for="waitingListButton"
                                 >Ожидание</label
@@ -195,7 +195,7 @@
                             class="row row-cols-2 g-2 p-2"
                         >
 <!--                            class="col-md-5 col-5 m-0"-->
-                            <div class="col-auto col-lg-4 col-xl-5">
+                            <div class="col-auto col-md-4 col-lg-4 col-xl-5">
                                 <img
                                     :src="require('../../svg/bbq.svg').default"
                                     alt="bbq"
@@ -216,7 +216,7 @@
                             </div>
                             <div class="w-100"></div>
 
-                            <div class="col-auto col-lg-4 col-xl-5">
+                            <div class="col-auto col-md-4 col-lg-4 col-xl-5">
                                 <img
                                     :src="
                                         require('../../svg/birthday.svg')
@@ -239,7 +239,7 @@
                             </div>
                             <div class="w-100"></div>
 
-                            <div class="col-auto col-lg-4 col-xl-5">
+                            <div class="col-auto col-md-4 col-lg-4 col-xl-5">
                                 <img
                                     :src="
                                         require('../../svg/family.svg').default
@@ -261,13 +261,21 @@
                                 <span>Конфликтный гость</span>
                             </div>
                             <div class="w-100"></div>
-                            <div class="col-auto col-lg-4 col-xl-5">
+                            <div class="col-auto col-md-4 col-lg-4 col-xl-5">
                                 <img
                                     :src="require('../../svg/finish.svg').default"
                                     alt="restrictions"
                                     :style="{ width: '15px' }"
                                 />
                                 <span>Ограничения по времени</span>
+                            </div>
+                            <div class="col-auto col-lg-4 col-xl-5">
+                                <img
+                                    :src="require('../../svg/bar.svg').default"
+                                    alt="bar sign"
+                                    :style="{ width: '15px' }"
+                                />
+                                <span>Бар</span>
                             </div>
                             <div class="w-100"></div>
 
@@ -429,7 +437,7 @@
                                     >{{
                                         Number(item.i) === 0
                                             ? null
-                                            : Number(item.i)
+                                            : item.i === 'Бар' ? item.i : Number(item.i)
                                     }}</span
                                 >
                                 <img
@@ -439,6 +447,18 @@
                                         require('../../svg/bbqSign.svg').default
                                     "
                                     alt="bbq"
+                                    :style="{
+                                        width: '15px',
+                                        paddingBottom: '3px',
+                                    }"
+                                />
+                                <img
+                                    class="bbq_table"
+                                    v-if="item.i === 'Бар'"
+                                    :src="
+                                        require('../../svg/barSign.svg').default
+                                    "
+                                    alt="bar"
                                     :style="{
                                         width: '15px',
                                         paddingBottom: '3px',
@@ -570,6 +590,7 @@
                             class="btn-close"
                             data-bs-dismiss="modal"
                             aria-label="Close"
+                            @click="() => clearReservationInfo()"
                         ></button>
                     </div>
                     <div class="modal-body">
@@ -691,6 +712,7 @@
                                     id="guestPrepaymentAdd"
                                     placeholder="Сумма предоплаты"
                                     step="100"
+                                    required
                                 />
                             </div>
                             <!-- Стол -->
@@ -724,10 +746,10 @@
                             <div class="col-6">
                                 <p class="mb-2">Дата</p>
                                 <date-picker
-                                    v-model="reservation.date"
+                                    v-model="today"
                                     format="YYYY-MM-DD"
-                                    type="date"
-                                    valueType="format"
+                                    type="datetime"
+                                    valueType="date"
                                 >
                                 </date-picker>
                             </div>
@@ -735,12 +757,12 @@
                             <div class="col-6">
                                 <p class="mb-2">Начало</p>
                                 <date-picker
-                                    v-model="reservation.from"
-                                    :minute-step="30"
-                                    :hour-options="hours"
+                                    v-model="from"
                                     format="HH:mm"
-                                    value-type="format"
                                     type="time"
+                                    value-type="format"
+                                    :hour-options="hours"
+                                    :minute-step="30"
                                     placeholder="Ч:м"
                                 ></date-picker>
                             </div>
@@ -749,7 +771,7 @@
                             <div class="col offset-6">
                                 <p class="mb-2">Конец</p>
                                 <date-picker
-                                    v-model="reservation.to"
+                                    v-model="to"
                                     :minute-step="30"
                                     :hour-options="hours"
                                     format="HH:mm"
@@ -765,6 +787,7 @@
                             type="button"
                             class="btn btn-secondary"
                             data-bs-dismiss="modal"
+                            @click="()=> clearReservationInfo()"
                         >
                             Закрыть
                         </button>
@@ -928,6 +951,7 @@
                                     id="guestPrepaymentUpdate"
                                     placeholder="Сумма предоплаты"
                                     step="100"
+                                    required
                                 />
                             </div>
                             <!-- Стол -->
@@ -1714,6 +1738,8 @@ export default {
             place: "",
             actionType: "addGuest",
             today: new Date(),
+            from: this.addLeadingZero(new Date().getHours()) + ":" + this.addLeadingZero(new Date().getMinutes()),
+            to: "",
             layout: [],
             selected: "Ожидание",
             waitingList: null,
@@ -1735,7 +1761,7 @@ export default {
                 to: "",
                 table_id: null
             },
-            hours: Array.from({ length: 23 }).map((_, i) => i + 9),
+            hours: Array.from({ length: 23 }).map((_, i) => i + 11),
             reservation: {
                 name: "",
                 phone: "",
@@ -1746,9 +1772,6 @@ export default {
                 prepayment: 0,
                 table_id: null,
                 place_id: null,
-                date: new Date(),
-                from: "",
-                to: "",
                 responsible_email: "",
                 responsible_name: "",
             },
@@ -1768,6 +1791,9 @@ export default {
             });
     },
     computed: {
+        reserveFrom () {
+            return this.addLeadingZero(new Date().getHours() + ":" + new Date().getMinutes());
+        },
         tables() {
             // Все столы, кроме Ожидания
             if (this.place === "place_1") {
@@ -1777,12 +1803,12 @@ export default {
             }
             if (this.place === "place_2") {
                 return this.layout.filter(
-                    (table) => table.id !== 101 && table.place_id === 2
+                    (table) => table.id !== 102 && table.place_id === 2
                 );
             }
             if (this.place === "place_3") {
                 return this.layout.filter(
-                    (table) => table.id !== 102 && table.place_id === 3
+                    (table) => table.id !== 104 && table.place_id === 3
                 );
             }
         },
@@ -1855,6 +1881,17 @@ export default {
             this.restriction.table_id = item.id;
             this.table.id = item.id;
         },
+        chooseWaitingTable() {
+            if (this.place === 'place_1') {
+                this.reservation.table_id = 100;
+            }
+            if (this.place === 'place_2') {
+                this.reservation.table_id = 102;
+            }
+            if (this.place === 'place_3') {
+                this.reservation.table_id = 104;
+            }
+        },
         clearReservationInfo() {
             this.reservation.name = "";
             this.reservation.phone = "";
@@ -1865,9 +1902,9 @@ export default {
             this.reservation.prepayment = 0;
             this.reservation.table_id = null;
             this.reservation.place_id = null;
-            this.reservation.date = null;
-            this.reservation.from = "";
-            this.reservation.to = "";
+            this.today = new Date();
+            this.from = this.addLeadingZero(new Date().getHours()) + ":" + this.addLeadingZero(new Date().getMinutes());
+            this.to = '';
             // Не очищаю имя и почту ответственного, чтобы использовать на всех 3-х точках
         },
         clearRestrictionInfo() {
@@ -1883,7 +1920,7 @@ export default {
                 phone: item.phone,
                 conflict: item.conflict,
                 visit_type: item.visit_type,
-                prepayment: item.prepayment,
+                prepayment: item.prepayment === '' ? 0 : item.prepayment,
                 amount: item.amount,
                 note: item.note,
                 table_id: item.table_id,
@@ -2028,12 +2065,12 @@ export default {
                     visit_type: this.reservation.visit_type,
                     amount: this.reservation.amount,
                     note: this.reservation.note,
-                    prepayment: this.reservation.prepayment,
+                    prepayment: this.reservation.prepayment === '' ? 0 : this.reservation.prepayment,
                     table_id: this.reservation.table_id,
                     place_id: 1,
-                    date: this.reservation.date,
-                    from: this.reservation.from,
-                    to: this.reservation.to,
+                    date: this.today,
+                    from: this.from,
+                    to: this.to,
                     responsible_email: this.reservation.responsible_email,
                     responsible_name: this.reservation.responsible_name,
                 };
@@ -2044,7 +2081,7 @@ export default {
                         newReservation
                     );
                     const newLog = {
-                        text: `Стол №${newReservation.table_id} был забронирован.`,
+                        text: `Стол №${newReservation.table_id === 100 ? 'ОЖИДАНИЕ' : newReservation.table_id === 101 ? 'Бар' : newReservation.table_id } был забронирован.`,
                         type: "Бронирование",
                         ...newReservation,
                     };
@@ -2064,12 +2101,12 @@ export default {
                     visit_type: this.reservation.visit_type,
                     amount: this.reservation.amount,
                     note: this.reservation.note,
-                    prepayment: this.reservation.prepayment,
+                    prepayment: this.reservation.prepayment === '' ? 0 : this.reservation.prepayment,
                     table_id: this.reservation.table_id,
                     place_id: 2,
-                    date: this.reservation.date,
-                    from: this.reservation.from,
-                    to: this.reservation.to,
+                    date: this.today,
+                    from: this.from,
+                    to: this.to,
                     responsible_email: this.reservation.responsible_email,
                     responsible_name: this.reservation.responsible_name,
                 };
@@ -2078,7 +2115,7 @@ export default {
                     newReservation
                 );
                 const newLog = {
-                    text: `Стол №${newReservation.table_id} на Байкальской был забронирован.`,
+                    text: `Стол №${newReservation.table_id === 102 ? 'ОЖИДАНИЕ' : newReservation.table_id === 103 ? 'Бар' : newReservation.table_id} на Байкальской был забронирован.`,
                     type: "Бронирование",
                     ...newReservation,
                 };
@@ -2092,12 +2129,12 @@ export default {
                     visit_type: this.reservation.visit_type,
                     amount: this.reservation.amount,
                     note: this.reservation.note,
-                    prepayment: this.reservation.prepayment,
+                    prepayment: this.reservation.prepayment === '' ? 0 : this.reservation.prepayment,
                     table_id: this.reservation.table_id,
                     place_id: 3,
-                    date: this.reservation.date,
-                    from: this.reservation.from,
-                    to: this.reservation.to,
+                    date: this.today,
+                    from: this.from,
+                    to: this.to,
                     responsible_email: this.reservation.responsible_email,
                     responsible_name: this.reservation.responsible_name,
                 };
@@ -2106,7 +2143,7 @@ export default {
                     newReservation
                 );
                 const newLog = {
-                    text: `Стол №${newReservation.table_id} на Байкальской был забронирован.`,
+                    text: `Стол №${newReservation.table_id === 104 ? 'ОЖИДАНИЕ' : newReservation.table_id === 105 ? 'Бар' : newReservation.table_id} на Байкальской был забронирован.`,
                     type: "Бронирование",
                     ...newReservation,
                 };
@@ -2117,39 +2154,51 @@ export default {
         },
         async updateGuest() {
             if (this.place === "place_1") {
+                const updatedGuest = {
+                    ...this.reservation,
+                    prepayment: this.reservation.prepayment === '' ? 0 : this.reservation.prepayment
+                }
                 await axios.put(
                     `/api/reservations/${this.reservation.id}`,
-                    this.reservation
+                    updatedGuest
                 );
                 console.log(this.reservation.id)
                 const newLog = {
                     text: `Новые данные гостя.`,
                     type: "Обновление",
-                    ...this.reservation,
+                    ...updatedGuest,
                 };
                 await axios.post(`/api/logs`, newLog);
             }
             if (this.place === "place_2") {
+                const updatedGuest = {
+                    ...this.reservation,
+                    prepayment: this.reservation.prepayment === '' ? 0 : this.reservation.prepayment
+                }
                 await axios.put(
                     `/api/reservations/${this.reservation.id}`,
-                    this.reservation
+                    updatedGuest
                 );
                 const newLog = {
                     text: `Новые данные гостя.`,
                     type: "Обновление",
-                    ...this.reservation,
+                    ...updatedGuest,
                 };
                 await axios.post(`/api/logs`, newLog);
             }
             if (this.place === "place_3") {
+                const updatedGuest = {
+                    ...this.reservation,
+                    prepayment: this.reservation.prepayment === '' ? 0 : this.reservation.prepayment
+                }
                 await axios.put(
                     `/api/reservations/${this.reservation.id}`,
-                    this.reservation
+                    updatedGuest
                 );
                 const newLog = {
                     text: `Новые данные гостя.`,
                     type: "Обновление",
-                    ...this.reservation,
+                    ...updatedGuest,
                 };
                 await axios.post(`/api/logs`, newLog);
             }
@@ -2169,112 +2218,110 @@ export default {
             }
             if (this.place === "place_2") {
                 this.waitingList = response.data.data.find((table) => {
-                    if (table.id === 101) {
+                    if (table.id === 102) {
                         return table;
                     }
                 });
             }
             if (this.place === "place_3") {
                 this.waitingList = response.data.data.find((table) => {
-                    if (table.id === 102) {
+                    if (table.id === 104) {
                         return table;
                     }
                 });
             }
         },
-        async addToWaitingList() {
-            if (this.place === "place_1") {
-                const waitingGuest = {
-                    name: this.reservation.name,
-                    phone: this.reservation.phone,
-                    prepayment: this.reservation.prepayment,
-                    amount: this.reservation.amount,
-                    note: this.reservation.note,
-                    date: this.reservation.date,
-                    from:
-                        this.reservation.from === ""
-                            ? "Ожидание"
-                            : this.reservation.from,
-                    to: this.reservation.to,
-                    table_id: 100,
-                    place_id: 1,
-                    responsible_email: this.reservation.responsible_email,
-                    responsible_name: this.reservation.responsible_name,
-                };
-                await axios.post(
-                    `/api/reservations`,
-                    waitingGuest
-                );
-
-                const newLog = {
-                    text: `Гость был добавлен в лист ожидания.`,
-                    type: "Ожидание",
-                    ...waitingGuest,
-                };
-                await axios.post(`/api/logs`, newLog);
-            }
-            if (this.place === "place_2") {
-                const waitingGuest = {
-                    name: this.reservation.name,
-                    phone: this.reservation.phone,
-                    prepayment: this.reservation.prepayment,
-                    amount: this.reservation.amount,
-                    note: this.reservation.note,
-                    date: this.reservation.date,
-                    from:
-                        this.reservation.from === ""
-                            ? "Ожидание"
-                            : this.reservation.from,
-                    to: this.reservation.to,
-                    table_id: 101,
-                    place_id: 2,
-                    responsible_email: this.reservation.responsible_email,
-                    responsible_name: this.reservation.responsible_name,
-                };
-                await axios.post(
-                    `/api/reservations`,
-                    waitingGuest
-                );
-
-                const newLog = {
-                    text: `Гость был добавлен в лист ожидания.`,
-                    type: "Ожидание",
-                    ...waitingGuest,
-                };
-                await axios.post(`/api/logs`, newLog);
-            }
-            if (this.place === "place_3") {
-                const waitingGuest = {
-                    name: this.reservation.name,
-                    phone: this.reservation.phone,
-                    prepayment: this.reservation.prepayment,
-                    amount: this.reservation.amount,
-                    note: this.reservation.note,
-                    date: this.reservation.date,
-                    from:
-                        this.reservation.from === ""
-                            ? "Ожидание"
-                            : this.reservation.from,
-                    to: this.reservation.to,
-                    table_id: 102,
-                    place_id: 3,
-                    responsible_email: this.reservation.responsible_email,
-                    responsible_name: this.reservation.responsible_name,
-                };
-                await axios.post(
-                    `/api/reservations`,
-                    waitingGuest
-                );
-
-                const newLog = {
-                    text: `Гость был добавлен в лист ожидания.`,
-                    type: "Ожидание",
-                    ...waitingGuest,
-                };
-                await axios.post(`/api/logs`, newLog);
-            }
-            this.clearReservationInfo();
-        },
+        // 13.03.22 - Т.к. бронирование и ожидание - один ендпоинт, отдельная функция не нужна
+        // async addToWaitingList() {
+        //     if (this.place === "place_1") {
+        //         const waitingGuest = {
+        //             name: this.reservation.name,
+        //             phone: this.reservation.phone,
+        //             prepayment: this.reservation.prepayment,
+        //             amount: this.reservation.amount,
+        //             note: this.reservation.note,
+        //             date: this.today,
+        //             from: this.from,
+        //             to: this.to,
+        //             table_id: 100,
+        //             place_id: 1,
+        //             responsible_email: this.reservation.responsible_email,
+        //             responsible_name: this.reservation.responsible_name,
+        //         };
+        //         await axios.post(
+        //             `/api/reservations`,
+        //             waitingGuest
+        //         );
+        //
+        //         const newLog = {
+        //             text: `Гость был добавлен в лист ожидания.`,
+        //             type: "Ожидание",
+        //             ...waitingGuest,
+        //         };
+        //         await axios.post(`/api/logs`, newLog);
+        //     }
+        //     if (this.place === "place_2") {
+        //         const waitingGuest = {
+        //             name: this.reservation.name,
+        //             phone: this.reservation.phone,
+        //             prepayment: this.reservation.prepayment,
+        //             amount: this.reservation.amount,
+        //             note: this.reservation.note,
+        //             date: this.reservation.date,
+        //             from:
+        //                 this.reservation.from === ""
+        //                     ? "Ожидание"
+        //                     : this.reservation.from,
+        //             to: this.reservation.to,
+        //             table_id: 101,
+        //             place_id: 2,
+        //             responsible_email: this.reservation.responsible_email,
+        //             responsible_name: this.reservation.responsible_name,
+        //         };
+        //         await axios.post(
+        //             `/api/reservations`,
+        //             waitingGuest
+        //         );
+        //
+        //         const newLog = {
+        //             text: `Гость был добавлен в лист ожидания.`,
+        //             type: "Ожидание",
+        //             ...waitingGuest,
+        //         };
+        //         await axios.post(`/api/logs`, newLog);
+        //     }
+        //     if (this.place === "place_3") {
+        //         const waitingGuest = {
+        //             name: this.reservation.name,
+        //             phone: this.reservation.phone,
+        //             prepayment: this.reservation.prepayment,
+        //             amount: this.reservation.amount,
+        //             note: this.reservation.note,
+        //             date: this.reservation.date,
+        //             from:
+        //                 this.reservation.from === ""
+        //                     ? "Ожидание"
+        //                     : this.reservation.from,
+        //             to: this.reservation.to,
+        //             table_id: 102,
+        //             place_id: 3,
+        //             responsible_email: this.reservation.responsible_email,
+        //             responsible_name: this.reservation.responsible_name,
+        //         };
+        //         await axios.post(
+        //             `/api/reservations`,
+        //             waitingGuest
+        //         );
+        //
+        //         const newLog = {
+        //             text: `Гость был добавлен в лист ожидания.`,
+        //             type: "Ожидание",
+        //             ...waitingGuest,
+        //         };
+        //         await axios.post(`/api/logs`, newLog);
+        //     }
+        //     this.clearReservationInfo();
+        // },
         async deleteReservation() {
             try {
                 await axios.post(
@@ -2300,6 +2347,7 @@ export default {
             };
 
             await axios.post(`/api/logs`, newLog);
+            this.clearReservationInfo();
             await this.fetchTables();
         },
         async completeReservation() {
@@ -2326,6 +2374,7 @@ export default {
                 ...this.reservation,
             };
             await axios.post(`/api/logs`, newLog);
+            this.clearReservationInfo();
             await this.fetchTables();
         },
         async addTable(type, password) {
@@ -2379,21 +2428,18 @@ export default {
             this.checkPass(password);
 
             if (this.place === "place_1" && this.passCheck) {
-                const table = await axios.get(
-                    `/api/tables/${this.table.id}`
-                );
                 await axios.delete(
                     `/api/tables/${this.table.id}`
                 );
             }
             if (this.place === "place_2" && this.passCheck) {
                 await axios.delete(
-                    `/api/tables/${this.table}`
+                    `/api/tables/${this.table.id}`
                 );
             }
             if (this.place === "place_3" && this.passCheck) {
                 await axios.delete(
-                    `/api/tables/${this.table}`
+                    `/api/tables/${this.table.id}`
                 );
             }
             this.loading = true;
@@ -2554,12 +2600,12 @@ export default {
     width: 200px;
 }
 .button_action:hover {
-    box-shadow: 0px 3px 1px rgba(0, 0, 0, 0.1), 0px 1px 2px rgba(0, 0, 0, 0.08),
-        0px 2px 2px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 3px 1px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.08),
+        0 2px 2px rgba(0, 0, 0, 0.12);
 }
 .button_action:focus {
-    box-shadow: 0px 3px 1px rgba(0, 0, 0, 0.1), 0px 1px 2px rgba(0, 0, 0, 0.08),
-        0px 2px 2px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 3px 1px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.08),
+        0 2px 2px rgba(0, 0, 0, 0.12);
 }
 .place_input {
     height: 50px;
@@ -2567,25 +2613,13 @@ export default {
     color: #3c4655;
     background-color: white;
     border: 1px none;
-    /* border-color: #bacad6; */
     @media (min-width: 2560px) {
         font-size: 20px;
     }
 }
-// .card_md {
-//     width: 15rem;
-//     height: 15rem;
-// }
 .card {
     width: 70px;
     height: 70px;
-    // width: 18vw;
-    // height: 18vw;
-    /* width: 100%;
-    height: 0;
-    padding-top: 100%;
-    background-color: white;
-    position: relative; */
     @media (min-width: 576px) {
         width: 74px;
         height: 74px;
@@ -2599,22 +2633,19 @@ export default {
         min-height: 182px;
     }
     @media (min-width: 1200px) and (max-width: 1500px) {
-        min-width: 257px;
-        min-height: 257px;
+        min-width: 240px;
+        min-height: 240px;
     }
-    @media (min-width: 1570px) {
-        min-width: 420px;
+    @media (min-width: 1501px) {
+        min-width: 300px;
+        min-height: 300px;
+    }
+    @media (min-width: 1999px) {
+        min-width: 410px;
         min-height: 300px;
     }
 }
 
-// .card_content {
-//     width: 100%;
-//     height: 100%;
-//     position: absolute;
-//     top: 0;
-//     left: 0;
-// }
 .card_content_info {
     @media (min-width: 576px) {
         padding: 15px 5px 15px 5px;
@@ -2623,13 +2654,16 @@ export default {
         padding: 20px 5px 20px 5px;
     }
     @media (min-width: 992px) {
-        padding: 20px 5px 20px 5px;
+        padding: 17px 5px 20px 5px;
     }
     @media (min-width: 1200px) {
-        padding: 30px 10px 15px 10px;
+        padding: 25px 10px 15px 10px;
     }
-    @media (min-width: 2559px) {
-        padding: 60px 10px 15px 10px;
+    @media (min-width: 1500px) {
+        padding: 50px 10px 15px 10px;
+    }
+    @media (min-width: 2000px) {
+        padding: 45px 10px 15px 10px;
     }
 }
 .day_full {
@@ -2656,20 +2690,18 @@ export default {
     @media (min-width: 375px) {
         display: none;
     }
-    // @media (min-width: 576px) {
-    //     display: block;
-    //     font-size: 10px;
-    //     font-weight: 600;
-    // }
     @media (min-width: 767px) {
         display: block;
         font-size: 15px;
     }
     @media (min-width: 992px) {
-        font-size: 20px;
+        font-size: 25px;
     }
     @media (min-width: 1440px) {
         font-size: 28px;
+    }
+    @media (min-width: 2000px) {
+        font-size: 35px;
     }
     @media (min-width: 2560px) {
         font-size: 40px;
