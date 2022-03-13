@@ -14,7 +14,7 @@ class TableSeeder extends Seeder
      */
     public function run()
     {
-        for($i = 0; $i < 14; $i++)
+        for($i = 0; $i < 15; $i++)
             DB::table('tables')->insert([
                 'place_id' => 1,
                 'x' => rand(0, 10),
@@ -24,7 +24,7 @@ class TableSeeder extends Seeder
                 'i' => $i + 1,
                 'bbq' => rand(0, 1),
             ]);
-        for($i = 0; $i < 14; $i++)
+        for($i = 0; $i < 15; $i++)
             DB::table('tables')->insert([
                 'place_id' => 2,
                 'x' => rand(0, 10),
@@ -44,7 +44,6 @@ class TableSeeder extends Seeder
                 'i' => $i + 1,
                 'bbq' => rand(0, 1),
             ]);
-
         for($i = 100; $i < 101; $i++)
             DB::table('tables')->insert([
                 'id'=> 100,
@@ -59,7 +58,40 @@ class TableSeeder extends Seeder
         for($i = 101; $i < 102; $i++)
             DB::table('tables')->insert([
                 'id'=> 101,
+                'place_id' => 1,
+                'x' => rand(0, 10),
+                'y' => rand(0, 10),
+                'w' => 2,
+                'h' => 6,
+                'i' => 'Бар',
+                'bbq' => 0,
+            ]);
+        for($i = 102; $i < 103; $i++)
+            DB::table('tables')->insert([
+                'id'=> 102,
                 'place_id' => 2,
+                'x' => rand(0, 10),
+                'y' => rand(0, 10),
+                'w' => 0,
+                'h' => 0,
+                'i' => 'Ожидание',
+                'bbq' => 0,
+            ]);
+        for($i = 103; $i < 104; $i++)
+            DB::table('tables')->insert([
+                'id'=> 103,
+                'place_id' => 2,
+                'x' => 0,
+                'y' => 0,
+                'w' => 2,
+                'h' => 6,
+                'i' => 'Бар',
+                'bbq' => 0,
+            ]);
+        for($i = 104; $i < 105; $i++)
+            DB::table('tables')->insert([
+                'id'=> 104,
+                'place_id' => 3,
                 'x' => 0,
                 'y' => 0,
                 'w' => 0,
@@ -67,15 +99,15 @@ class TableSeeder extends Seeder
                 'i' => 'Ожидание',
                 'bbq' => 0,
             ]);
-        for($i = 102; $i < 103; $i++)
+        for($i = 105; $i < 106; $i++)
             DB::table('tables')->insert([
-                'id'=> 102,
+                'id'=> 105,
                 'place_id' => 3,
                 'x' => 0,
                 'y' => 0,
-                'w' => 0,
-                'h' => 0,
-                'i' => 'Ожидание',
+                'w' => 2,
+                'h' => 6,
+                'i' => 'Бар',
                 'bbq' => 0,
             ]);
     }

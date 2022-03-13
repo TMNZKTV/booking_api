@@ -23,7 +23,7 @@ class CreateLogsTable extends Migration
             $table->bigInteger('amount')->unsigned()->default('1');;
             $table->text('note')->nullable();
             $table->bigInteger('prepayment')->unsigned()->default('0');;
-            $table->foreignId('table_id')->constrained();
+            $table->foreignId('table_id')->constrained()->references('id')->on('tables')->onDelete('cascade');
             $table->foreignId('place_id')->constrained();
             $table->string('date');
             $table->string('from')->nullable();
