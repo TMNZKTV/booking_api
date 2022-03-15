@@ -26,7 +26,7 @@ class AddReasonFailedToLogsTable extends Migration
     public function down()
     {
         Schema::table('logs', function (Blueprint $table) {
-            $table->string('reason_failed')->nullable();
+            $table->string('reason_failed');
         });
     }
 }
