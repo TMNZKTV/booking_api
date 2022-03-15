@@ -79,7 +79,7 @@
                 </div>
 
                 <!-- Выбор действия -->
-                <div class="xs col-12 col-sm-8 col-md-6">
+                <div class="xs col-12 col-sm-8 col-md-6 info_panel">
                     <!-- 1 ряд -->
                     <div class="row row-cols-2 g-1 mb-1">
                         <!-- Изменить расположение -->
@@ -593,213 +593,221 @@
                             @click="() => clearReservationInfo()"
                         ></button>
                     </div>
-                    <div class="modal-body">
-                        <!-- Имя и Телефон -->
-                        <div class="row">
-                            <!-- Имя -->
-                            <div class="mb-3 col-6">
-                                <label for="guestNameAdd" class="form-label"
+                    <form @submit.prevent="addGuest">
+                        <div class="modal-body">
+                            <!-- Имя и Телефон -->
+                            <div class="row">
+                                <!-- Имя -->
+                                <div class="mb-3 col-6">
+                                    <label for="guestNameAdd" class="form-label"
                                     >Имя</label
-                                >
-                                <input
-                                    v-model="reservation.name"
-                                    type="text"
-                                    class="form-control"
-                                    id="guestNameAdd"
-                                    placeholder="Иван Иванов"
-                                />
-                            </div>
-                            <!-- Телефон -->
-                            <div class="mb-3 col-6">
-                                <label for="guestPhoneAdd" class="form-label"
+                                    >
+                                    <input
+                                        v-model="reservation.name"
+                                        type="text"
+                                        class="form-control"
+                                        id="guestNameAdd"
+                                        placeholder="Иван Иванов"
+                                    />
+                                </div>
+                                <!-- Телефон -->
+                                <div class="mb-3 col-6">
+                                    <label for="guestPhoneAdd" class="form-label"
                                     >Телефон</label
-                                >
+                                    >
+                                    <input
+                                        v-model="reservation.phone"
+                                        type="tel"
+                                        class="form-control"
+                                        id="guestPhoneAdd"
+                                        placeholder="+7(xxx)xxx-xx-xx"
+                                        v-phone
+                                        required
+                                    />
+                                </div>
+                            </div>
+                            <!-- Вредный гость? -->
+                            <div class="form-check mb-3">
+                                <label class="form-check-label" for="conflictGuest">
+                                    Конфликтный гость?
+                                </label>
+
                                 <input
-                                    v-model="reservation.phone"
-                                    type="text"
-                                    class="form-control"
-                                    id="guestPhoneAdd"
-                                    placeholder="+7(xxx)xxx-xx-xx"
+                                    v-model="reservation.conflict"
+                                    class="form-check-input"
+                                    type="checkbox"
+                                    value=""
+                                    id="conflictGuest"
                                 />
                             </div>
-                        </div>
-                        <!-- Вредный гость? -->
-                        <div class="form-check mb-3">
-                            <label class="form-check-label" for="conflictGuest">
-                                Конфликтный гость?
-                            </label>
-
-                            <input
-                                v-model="reservation.conflict"
-                                class="form-check-input"
-                                type="checkbox"
-                                value=""
-                                id="conflictGuest"
-                            />
-                        </div>
-                        <!-- Мероприятие и Кол-во гостей -->
-                        <div class="row">
-                            <!-- Мероприятие -->
-                            <div class="mb-3 col-6">
-                                <span>Мероприятие</span>
-                                <select
-                                    class="form-control form-select"
-                                    v-model="reservation.visit_type"
-                                    @change="
+                            <!-- Мероприятие и Кол-во гостей -->
+                            <div class="row">
+                                <!-- Мероприятие -->
+                                <div class="mb-3 col-6">
+                                    <span>Мероприятие</span>
+                                    <select
+                                        class="form-control form-select"
+                                        v-model="reservation.visit_type"
+                                        @change="
                                         reservation.visit_type =
                                             $event.target.value
                                     "
-                                >
-                                    <option value="Обычный визит" selected>
-                                        Обычный визит
-                                    </option>
-                                    <option value="День рождения">
-                                        День рождения
-                                    </option>
-                                    <option value="Романтический ужин">
-                                        Романтический ужин
-                                    </option>
-                                    <option value="Семейный ужин">
-                                        Семейный ужин
-                                    </option>
-                                </select>
-                            </div>
-                            <!-- Кол-во гостей -->
-                            <div class="mb-3 col-6">
-                                <span>Количество гостей</span>
-                                <select
-                                    class="form-control form-select w-50"
-                                    v-model="reservation.amount"
-                                    @change="
+                                    >
+                                        <option value="Обычный визит" selected>
+                                            Обычный визит
+                                        </option>
+                                        <option value="День рождения">
+                                            День рождения
+                                        </option>
+                                        <option value="Романтический ужин">
+                                            Романтический ужин
+                                        </option>
+                                        <option value="Семейный ужин">
+                                            Семейный ужин
+                                        </option>
+                                    </select>
+                                </div>
+                                <!-- Кол-во гостей -->
+                                <div class="mb-3 col-6">
+                                    <span>Количество гостей</span>
+                                    <select
+                                        class="form-control form-select w-50"
+                                        v-model="reservation.amount"
+                                        @change="
                                         reservation.amount = $event.target.value
                                     "
-                                >
-                                    <option value="1" selected>1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                    <option value="6">6</option>
-                                </select>
+                                    >
+                                        <option value="1" selected>1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                        <option value="11">11</option>
+                                        <option value="12">12</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <!-- Доп.инфо -->
-                        <div class="mb-3">
-                            <label for="guestNoteAdd" class="form-label"
+                            <!-- Доп.инфо -->
+                            <div class="mb-3">
+                                <label for="guestNoteAdd" class="form-label"
                                 >Дополнительная информация</label
-                            >
-                            <input
-                                v-model="reservation.note"
-                                type="text"
-                                class="form-control"
-                                id="guestNoteAdd"
-                                placeholder="На заметку"
-                            />
-                        </div>
-                        <!-- Предоплата и Стол -->
-                        <div class="row mb-3">
-                            <!-- Предоплата -->
-                            <div class="col-6">
-                                <label
-                                    for="guestPrepaymentAdd"
-                                    class="form-label"
-                                    >Предоплата</label
                                 >
                                 <input
-                                    v-model="reservation.prepayment"
-                                    type="number"
+                                    v-model="reservation.note"
+                                    type="text"
                                     class="form-control"
-                                    id="guestPrepaymentAdd"
-                                    placeholder="Сумма предоплаты"
-                                    step="100"
-                                    required
+                                    id="guestNoteAdd"
+                                    placeholder="На заметку"
                                 />
                             </div>
-                            <!-- Стол -->
-                            <div class="col-6">
-                                <label class="form-label" for="tables"
+                            <!-- Предоплата и Стол -->
+                            <div class="row mb-3">
+                                <!-- Предоплата -->
+                                <div class="col-6">
+                                    <label
+                                        for="guestPrepaymentAdd"
+                                        class="form-label"
+                                    >Предоплата</label
+                                    >
+                                    <input
+                                        v-model="reservation.prepayment"
+                                        type="number"
+                                        class="form-control"
+                                        id="guestPrepaymentAdd"
+                                        placeholder="Сумма предоплаты"
+                                        step="100"
+                                        required
+                                    />
+                                </div>
+                                <!-- Стол -->
+                                <div class="col-6">
+                                    <label class="form-label" for="tables"
                                     >№ стола</label
-                                >
-                                <select
-                                    id="selectTables"
-                                    class="form-control form-select"
-                                    v-model="reservation.table_id"
-                                    @change="
+                                    >
+                                    <select
+                                        id="selectTables"
+                                        class="form-control form-select"
+                                        v-model="reservation.table_id"
+                                        @change="
                                         reservation.table_id =
                                             $event.target.value
                                     "
-                                >
-                                    <option
-                                        v-for="table in layout"
-                                        :value="table.id"
-                                        :key="table.id"
-                                        selected
                                     >
-                                        {{ table.i }}
-                                    </option>
-                                </select>
+                                        <option
+                                            v-for="table in layout"
+                                            :value="table.id"
+                                            :key="table.id"
+                                            selected
+                                        >
+                                            {{ table.i }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- Дата и Время -->
+                            <div class="row mb-3">
+                                <!-- Дата -->
+                                <div class="col-6">
+                                    <p class="mb-2">Дата</p>
+                                    <date-picker
+                                        v-model="today"
+                                        format="YYYY-MM-DD"
+                                        type="datetime"
+                                        valueType="date"
+                                    >
+                                    </date-picker>
+                                </div>
+                                <!-- Время -->
+                                <div class="col-6">
+                                    <p class="mb-2">Начало</p>
+                                    <date-picker
+                                        v-model="from"
+                                        format="HH:mm"
+                                        type="time"
+                                        value-type="format"
+                                        :hour-options="hours"
+                                        :minute-step="30"
+                                        placeholder="Ч:м"
+                                    ></date-picker>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col offset-6">
+                                    <p class="mb-2">Конец</p>
+                                    <date-picker
+                                        v-model="to"
+                                        :minute-step="30"
+                                        :hour-options="hours"
+                                        format="HH:mm"
+                                        value-type="format"
+                                        type="time"
+                                        placeholder="Ч:м"
+                                    ></date-picker>
+                                </div>
                             </div>
                         </div>
-                        <!-- Дата и Время -->
-                        <div class="row mb-3">
-                            <!-- Дата -->
-                            <div class="col-6">
-                                <p class="mb-2">Дата</p>
-                                <date-picker
-                                    v-model="today"
-                                    format="YYYY-MM-DD"
-                                    type="datetime"
-                                    valueType="date"
-                                >
-                                </date-picker>
-                            </div>
-                            <!-- Время -->
-                            <div class="col-6">
-                                <p class="mb-2">Начало</p>
-                                <date-picker
-                                    v-model="from"
-                                    format="HH:mm"
-                                    type="time"
-                                    value-type="format"
-                                    :hour-options="hours"
-                                    :minute-step="30"
-                                    placeholder="Ч:м"
-                                ></date-picker>
-                            </div>
+                        <div class="modal-footer">
+                            <button
+                                type="button"
+                                class="btn btn-secondary"
+                                data-bs-dismiss="modal"
+                                @click="()=> clearReservationInfo()"
+                            >
+                                Закрыть
+                            </button>
+                            <button
+                                type="submit"
+                                class="btn btn-primary"
+                            >
+                                Добавить гостя
+                            </button>
                         </div>
-                        <div class="row">
-                            <div class="col offset-6">
-                                <p class="mb-2">Конец</p>
-                                <date-picker
-                                    v-model="to"
-                                    :minute-step="30"
-                                    :hour-options="hours"
-                                    format="HH:mm"
-                                    value-type="format"
-                                    type="time"
-                                    placeholder="Ч:м"
-                                ></date-picker>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button
-                            type="button"
-                            class="btn btn-secondary"
-                            data-bs-dismiss="modal"
-                            @click="()=> clearReservationInfo()"
-                        >
-                            Закрыть
-                        </button>
-                        <button
-                            type="button"
-                            class="btn btn-primary"
-                            @click="() => addGuest()"
-                            data-bs-dismiss="modal"
-                        >
-                            Добавить гостя
-                        </button>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -828,239 +836,279 @@
                         ></button>
                     </div>
                     <div class="modal-body">
-                        <!-- Имя и Телефон -->
-                        <div class="row">
-                            <!-- Имя -->
-                            <div class="mb-3 col-6">
-                                <label for="guestNameUpdate" class="form-label"
+                        <form>
+                            <!-- Имя и Телефон -->
+                            <div class="row">
+                                <!-- Имя -->
+                                <div class="mb-3 col-6">
+                                    <label for="guestNameUpdate" class="form-label"
                                     >Имя</label
+                                    >
+                                    <input
+                                        v-model="reservation.name"
+                                        type="text"
+                                        class="form-control"
+                                        id="guestNameUpdate"
+                                        placeholder="Brad Pitt"
+                                    />
+                                </div>
+                                <!-- Телефон -->
+                                <div class="mb-3 col-6">
+                                    <label for="guestPhoneUpdate" class="form-label"
+                                    >Телефон</label
+                                    >
+                                    <input
+                                        v-model="reservation.phone"
+                                        type="tel"
+                                        class="form-control"
+                                        id="guestPhoneUpdate"
+                                        placeholder="+7(xxx)xxx-xx-xx"
+                                        v-phone
+                                        required
+                                    />
+                                </div>
+                            </div>
+                            <!-- Вредный гость? -->
+                            <div class="form-check mb-3">
+                                <label
+                                    class="form-check-label"
+                                    for="conflictGuestUpdate"
+                                >
+                                    Конфликтный гость?
+                                </label>
+
+                                <input
+                                    v-model="reservation.conflict"
+                                    class="form-check-input"
+                                    type="checkbox"
+                                    value=""
+                                    id="conflictGuestUpdate"
+                                />
+                            </div>
+                            <!-- Мероприятие и Кол-во гостей -->
+                            <div class="row">
+                                <!-- Мероприятие -->
+                                <div class="mb-3 col-6">
+                                    <span>Мероприятие</span>
+                                    <select
+                                        id="visit_type"
+                                        class="form-control"
+                                        aria-label="Visit type select"
+                                        v-model="reservation.visit_type"
+                                        @change="
+                                            reservation.visit_type =
+                                                $event.target.value
+                                        "
+                                    >
+                                        <option value="Обычный визит">
+                                            Обычный визит
+                                        </option>
+                                        <option value="День рождения">
+                                            День рождения
+                                        </option>
+                                        <option value="Романтический ужин">
+                                            Романтический ужин
+                                        </option>
+                                        <option value="Семейный ужин">
+                                            Семейный ужин
+                                        </option>
+                                    </select>
+                                </div>
+                                <!-- Кол-во гостей -->
+                                <div class="mb-3 col-6">
+                                    <span>Количество гостей</span>
+                                    <select
+                                        v-model="reservation.amount"
+                                        @change="
+                                            reservation.amount = $event.target.value
+                                        "
+                                        class="form-control w-50"
+                                    >
+                                        <option value="1" selected>1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- Доп.инфо -->
+                            <div class="mb-3">
+                                <label for="guestNoteUpdate" class="form-label"
+                                >Дополнительная информация</label
                                 >
                                 <input
-                                    v-model="reservation.name"
+                                    v-model="reservation.note"
                                     type="text"
                                     class="form-control"
-                                    id="guestNameUpdate"
-                                    placeholder="Brad Pitt"
+                                    id="guestNoteUpdate"
+                                    placeholder="На заметку"
                                 />
                             </div>
-                            <!-- Телефон -->
-                            <div class="mb-3 col-6">
-                                <label for="guestPhoneUpdate" class="form-label"
-                                    >Телефон</label
+                            <!-- Предоплата и Стол -->
+                            <div class="row">
+                                <!-- Предоплата -->
+                                <div class="mb-3 col-6">
+                                    <label
+                                        for="guestPrepaymentUpdate"
+                                        class="form-label"
+                                    >Предоплата</label
+                                    >
+                                    <input
+                                        v-model="reservation.prepayment"
+                                        type="number"
+                                        class="form-control"
+                                        id="guestPrepaymentUpdate"
+                                        placeholder="Сумма предоплаты"
+                                        step="100"
+                                        required
+                                    />
+                                </div>
+                                <!-- Стол -->
+                                <div class="mb-3 col-6">
+                                    <label
+                                        class="form-label"
+                                        for="selectTablesUpdate"
+                                    >№ стола</label
+                                    >
+                                    <select
+                                        id="selectTablesUpdate"
+                                        class="form-control"
+                                        v-model="reservation.table_id"
+                                        @change="
+                                            reservation.table_id =
+                                                $event.target.value
+                                        "
+                                    >
+                                        <option
+                                            v-for="table in layout"
+                                            :value="table.id"
+                                            :key="table.id"
+                                            selected
+                                        >
+                                            {{ table.i }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- Дата и Время -->
+                            <div class="row mb-3">
+                                <!-- Дата -->
+                                <div class="col-6">
+                                    <p class="mb-1">Дата</p>
+                                    <date-picker
+                                        v-model="today"
+                                        format="YYYY-MM-DD"
+                                        type="datetime"
+                                        valueType="date"
+                                    >
+                                    </date-picker>
+                                </div>
+                                <!-- Время -->
+                                <div class="col-6">
+                                    <p class="mb-1">Начало</p>
+                                    <date-picker
+                                        v-model="from"
+                                        :minute-step="30"
+                                        :hour-options="hours"
+                                        format="HH:mm"
+                                        value-type="format"
+                                        type="time"
+                                        placeholder="Ч:м"
+                                    ></date-picker>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col offset-6">
+                                    <p class="mb-1">Конец</p>
+                                    <date-picker
+                                        v-model="to"
+                                        :minute-step="30"
+                                        :hour-options="hours"
+                                        format="HH:mm"
+                                        value-type="format"
+                                        type="time"
+                                        placeholder="Ч:м"
+                                    ></date-picker>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                            <div class="me-auto">
+                                <button
+                                    type="button"
+                                    class="btn btn-secondary btn-danger"
+                                    data-bs-dismiss="modal"
+                                    data-bs-target="#reasonFailedModal"
+                                    data-bs-toggle="modal"
                                 >
-                                <input
-                                    v-model="reservation.phone"
-                                    type="number"
-                                    class="form-control"
-                                    id="guestPhoneUpdate"
-                                    placeholder="+7(xxx)xxx-xx-xx"
-                                />
+                                    Удалить
+                                </button>
+                                <button
+                                    type="button"
+                                    class="btn btn-secondary btn-success"
+                                    data-bs-dismiss="modal"
+                                    @click="() => completeReservation()"
+                                >
+                                    Завершить
+                                </button>
+                                <button
+                                    type="button"
+                                    class="btn btn-primary"
+                                    @click="() => updateGuest()"
+                                    data-bs-dismiss="modal"
+                                >
+                                    Обновить
+                                </button>
+                            </div>
+                            <div>
+                                <button
+                                    type="button"
+                                    class="btn btn-secondary"
+                                    data-bs-dismiss="modal"
+                                    @click="() => clearReservationInfo()"
+                                >
+                                    Закрыть
+                                </button>
                             </div>
                         </div>
-                        <!-- Вредный гость? -->
-                        <div class="form-check mb-3">
-                            <label
-                                class="form-check-label"
-                                for="conflictGuestUpdate"
+                </div>
+            </div>
+        </div>
+        <!-- Модалка для указания причины отмены бронирования -->
+        <div class="modal fade" id="reasonFailedModal" aria-hidden="true" aria-labelledby="reasonFailedModal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="reasonFailedModalTitle">Почему отменяется бронь?</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            <label for="reasonFailed" class="form-label"
+                            >Опишите ситуацию</label
                             >
-                                Конфликтный гость?
-                            </label>
-
                             <input
-                                v-model="reservation.conflict"
-                                class="form-check-input"
-                                type="checkbox"
-                                value=""
-                                id="conflictGuestUpdate"
-                            />
-                        </div>
-                        <!-- Мероприятие и Кол-во гостей -->
-                        <div class="row">
-                            <!-- Мероприятие -->
-                            <div class="mb-3 col-6">
-                                <span>Мероприятие</span>
-                                <select
-                                    id="visit_type"
-                                    class="form-control"
-                                    aria-label="Visit type select"
-                                    v-model="reservation.visit_type"
-                                    @change="
-                                        reservation.visit_type =
-                                            $event.target.value
-                                    "
-                                >
-                                    <option value="Обычный визит">
-                                        Обычный визит
-                                    </option>
-                                    <option value="День рождения">
-                                        День рождения
-                                    </option>
-                                    <option value="Романтический ужин">
-                                        Романтический ужин
-                                    </option>
-                                    <option value="Семейный ужин">
-                                        Семейный ужин
-                                    </option>
-                                </select>
-                            </div>
-                            <!-- Кол-во гостей -->
-                            <div class="mb-3 col-6">
-                                <span>Количество гостей</span>
-                                <select
-                                    v-model="reservation.amount"
-                                    @change="
-                                        reservation.amount = $event.target.value
-                                    "
-                                    class="form-control w-50"
-                                >
-                                    <option value="1" selected>1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                    <option value="6">6</option>
-                                </select>
-                            </div>
-                        </div>
-                        <!-- Доп.инфо -->
-                        <div class="mb-3">
-                            <label for="guestNoteUpdate" class="form-label"
-                                >Дополнительная информация</label
-                            >
-                            <input
-                                v-model="reservation.note"
+                                v-model="reason_failed"
                                 type="text"
                                 class="form-control"
-                                id="guestNoteUpdate"
-                                placeholder="На заметку"
+                                id="reasonFailed"
+                                placeholder="..."
                             />
-                        </div>
-                        <!-- Предоплата и Стол -->
-                        <div class="row">
-                            <!-- Предоплата -->
-                            <div class="mb-3 col-6">
-                                <label
-                                    for="guestPrepaymentUpdate"
-                                    class="form-label"
-                                    >Предоплата</label
-                                >
-                                <input
-                                    v-model="reservation.prepayment"
-                                    type="number"
-                                    class="form-control"
-                                    id="guestPrepaymentUpdate"
-                                    placeholder="Сумма предоплаты"
-                                    step="100"
-                                    required
-                                />
-                            </div>
-                            <!-- Стол -->
-                            <div class="mb-3 col-6">
-                                <label
-                                    class="form-label"
-                                    for="selectTablesUpdate"
-                                    >№ стола</label
-                                >
-                                <select
-                                    id="selectTablesUpdate"
-                                    class="form-control"
-                                    v-model="reservation.table_id"
-                                    @change="
-                                        reservation.table_id =
-                                            $event.target.value
-                                    "
-                                >
-                                    <option
-                                        v-for="table in layout"
-                                        :value="table.id"
-                                        :key="table.id"
-                                        selected
-                                    >
-                                        {{ table.i }}
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-                        <!-- Дата и Время -->
-                        <div class="row mb-3">
-                            <!-- Дата -->
-                            <div class="col-6">
-                                <p class="mb-1">Дата</p>
-                                <date-picker
-                                    v-model="reservation.date"
-                                    format="YYYY-MM-DD"
-                                    type="date"
-                                    valueType="format"
-                                >
-                                </date-picker>
-                            </div>
-                            <!-- Время -->
-                            <div class="col-6">
-                                <p class="mb-1">Начало</p>
-                                <date-picker
-                                    v-model="reservation.from"
-                                    :minute-step="30"
-                                    :hour-options="hours"
-                                    format="HH:mm"
-                                    value-type="format"
-                                    type="time"
-                                    placeholder="Ч:м"
-                                ></date-picker>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col offset-6">
-                                <p class="mb-1">Конец</p>
-                                <date-picker
-                                    v-model="reservation.to"
-                                    :minute-step="30"
-                                    :hour-options="hours"
-                                    format="HH:mm"
-                                    value-type="format"
-                                    type="time"
-                                    placeholder="Ч:м"
-                                ></date-picker>
-                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <div class="me-auto">
-                            <button
-                                type="button"
-                                class="btn btn-secondary btn-danger"
-                                data-bs-dismiss="modal"
-                                @click="() => deleteReservation()"
-                            >
-                                Удалить
-                            </button>
-                            <button
-                                type="button"
-                                class="btn btn-secondary btn-success"
-                                data-bs-dismiss="modal"
-                                @click="() => completeReservation()"
-                            >
-                                Завершить
-                            </button>
-
-                            <button
-                                type="button"
-                                class="btn btn-primary"
-                                @click="() => updateGuest()"
-                                data-bs-dismiss="modal"
-                            >
-                                Обновить
-                            </button>
-                        </div>
-                        <div>
-                            <button
-                                type="button"
-                                class="btn btn-secondary"
-                                data-bs-dismiss="modal"
-                                @click="() => clearReservationInfo()"
-                            >
-                                Закрыть
-                            </button>
-                        </div>
+                        <button class="btn btn-danger" data-bs-dismiss="modal" @click="() => deleteReservation()">Удалить бронирование</button>
+                        <button
+                            type="button"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal"
+                            @click="() => clearReservationInfo()"
+                        >
+                            Закрыть
+                        </button>
                     </div>
                 </div>
             </div>
@@ -1764,7 +1812,7 @@ export default {
             hours: Array.from({ length: 23 }).map((_, i) => i + 11),
             reservation: {
                 name: "",
-                phone: "",
+                phone: '',
                 conflict: false,
                 visit_type: "Обычный визит",
                 amount: 1,
@@ -1775,6 +1823,7 @@ export default {
                 responsible_email: "",
                 responsible_name: "",
             },
+            reason_failed: ''
         };
     },
     async mounted() {
@@ -1914,6 +1963,7 @@ export default {
             this.restriction.table_id = null;
         },
         updateGuestInfo(item) {
+            console.log(item);
             this.reservation = {
                 id: item.id,
                 name: item.name,
@@ -1925,9 +1975,9 @@ export default {
                 note: item.note,
                 table_id: item.table_id,
                 place_id: item.place_id,
-                date: item.date,
-                from: item.from,
-                to: item.to,
+                date: this.today,
+                from: this.from,
+                to: this.to,
                 responsible_email: this.reservation.responsible_email,
                 responsible_name: this.reservation.responsible_name,
             };
@@ -2057,6 +2107,9 @@ export default {
             }
         },
         async addGuest() {
+            const myModalEl = document.getElementById('AddGuest');
+            const modal = bootstrap.Modal.getInstance(myModalEl)
+            modal.hide();
             if (this.place === "place_1") {
                 const newReservation = {
                     name: this.reservation.name,
@@ -2323,10 +2376,15 @@ export default {
         //     this.clearReservationInfo();
         // },
         async deleteReservation() {
+            const deletedReservation = {
+                reason_failed: this.reason_failed,
+                ...this.reservation
+            }
+            console.log(deletedReservation);
             try {
                 await axios.post(
                     `/api/failed_reservations`,
-                    this.reservation
+                    deletedReservation
                 );
             } catch (error) {
                 console.log(error);
@@ -2343,11 +2401,13 @@ export default {
             const newLog = {
                 text: "Бронирование удалено.",
                 type: "Отмена",
-                ...this.reservation,
+                reason_failed: this.reason_failed,
+                ...this.reservation
             };
 
             await axios.post(`/api/logs`, newLog);
             this.clearReservationInfo();
+            this.reason_failed = '';
             await this.fetchTables();
         },
         async completeReservation() {
@@ -2748,5 +2808,10 @@ export default {
 .bbq_table path {
     fill: #fff;
     stroke: #fff;
+}
+.info_panel {
+    @media (min-width: 1500px) {
+        margin-top: 20px;
+    }
 }
 </style>

@@ -3,46 +3,40 @@
         <div>
             <transition name="slide">
                 <div v-if="token" class="border-bottom header">
-                    <div class="header_full px-4 py-2">
-                        <ul class="nav align-items-center">
-                            <li class="nav-item me-3">
+                    <div class="header_full px-4">
+                        <nav class="nav align-items-center d-flex">
                                 <router-link
-                                    class="nav-link px-0 py-3 link active"
+                                    class="me-2 link"
                                     :to="{ name: 'Home' }"
                                 >
                                     Главная
                                 </router-link>
-                            </li>
-                            <li class="nav-item me-3">
                                 <router-link
-                                    class="nav-link px-0 py-3 link"
+                                    class="me-2 link"
                                     :to="{ name: 'Booking' }"
                                 >
                                     Бронирования
                                 </router-link>
-                            </li>
-                            <li class="nav-item">
                                 <router-link
-                                    class="nav-link px-0 py-3 link"
+                                    class="link"
                                     :to="{ name: 'History' }"
                                 >
                                     История
                                 </router-link>
-                            </li>
-                        </ul>
+                        </nav>
                         <div
                             v-if="token"
                             class="d-flex ms-auto align-items-center"
                         >
                             <div class="px-0 py-3 me-2">
-                                <p class="link m-0">
+                                <p class="link name m-0">
                                     {{ user }}
                                 </p>
                             </div>
                             <div class="px-0 py-3">
                                 <a
                                     type="button"
-                                    class="btn btn-primary btn-sm button_action"
+                                    class="btn btn-primary p-2 button_action"
                                     @click.prevent="logout"
                                     >ВЫЙТИ</a
                                 >
@@ -96,7 +90,7 @@
                             class="d-flex ms-auto align-items-center"
                         >
                             <div class="px-0 py-3 me-2">
-                                <p class="link m-0">
+                                <p class="link name m-0">
                                     {{ user }}
                                 </p>
                             </div>
@@ -168,10 +162,26 @@ export default {
 </script>
 
 <style lang="scss">
-// * {
-//     font-family: Nunito, system-ui, BlinkMacSystemFont, -apple-system,
-//         sans-serif;
-// }
+a.router-link-exact-active {
+    padding: 20px 3px 20px 3px;
+    color: white;
+    position: relative;
+
+    &::after {
+        position: absolute;
+        content: "";
+        width: 100%;
+        height: 2px;
+        left: 0;
+        right: 0;
+        bottom: 10px;
+        background-color: white;
+    }
+}
+.nav a:hover,
+.nav a:focus {
+    color: white;
+}
 html,
 body {
     font-family: Circe, sans-serif;
@@ -193,9 +203,13 @@ body {
     }
 }
 .link {
-    color: white;
+    color: #D3D3D3;
     text-transform: uppercase;
     font-weight: 600;
+    text-decoration: none;
+}
+.name {
+    color: white;
 }
 .main {
     position: absolute;

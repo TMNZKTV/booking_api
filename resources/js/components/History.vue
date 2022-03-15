@@ -1,15 +1,14 @@
 <template>
     <div>
         <div>
-            <!-- px-4 py-5 my-5 text-center  panel row p-3 mb-2-->
-            <div class="px-4 py-3" :style="{ backgroundColor: '#eef1f4' }">
-                <div class="col-12">
+            <div class="row px-4 py-3" :style="{ backgroundColor: '#eef1f4' }">
+                <!-- Выбор Ресторана -->
+                <div class="col-6">
                     <div class="mb-2">
                         <label for="place_selector" class="place_title">
                             <b>Ресторан на </b>
                         </label>
                     </div>
-
                     <div>
                         <select
                             class="form-control form-select w-full place_input"
@@ -21,6 +20,26 @@
                             <option value="place_1">Марата</option>
                             <option value="place_2">Байкальской</option>
                             <option value="place_3">Горной</option>
+                        </select>
+                    </div>
+                </div>
+                <!-- Выбор Стола -->
+                <div class="col-6">
+                    <div class="mb-2">
+                        <label class="place_title">
+                            <b>Стол №</b>
+                        </label>
+                    </div>
+                    <div>
+                        <select
+                            class="form-control form-select w-full place_input"
+                            id="table_selector"
+                            v-model="table"
+                            @change="chooseTable($event)"
+
+                        >
+                            <option value="" selected>Все столы</option>
+                            <option v-for="item in tables" :value="item.id">{{item.i}}</option>
                         </select>
                     </div>
                 </div>
@@ -42,7 +61,7 @@
             </div>
         </div>
 
-        <div v-else-if="logs.length">
+        <div v-if="allLogs.length">
             <ul class="list-group">
                 <li
                     v-for="log in logs"
@@ -109,7 +128,7 @@
                                             >
                                             <input
                                                 v-model="log.phone"
-                                                type="number"
+                                                type="tel"
                                                 class="form-control"
                                                 id="guestPhoneUpdate"
                                                 placeholder="+7(xxx)xxx-xx-xx"
@@ -289,9 +308,24 @@
                                                 value-type="format"
                                                 type="time"
                                                 placeholder="Ч:м"
-                                                disabled=""
+                                                disabled
                                             ></date-picker>
                                         </div>
+                                    </div>
+                                    <div v-if="log.type === 'Отмена'" class="mb-3">
+                                            <label
+                                                for="reasonFailed"
+                                                class="form-label"
+                                            >Причина отмены</label
+                                            >
+                                            <input
+                                                v-model="log.reason_failed"
+                                                type="text"
+                                                class="form-control"
+                                                id="reasonFailed"
+                                                placeholder="..."
+                                                disabled
+                                            />
                                     </div>
                                     <!-- Ответственный -->
                                     <div class="mb-3 row">
@@ -330,13 +364,13 @@
                                     class="modal-footer"
                                     v-if="log.type === 'Отмена'"
                                 >
-                                    <button
-                                        type="button"
+                                    <a
+                                        id="rebookBtn"
                                         class="btn btn-secondary btn-danger"
                                         @click="() => rebook(log)"
                                     >
                                         Восстановить
-                                    </button>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -345,7 +379,7 @@
             </ul>
         </div>
 
-        <div v-else>
+        <div v-if="logs.length === 0 && place !== ''" class="text-center mt-3">
             <h2 class="text-center">Пока нет никаких записей</h2>
         </div>
     </div>
@@ -362,7 +396,7 @@ export default {
     },
     data() {
         return {
-            logs: [],
+            allLogs: [],
             hours: Array.from({ length: 23 }).map((_, i) => i + 9),
             log: {
                 id: null,
@@ -382,10 +416,62 @@ export default {
                 responsible_name: "",
             },
             place: "",
+            table: '',
+            allTables: [],
             loading: false,
         };
     },
-    computed: {},
+    async mounted() {
+      const response = await axios.get('/api/tables');
+      this.allTables = response.data.data;
+    },
+    computed: {
+        tables() {
+            if(this.place === 'place_1') {
+                return this.allTables.filter(
+                    (table) => table.place_id === 1
+                );
+            }
+            if(this.place === 'place_2') {
+                return this.allTables.filter(
+                    (table) => table.place_id === 2
+                );
+            }
+            if(this.place === 'place_3') {
+                return this.allTables.filter(
+                    (table) => table.place_id === 3
+                );
+            }
+        },
+        logs() {
+            if(this.table === '' && this.place !== '') {
+                return this.allLogs;
+            }
+            if(this.table !== '' || this.table !== 'Ожидание' || this.table !== 'Бар') {
+                return this.allLogs.filter((log) => log.table_id === Number(this.table))
+            }
+            if(this.table === 'Ожидание' && this.place === 'place_1') {
+                return this.allLogs.filter((log) => log.table_id === 100)
+            }
+            if(this.table === 'Бар' && this.place === 'place_1') {
+                return this.allLogs.filter((log) => log.table_id === 101)
+            }
+
+            if(this.table === 'Ожидание' && this.place === 'place_2') {
+                return this.allLogs.filter((log) => log.table_id === 102)
+            }
+            if(this.table === 'Бар' && this.place === 'place_2') {
+                return this.allLogs.filter((log) => log.table_id === 103)
+            }
+
+            if(this.table === 'Ожидание' && this.place === 'place_3') {
+                return this.allLogs.filter((log) => log.table_id === 104)
+            }
+            if(this.table === 'Бар' && this.place === 'place_3') {
+                return this.allLogs.filter((log) => log.table_id === 105)
+            }
+        }
+    },
     methods: {
         addLeadingZero(date) {
             return date < 10 ? "0" + date : date;
@@ -428,7 +514,11 @@ export default {
         },
         choosePlace($event) {
             this.place = $event.target.value;
+            this.table = '';
             this.fetchLogs();
+        },
+        chooseTable($event) {
+            this.table = $event.target.value;
         },
         async rebook(log) {
             if (this.place === "place_1") {
@@ -455,7 +545,7 @@ export default {
                         newReservation
                     );
                     const newLog = {
-                        text: `Стол №${newReservation.table_id} был забронирован.`,
+                        text: `Стол №${newReservation.table_id} на Марата был забронирован.`,
                         type: "Восстановление",
                         ...newReservation,
                     };
@@ -492,7 +582,7 @@ export default {
                     );
 
                     const newLog = {
-                        text: `Стол №${newReservation.table_id} был забронирован.`,
+                        text: `Стол №${newReservation.table_id} на Байкальской был забронирован.`,
                         type: "Восстановление",
                         ...newReservation,
                     };
@@ -528,7 +618,7 @@ export default {
                         newReservation
                     );
                     const newLog = {
-                        text: `Стол №${newReservation.table_id} был забронирован.`,
+                        text: `Стол №${newReservation.table_id} на Горной был забронирован.`,
                         type: "Восстановление",
                         ...newReservation,
                     };
@@ -540,49 +630,28 @@ export default {
                     console.log(error);
                 }
             }
-            this.fetchLogs();
+
+            const dropdownToggleEl = document.getElementById('dropdownMenuClickableInside');
+            const dropdownList = new bootstrap.Dropdown(dropdownToggleEl);
+            dropdownList.hide();
+            await this.fetchLogs();
+            window.scrollTo(0, -1000)
         },
         async fetchLogs() {
+            this.loading = true;
+            const response = await axios.get(
+                 "/api/logs"
+            );
             if (this.place === "place_1") {
-                this.loading = true;
-                const response = await axios.get(
-                    "/api/logs"
-                );
-                const logs = response.data.filter((log) => {
-                    if (log.place_id === 1) {
-                        return log;
-                    }
-                });
-                this.logs = logs.reverse();
-                this.loading = false;
+                this.allLogs = response.data.filter((log) => log.place_id === 1).reverse();
             }
             if (this.place === "place_2") {
-                this.loading = true;
-                const response = await axios.get(
-                    "/api/logs"
-                );
-                const logs = response.data.filter((log) => {
-                    if (log.place_id === 2) {
-                        return log;
-                    }
-                });
-                this.logs = logs.reverse();
-                this.loading = false;
+                this.allLogs = response.data.filter((log) => log.place_id === 2).reverse();
             }
             if (this.place === "place_3") {
-                this.loading = true;
-                const response = await axios.get(
-                    "/api/logs"
-                );
-                const logs = response.data.filter((log) => {
-                    if (log.place_id === 3) {
-                        return log;
-                    }
-                });
-                console.log(this.logs);
-                this.logs = logs.reverse();
-                this.loading = false;
+                this.allLogs = response.data.filter((log) => log.place_id === 3).reverse();
             }
+            this.loading = false;
         },
     },
 };
