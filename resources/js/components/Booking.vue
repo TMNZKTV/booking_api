@@ -261,14 +261,6 @@
                                 <span>Конфликтный гость</span>
                             </div>
                             <div class="w-100"></div>
-                            <div class="col-auto col-md-4 col-lg-4 col-xl-5">
-                                <img
-                                    :src="require('../../svg/finish.svg').default"
-                                    alt="restrictions"
-                                    :style="{ width: '15px' }"
-                                />
-                                <span>Ограничения по времени</span>
-                            </div>
                             <div class="col-auto col-lg-4 col-xl-5">
                                 <img
                                     :src="require('../../svg/bar.svg').default"
@@ -469,12 +461,12 @@
                         </div>
                     </div>
                     <!-- Вывод информации о бронированияя -->
-                    <div
-                        v-for="(item, idx) in item.reservations"
-                        :key="idx"
-                        :style="{ margin: '0', padding: '0' }"
+                    <ul
+                        class="m-0 p-0 list-unstyled"
                     >
                         <li
+                            v-for="(item, idx) in item.reservations"
+                            :key="idx"
                             v-if="
                                 new Date(item.date).getDate() ===
                                 today.getDate()
@@ -482,10 +474,9 @@
                             @click="updateGuestInfo(item)"
                             data-bs-toggle="modal"
                             data-bs-target="#updateGuestInfo"
+                            class="p-0 m-0 align-items-center"
                             :style="{
-                                listStyle: 'none',
-                                padding: '0',
-                                margin: '0',
+                                height: '17px',
                                 backgroundColor: item.from !== null ? colorByTime(item.from) : '',
                                 color: '',
                                 fontSize: '9px',
@@ -493,7 +484,7 @@
                                 borderBottom: '1px solid black',
                             }"
                         >
-                            <div :style="{ padding: '1px' }">
+                            <div :style="{ padding: '1px' }" class="align-items-center">
                                 <!-- Иконка предоплаты -->
                                 <img
                                     v-if="item.prepayment"
@@ -541,26 +532,17 @@
                                     alt="Warning!"
                                     :style="{ width: '15px' }"
                                 />
-                                <!-- Ограниченный визит -->
-                                <img
-                                    v-if="item.to"
-                                    :src="
-                                        require('../../svg/finish.svg')
-                                            .default
-                                    "
-                                    alt="Warning!"
-                                    :style="{ width: '15px' }"
-                                />
                                 <span class="align-middle">
                                     <b
-                                        >{{ item.from }}. {{ item.name }} [{{
-                                            item.amount
-                                        }}]
+                                        >{{ item.from }}{{item.to === null ? "." : null }}
+                                        {{item.to === null ? null : "-"}}
+                                        {{item.to !== '' ? item.to : null}}{{item.to === null ? null : '.'}}
+                                        {{ item.name }} [{{item.amount }}]
                                     </b>
                                 </span>
                             </div>
                         </li>
-                    </div>
+                    </ul>
                 </grid-item>
             </grid-layout>
         </div>
