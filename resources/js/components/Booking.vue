@@ -1004,7 +1004,7 @@
                                 <div class="col-6">
                                     <p class="mb-1">Дата</p>
                                     <date-picker
-                                        v-model="today"
+                                        v-model="reservation.date"
                                         format="YYYY-MM-DD"
                                         type="datetime"
                                         valueType="date"
@@ -1015,7 +1015,7 @@
                                 <div class="col-6">
                                     <p class="mb-1">Начало</p>
                                     <date-picker
-                                        v-model="from"
+                                        v-model="reservation.from"
                                         :minute-step="30"
                                         :hour-options="hours"
                                         format="HH:mm"
@@ -1029,7 +1029,7 @@
                                 <div class="col offset-6">
                                     <p class="mb-1">Конец</p>
                                     <date-picker
-                                        v-model="to"
+                                        v-model="reservation.to"
                                         :minute-step="30"
                                         :hour-options="hours"
                                         format="HH:mm"
@@ -1824,6 +1824,9 @@ export default {
                 amount: 1,
                 note: "",
                 prepayment: 0,
+                date: "",
+                from: "",
+                to: "",
                 table_id: null,
                 place_id: null,
                 responsible_email: "",
@@ -1948,6 +1951,7 @@ export default {
             }
         },
         clearReservationInfo() {
+            this.reservation.id = null;
             this.reservation.name = "";
             this.reservation.phone = "";
             this.reservation.conflict = false;
@@ -1957,6 +1961,10 @@ export default {
             this.reservation.prepayment = 0;
             this.reservation.table_id = null;
             this.reservation.place_id = null;
+            this.reservation.date = "";
+            this.reservation.from = "";
+            this.reservation.to = "";
+
             this.today = new Date();
             this.from = this.addLeadingZero(new Date().getHours()) + ":" + this.addLeadingZero(new Date().getMinutes());
             this.to = '';
@@ -1982,8 +1990,8 @@ export default {
                 table_id: item.table_id,
                 place_id: item.place_id,
                 date: this.today,
-                from: this.from,
-                to: this.to,
+                from: item.from,
+                to: item.to,
                 responsible_email: this.reservation.responsible_email,
                 responsible_name: this.reservation.responsible_name,
             };
