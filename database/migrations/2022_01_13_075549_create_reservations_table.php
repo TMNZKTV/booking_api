@@ -31,7 +31,6 @@ class CreateReservationsTable extends Migration
             $table->string('to')->nullable();
             $table->string('responsible_email')->nullable();
             $table->string('responsible_name')->nullable();
-
         });
     }
 
