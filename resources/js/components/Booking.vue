@@ -352,7 +352,7 @@
                 :is-resizable="false"
                 :is-mirrored="false"
                 :vertical-compact="false"
-                :margin="[20, 20]"
+                :margin="[10, 10]"
                 :use-css-transforms="true"
                 :responsive="false"
                 :cols="{ lg: 12, md: 12, sm: 10, xs: 6, xxs: 4 }"
@@ -2095,7 +2095,7 @@ export default {
                 this.passCheck = true;
                 this.timer = setTimeout(() => {
                     this.passCheck = false;
-                }, 60000);
+                }, 600000);
             }
             if(this.password !== process.env.MIX_MASTERKEY) {
                 alert('Неправильный пароль')
