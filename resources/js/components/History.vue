@@ -338,6 +338,22 @@
                                                 :style="{resize: 'none', height: '100px'}"
                                             ></textarea>
                                     </div>
+                                    <div v-if="log.type === 'Завершено'" class="mb-3">
+                                        <label
+                                            for="feedback"
+                                            class="form-label"
+                                        >Комментарий</label
+                                        >
+                                        <textarea
+                                            v-model="log.feedback"
+                                            type="text"
+                                            class="form-control"
+                                            id="feedback"
+                                            placeholder="..."
+                                            disabled
+                                            :style="{resize: 'none', height: '100px'}"
+                                        ></textarea>
+                                    </div>
                                     <!-- Ответственный -->
                                     <div class="mb-3 row">
                                         <div class="col-6">
