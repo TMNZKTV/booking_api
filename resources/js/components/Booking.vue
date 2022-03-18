@@ -758,8 +758,28 @@
                                     ></date-picker>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col offset-6">
+                            <div class="row mb-3">
+                                <div class="col-6">
+                                        <div class="form-check form-switch col-auto mb-3">
+                                            <label class="form-check-label" for="guestArrivedToggle">Гость пришел</label>
+                                            <input
+                                                v-model="reservation.arrived"
+                                                id="guestArrivedToggle"
+                                                type="checkbox"
+                                                class="form-check-input"
+                                            />
+                                        </div>
+                                        <div class="form-check form-switch col-auto">
+                                            <label class="form-check-label" for="guestLateToggle">Гость опаздывает</label>
+                                            <input
+                                                v-model="reservation.late"
+                                                id="guestLateToggle"
+                                                type="checkbox"
+                                                class="form-check-input"
+                                            />
+                                        </div>
+                                </div>
+                                <div class="col-6">
                                     <p class="mb-2">Конец</p>
                                     <date-picker
                                         v-model="to"
@@ -1008,7 +1028,27 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col offset-6">
+                                <div class="col-6">
+                                    <div class="form-check form-switch col-auto mb-3">
+                                        <label class="form-check-label" for="guestArrivedToggleUpdate">Гость пришел</label>
+                                        <input
+                                            v-model="reservation.arrived"
+                                            id="guestArrivedToggleUpdate"
+                                            type="checkbox"
+                                            class="form-check-input"
+                                        />
+                                    </div>
+                                    <div class="form-check form-switch col-auto">
+                                        <label class="form-check-label" for="guestLateToggleUpdate">Гость опаздывает</label>
+                                        <input
+                                            v-model="reservation.late"
+                                            id="guestLateToggleUpdate"
+                                            type="checkbox"
+                                            class="form-check-input"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-6">
                                     <p class="mb-1">Конец</p>
                                     <date-picker
                                         v-model="reservation.to"
@@ -1038,7 +1078,8 @@
                                     type="button"
                                     class="btn btn-secondary btn-success"
                                     data-bs-dismiss="modal"
-                                    @click="() => completeReservation()"
+                                    data-bs-target="#feedbackModal"
+                                    data-bs-toggle="modal"
                                 >
                                     Завершить
                                 </button>
@@ -1065,6 +1106,43 @@
                 </div>
             </div>
         </div>
+        <!-- Модалка Как все прошло? -->
+        <div class="modal fade" id="feedbackModal" aria-hidden="true" aria-labelledby="feedbackModal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="feedbackModalTitle">Как все прошло?</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            <label for="feedback" class="form-label"
+                            >Комментарии</label
+                            >
+                            <textarea
+                                v-model="feedback"
+                                type="text"
+                                class="form-control"
+                                id="feedback"
+                                placeholder="..."
+                                :style="{resize: 'none', height: '100px'}"
+                            ></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-success" data-bs-dismiss="modal" @click="() => completeReservation()">Завершить бронирование</button>
+                        <button
+                            type="button"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal"
+                            @click="() => clearReservationInfo()"
+                        >
+                            Закрыть
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- Модалка для указания причины отмены бронирования -->
         <div class="modal fade" id="reasonFailedModal" aria-hidden="true" aria-labelledby="reasonFailedModal" tabindex="-1">
             <div class="modal-dialog modal-dialog-centered">
@@ -1078,13 +1156,14 @@
                             <label for="reasonFailed" class="form-label"
                             >Опишите ситуацию</label
                             >
-                            <input
+                            <textarea
                                 v-model="reason_failed"
                                 type="text"
                                 class="form-control"
                                 id="reasonFailed"
                                 placeholder="..."
-                            />
+                                :style="{resize: 'none', height: '100px'}"
+                            ></textarea>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -1809,12 +1888,15 @@ export default {
                 date: "",
                 from: "",
                 to: "",
+                arrived: false,
+                late: false,
                 table_id: null,
                 place_id: null,
                 responsible_email: "",
                 responsible_name: "",
             },
-            reason_failed: ''
+            reason_failed: '',
+            feedback: ''
         };
     },
     async mounted() {
@@ -1945,7 +2027,12 @@ export default {
             this.reservation.place_id = null;
             this.reservation.date = "";
             this.reservation.from = "";
+            this.reservation.arrived = 0;
+            this.reservation.late = 0;
             this.reservation.to = "";
+
+            this.reason_failed = '';
+            this.feedback = '';
 
             this.today = new Date();
             this.from = this.addLeadingZero(new Date().getHours()) + ":" + this.addLeadingZero(new Date().getMinutes());
@@ -1974,6 +2061,8 @@ export default {
                 date: this.today,
                 from: item.from,
                 to: item.to,
+                arrived: item.arrived,
+                late: item.late,
                 responsible_email: this.reservation.responsible_email,
                 responsible_name: this.reservation.responsible_name,
             };
@@ -1985,7 +2074,7 @@ export default {
                 this.passCheck = true;
                 this.timer = setTimeout(() => {
                     this.passCheck = false;
-                }, 20000);
+                }, 60000);
             }
             if(this.password !== process.env.MIX_MASTERKEY) {
                 alert('Неправильный пароль')
@@ -2120,6 +2209,8 @@ export default {
                     date: this.today,
                     from: this.from,
                     to: this.to,
+                    arrived: this.reservation.arrived,
+                    late: this.reservation.late,
                     responsible_email: this.reservation.responsible_email,
                     responsible_name: this.reservation.responsible_name,
                 };
@@ -2156,6 +2247,8 @@ export default {
                     date: this.today,
                     from: this.from,
                     to: this.to,
+                    arrived: this.reservation.arrived,
+                    late: this.reservation.late,
                     responsible_email: this.reservation.responsible_email,
                     responsible_name: this.reservation.responsible_name,
                 };
@@ -2184,6 +2277,8 @@ export default {
                     date: this.today,
                     from: this.from,
                     to: this.to,
+                    arrived: this.reservation.arrived,
+                    late: this.reservation.late,
                     responsible_email: this.reservation.responsible_email,
                     responsible_name: this.reservation.responsible_name,
                 };
@@ -2407,10 +2502,14 @@ export default {
             await this.fetchTables();
         },
         async completeReservation() {
+            const сompletedReservation = {
+                feedback: this.feedback,
+                ...this.reservation
+            }
             try {
                 await axios.post(
                     `/api/completed_reservations`,
-                    this.reservation
+                    сompletedReservation
                 );
             } catch (error) {
                 console.log(error);
@@ -2427,7 +2526,8 @@ export default {
             const newLog = {
                 text: "Бронирование завершено.",
                 type: "Завершено",
-                ...this.reservation,
+                feedback: this.feedback,
+                ...this.reservation
             };
             await axios.post(`/api/logs`, newLog);
             this.clearReservationInfo();

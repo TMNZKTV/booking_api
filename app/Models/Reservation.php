@@ -12,7 +12,7 @@ class Reservation extends Model
         'date' => 'date'
     ];
     protected $fillable = ['name', 'phone', 'conflict', 'visit_type', 'amount', 'note',
-    'prepayment', 'table_id', 'place_id', 'date', 'from', 'to', 'responsible_email', 'responsible_name'];
+    'prepayment', 'table_id', 'place_id', 'date', 'from', 'to', 'arrived', 'late', 'responsible_email', 'responsible_name'];
 
     public function table() {
         return $this->belongsTo(Table::class);

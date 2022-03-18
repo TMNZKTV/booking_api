@@ -197,25 +197,12 @@
                                                 for="guest_amount"
                                                 >Количество гостей</label
                                             >
-                                            <select
+                                            <input
                                                 id="guest_amount"
                                                 v-model="log.amount"
-                                                @change="
-                                                    log.amount =
-                                                        $event.target.value
-                                                "
                                                 class="form-control w-50"
                                                 disabled
-                                            >
-                                                <option value="1" selected>
-                                                    1
-                                                </option>
-                                                <option value="2">2</option>
-                                                <option value="3">3</option>
-                                                <option value="4">4</option>
-                                                <option value="5">5</option>
-                                                <option value="6">6</option>
-                                            </select>
+                                            />
                                         </div>
                                     </div>
                                     <!-- Доп.инфо -->
@@ -298,7 +285,30 @@
                                         </div>
                                     </div>
                                     <div class="row mb-3">
-                                        <div class="col offset-6">
+                                        <div class="col-6">
+                                            <div class="form-check form-switch col-auto mb-3">
+                                                <label class="form-check-label" for="guestArrivedToggleUpdate">Гость пришел</label>
+                                                <input
+                                                    v-model="log.arrived"
+                                                    id="guestArrivedToggleUpdate"
+                                                    type="checkbox"
+                                                    class="form-check-input"
+                                                    disabled
+                                                />
+                                            </div>
+                                            <div class="form-check form-switch col-auto">
+                                                <label class="form-check-label" for="guestLateToggleUpdate">Гость опаздывает</label>
+                                                <input
+                                                    v-model="log.late"
+                                                    id="guestLateToggleUpdate"
+                                                    type="checkbox"
+                                                    class="form-check-input"
+                                                    disabled
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-6">
                                             <p class="mb-2">Конец</p>
                                             <date-picker
                                                 v-model="log.to"
@@ -318,14 +328,15 @@
                                                 class="form-label"
                                             >Причина отмены</label
                                             >
-                                            <input
+                                            <textarea
                                                 v-model="log.reason_failed"
                                                 type="text"
                                                 class="form-control"
                                                 id="reasonFailed"
                                                 placeholder="..."
                                                 disabled
-                                            />
+                                                :style="{resize: 'none', height: '100px'}"
+                                            ></textarea>
                                     </div>
                                     <!-- Ответственный -->
                                     <div class="mb-3 row">
@@ -412,6 +423,8 @@ export default {
                 date: new Date(),
                 from: "",
                 to: "",
+                arrived: false,
+                late: false,
                 responsible_email: "",
                 responsible_name: "",
             },
@@ -536,6 +549,8 @@ export default {
                     date: log.date,
                     from: log.from,
                     to: log.to,
+                    arrived: log.arrived,
+                    late: log.late,
                     responsible_email: log.responsible_email,
                     responsible_name: log.responsible_name,
                 };
@@ -572,6 +587,8 @@ export default {
                     date: log.date,
                     from: log.from,
                     to: log.to,
+                    arrived: log.arrived,
+                    late: log.late,
                     responsible_email: log.responsible_email,
                     responsible_name: log.responsible_name,
                 };
@@ -609,6 +626,8 @@ export default {
                     date: log.date,
                     from: log.from,
                     to: log.to,
+                    arrived: log.arrived,
+                    late: log.late,
                     responsible_email: log.responsible_email,
                     responsible_name: log.responsible_name,
                 };
