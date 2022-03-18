@@ -34,7 +34,7 @@ class TableSeeder extends Seeder
                 'i' => $i + 1,
                 'bbq' => rand(0, 1),
             ]);
-        for($i = 0; $i < 20; $i++)
+        for($i = 0; $i < 19; $i++)
             DB::table('tables')->insert([
                 'place_id' => 3,
                 'x' => rand(0, 10),
@@ -105,8 +105,8 @@ class TableSeeder extends Seeder
                 'place_id' => 3,
                 'x' => 0,
                 'y' => 0,
-                'w' => 2,
-                'h' => 6,
+                'w' => 6,
+                'h' => 2,
                 'i' => 'Бар',
                 'bbq' => 0,
             ]);
