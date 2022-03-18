@@ -34,7 +34,6 @@
                             <date-picker
                                 v-model="today"
                                 format="YYYY-MM-DD"
-                                type="format"
                                 valueType="date"
                                 :style="{ width: '150px' }"
 
@@ -758,10 +757,9 @@
                                 <div class="col-6">
                                     <p class="mb-2">Дата</p>
                                     <date-picker
-                                        v-model="today"
+                                        v-model="date"
+                                        value-type="format"
                                         format="YYYY-MM-DD"
-                                        type="datetime"
-                                        valueType="date"
                                     >
                                     </date-picker>
                                 </div>
@@ -1029,8 +1027,7 @@
                                     <date-picker
                                         v-model="reservation.date"
                                         format="YYYY-MM-DD"
-                                        type="datetime"
-                                        valueType="date"
+                                        valueType="format"
                                     >
                                     </date-picker>
                                 </div>
@@ -1874,6 +1871,7 @@ export default {
             place: "",
             actionType: "addGuest",
             today: new Date(),
+            date: this.datePicker(new Date()),
             from: this.addLeadingZero(new Date().getHours()) + ":" + this.addLeadingZero(new Date().getMinutes()),
             to: "",
             layout: [],
@@ -1976,6 +1974,13 @@ export default {
         },
     },
     methods: {
+        datePicker(date) {
+            let Y = date.getFullYear();
+            let M = this.addLeadingZero(date.getMonth() + 1);
+            let D = this.addLeadingZero(date.getDate());
+
+            return `${Y}-${M}-${D}`;
+        },
         addLeadingZero(date) {
             return date < 10 ? "0" + date : date;
         },
@@ -2008,11 +2013,11 @@ export default {
             if (newValue >= 9 && newValue < 12) {
                 return "#FFFF8F";
             }
-            if (newValue >= 12 && newValue < 17) {
+            if (newValue >= 12 && newValue < 18) {
                 return "#19DF01";
             }
-            if (newValue >= 17) {
-                return "#EE4B2B";
+            if (newValue >= 18) {
+                return "#FFFB00";
             }
         },
         choosePlace(event) {
@@ -2055,7 +2060,7 @@ export default {
             this.reason_failed = '';
             this.feedback = '';
 
-            this.today = new Date();
+            this.date = this.datePicker(new Date());
             this.from = this.addLeadingZero(new Date().getHours()) + ":" + this.addLeadingZero(new Date().getMinutes());
             this.to = '';
             // Не очищаю имя и почту ответственного, чтобы использовать на всех 3-х точках
@@ -2079,7 +2084,7 @@ export default {
                 note: item.note,
                 table_id: item.table_id,
                 place_id: item.place_id,
-                date: this.today,
+                date: item.date !== '' ? item.date : new Date(),
                 from: item.from,
                 to: item.to,
                 arrived: item.arrived,
@@ -2227,7 +2232,7 @@ export default {
                     prepayment: this.reservation.prepayment === '' ? 0 : this.reservation.prepayment,
                     table_id: this.reservation.table_id,
                     place_id: 1,
-                    date: this.today,
+                    date: this.date,
                     from: this.from,
                     to: this.to,
                     arrived: this.reservation.arrived,
@@ -2265,7 +2270,7 @@ export default {
                     prepayment: this.reservation.prepayment === '' ? 0 : this.reservation.prepayment,
                     table_id: this.reservation.table_id,
                     place_id: 2,
-                    date: this.today,
+                    date: this.date,
                     from: this.from,
                     to: this.to,
                     arrived: this.reservation.arrived,
@@ -2295,7 +2300,7 @@ export default {
                     prepayment: this.reservation.prepayment === '' ? 0 : this.reservation.prepayment,
                     table_id: this.reservation.table_id,
                     place_id: 3,
-                    date: this.today,
+                    date: this.date,
                     from: this.from,
                     to: this.to,
                     arrived: this.reservation.arrived,
@@ -2935,6 +2940,6 @@ export default {
     background-color: #03a9f4!important;
 }
 .late {
-    background-color: #FFFB00!important;
+    background-color: #EE4B2B!important;
 }
 </style>
