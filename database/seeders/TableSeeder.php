@@ -14,7 +14,7 @@ class TableSeeder extends Seeder
      */
     public function run()
     {
-        for($i = 0; $i < 15; $i++)
+        for($i = 0; $i < 14; $i++)
             DB::table('tables')->insert([
                 'place_id' => 1,
                 'x' => rand(0, 10),
@@ -24,7 +24,7 @@ class TableSeeder extends Seeder
                 'i' => $i + 1,
                 'bbq' => rand(0, 1),
             ]);
-        for($i = 0; $i < 15; $i++)
+        for($i = 0; $i < 14; $i++)
             DB::table('tables')->insert([
                 'place_id' => 2,
                 'x' => rand(0, 10),
@@ -34,7 +34,7 @@ class TableSeeder extends Seeder
                 'i' => $i + 1,
                 'bbq' => rand(0, 1),
             ]);
-        for($i = 0; $i < 14; $i++)
+        for($i = 0; $i < 20; $i++)
             DB::table('tables')->insert([
                 'place_id' => 3,
                 'x' => rand(0, 10),
