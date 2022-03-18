@@ -299,6 +299,26 @@
                                 />
                                 <span>18-23 часов</span>
                             </div>
+                            <div class="col-auto col-lg-4 col-xl-4">
+                                <img
+                                    :src="
+                                        require('../../svg/arrived.svg').default
+                                    "
+                                    alt="guest arrived"
+                                    :style="{ width: '15px' }"
+                                />
+                                <span>Гость пришел</span>
+                            </div>
+                            <div class="col-auto col-lg-4 col-xl-4">
+                                <img
+                                    :src="
+                                        require('../../svg/late.svg').default
+                                    "
+                                    alt="guest late"
+                                    :style="{ width: '15px' }"
+                                />
+                                <span>Гость опаздывает</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -475,6 +495,7 @@
                             data-bs-toggle="modal"
                             data-bs-target="#updateGuestInfo"
                             class="p-0 m-0 align-items-center"
+                            :class="[ item.arrived ? 'arrived' : null, item.late ? 'late' : null]"
                             :style="{
                                 height: '17px',
                                 backgroundColor: item.from !== null ? colorByTime(item.from) : '',
@@ -2909,5 +2930,11 @@ export default {
     @media (min-width: 1500px) {
         margin-top: 20px;
     }
+}
+.arrived {
+    background-color: #03a9f4!important;
+}
+.late {
+    background-color: #FFFB00!important;
 }
 </style>
