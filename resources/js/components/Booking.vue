@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="px-4 py-3 mb-5" :style="{ backgroundColor: '#eef1f4' }">
+        <div class="px-4 py-3 mb-5 general_panel" >
             <div class="row">
                 <div class="xs col-12 col-sm-4 col-md-6 mb-2">
                     <!-- Календарь -->
@@ -32,11 +32,10 @@
                         <div class="date_picker_full col-sm-10 col-md-6">
                             <p class="p-0 mb-2"><b>Дата</b></p>
                             <date-picker
-                                v-model="today"
+                                v-model="date"
                                 format="YYYY-MM-DD"
-                                valueType="date"
+                                valueType="format"
                                 :style="{ width: '150px' }"
-
                             ></date-picker>
 
                             <div class="row mt-md-2 mt-xl-4">
@@ -99,7 +98,6 @@
                             </div>
                         </div>
                         <!-- Добавить посетителя -->
-<!--                        class="col-xs-auto col-sm-4 col-md-4 col-lg-auto" -->
                         <div class="col-auto">
                             <div class="btn btn-success p-2 button_action">
                                 <input
@@ -168,153 +166,121 @@
                                 >
                             </div>
                         </div>
-                        <!-- Ограничение по бронированию -->
-<!--                        <div class="col-sm-3 col-md-4 col-lg-auto">-->
-<!--                            <div class="btn btn-outline-warning button_action">-->
-<!--                                <input-->
-<!--                                    type="radio"-->
-<!--                                    value="addRestriction"-->
-<!--                                    v-model="actionType"-->
-<!--                                    class="btn-check"-->
-<!--                                    id="addRestriction"-->
-<!--                                />-->
-<!--                                <label for="addRestriction" class="py-2"-->
-<!--                                    >Выставить ограничение</label-->
-<!--                                >-->
-<!--                            </div>-->
-<!--                        </div>-->
                     </div>
 
                     <!-- 3 ряд с иконками -->
-                    <div class="col-md-12 col-xl-8 mt-3 border border-4"
-                         :style="{
-                                backgroundColor: 'white',
-                            }">
-                        <div
-                            class="row row-cols-2 g-2 p-2"
-                        >
-<!--                            class="col-md-5 col-5 m-0"-->
+                    <div class="col-md-12 col-xl-8 mt-3 border border-4 info_panel_icons">
+                        <div class="row row-cols-2 g-2 p-2">
+                            <!-- Стол BBQ -->
                             <div class="col-auto col-md-4 col-lg-4 col-xl-5">
                                 <img
                                     :src="require('../../svg/bbq.svg').default"
                                     alt="bbq"
-                                    :style="{ width: '15px' }"
+                                    class="info_panel_icons_icon"
                                 />
                                 <span>Стол BBQ</span>
                             </div>
-
+                            <!-- Предоплата -->
                             <div class="col-auto col-lg-4 col-xl-5">
                                 <img
-                                    :src="
-                                        require('../../svg/ruble.svg').default
-                                    "
+                                    :src="require('../../svg/ruble.svg').default"
                                     alt="Ruble"
-                                    :style="{ width: '15px' }"
+                                    class="info_panel_icons_icon"
                                 />
                                 <span>Есть предоплата</span>
                             </div>
                             <div class="w-100"></div>
-
+                            <!-- День рождения -->
                             <div class="col-auto col-md-4 col-lg-4 col-xl-5">
                                 <img
-                                    :src="
-                                        require('../../svg/birthday.svg')
-                                            .default
-                                    "
+                                    :src="require('../../svg/birthday.svg').default"
                                     alt="birthday"
-                                    :style="{ width: '15px' }"
+                                    class="info_panel_icons_icon"
                                 />
                                 <span>День рождения</span>
                             </div>
+                            <!-- Романтический ужин -->
                             <div class="col-auto col-lg-5 col-xl-5">
                                 <img
-                                    :src="
-                                        require('../../svg/heart.svg').default
-                                    "
+                                    :src="require('../../svg/heart.svg').default"
                                     alt="romantic dinner"
-                                    :style="{ width: '15px' }"
+                                    class="info_panel_icons_icon"
                                 />
                                 <span>Романтический ужин</span>
                             </div>
                             <div class="w-100"></div>
-
+                            <!-- Семейный ужин -->
                             <div class="col-auto col-md-4 col-lg-4 col-xl-5">
                                 <img
-                                    :src="
-                                        require('../../svg/family.svg').default
-                                    "
+                                    :src="require('../../svg/family.svg').default"
                                     alt="family dinner"
-                                    :style="{ width: '15px' }"
+                                    class="info_panel_icons_icon"
                                 />
                                 <span>Семейный ужин</span>
                             </div>
+                            <!-- Конфликтный гость -->
                             <div class="col-auto col-lg-5 col-xl-5">
                                 <img
-                                    :src="
-                                        require('../../svg/conflict.svg')
-                                            .default
-                                    "
+                                    :src="require('../../svg/conflict.svg').default"
                                     alt="conflict guest"
-                                    :style="{ width: '15px' }"
+                                    class="info_panel_icons_icon"
                                 />
                                 <span>Конфликтный гость</span>
                             </div>
                             <div class="w-100"></div>
+                            <!-- Бар -->
                             <div class="col-auto col-lg-4 col-xl-5">
                                 <img
                                     :src="require('../../svg/bar.svg').default"
                                     alt="bar sign"
-                                    :style="{ width: '15px' }"
+                                    class="info_panel_icons_icon"
                                 />
                                 <span>Бар</span>
                             </div>
                             <div class="w-100"></div>
-
+                            <!-- Утреннее время -->
                             <div class="col-auto col-lg-4 col-xl-4">
                                 <img
-                                    :src="
-                                        require('../../svg/morning.svg').default
-                                    "
+                                    :src="require('../../svg/morning.svg').default"
                                     alt="morning time"
-                                    :style="{ width: '15px' }"
+                                    class="info_panel_icons_icon"
                                 />
                                 <span>9-12 часов</span>
                             </div>
+                            <!-- Дневное время -->
                             <div class="col-auto col-lg-4 col-xl-4">
                                 <img
                                     :src="require('../../svg/day.svg').default"
                                     alt="day time"
-                                    :style="{ width: '15px' }"
+                                    class="info_panel_icons_icon"
                                 />
                                 <span>12-18 часов</span>
                             </div>
+                            <!-- Вечернее время -->
                             <div class="col-auto col-lg-4 col-xl-4">
                                 <img
-                                    :src="
-                                        require('../../svg/evening.svg').default
-                                    "
+                                    :src="require('../../svg/evening.svg').default"
                                     alt="evening time"
-                                    :style="{ width: '15px' }"
+                                    class="info_panel_icons_icon"
                                 />
                                 <span>18-23 часов</span>
                             </div>
+                            <div class="w-100"></div>
+                            <!-- Гость пришел -->
                             <div class="col-auto col-lg-4 col-xl-4">
                                 <img
-                                    :src="
-                                        require('../../svg/arrived.svg').default
-                                    "
+                                    :src="require('../../svg/arrived.svg').default"
                                     alt="guest arrived"
-                                    :style="{ width: '15px' }"
+                                    class="info_panel_icons_icon"
                                 />
                                 <span>Гость пришел</span>
                             </div>
+                            <!-- Гость опаздывает -->
                             <div class="col-auto col-lg-4 col-xl-4">
                                 <img
-                                    :src="
-                                        require('../../svg/late.svg').default
-                                    "
+                                    :src="require('../../svg/late.svg').default"
                                     alt="guest late"
-                                    :style="{ width: '15px' }"
+                                    class="info_panel_icons_icon"
                                 />
                                 <span>Гость опаздывает</span>
                             </div>
@@ -357,12 +323,8 @@
                 :cols="{ lg: 12, md: 12, sm: 10, xs: 6, xxs: 4 }"
             >
                 <grid-item
-                    class="py-1"
+                    class="py-1 grid_item"
                     v-for="item in tables"
-                    :style="{
-                        backgroundColor: '#3E2C41',
-                        touchAction: 'none'
-                    }"
                     :x="item.x"
                     :y="item.y"
                     :w="item.w"
@@ -373,7 +335,7 @@
                     drag-ignore-from=".no-drag"
                 >
                     <div class="text">
-                        <!-- v-if="actionType === 'changeLayout' && admin" -->
+                        <!-- Изменить расположение столов -->
                         <div v-if="passCheck === true">
                             <button
                                 class="vue-draggable-handle"
@@ -383,6 +345,7 @@
                                 =
                             </button>
                         </div>
+                        <!-- Добавить гостя -->
                         <div v-if="actionType === 'addGuest'">
                             <button
                                 type="button"
@@ -394,6 +357,7 @@
                                 +
                             </button>
                         </div>
+                        <!-- Убрать стол -->
                         <div v-if="actionType === 'removeTable'">
                             <button
                                 type="button"
@@ -405,6 +369,7 @@
                                 -
                             </button>
                         </div>
+                        <!-- Добавить ограничение по времени -->
                         <div v-if="actionType === 'addRestriction'">
                             <button
                                 type="button"
@@ -417,63 +382,43 @@
                             </button>
                         </div>
                         <!-- Номер и иконки стола -->
-                        <div class="no-drag text-center">
+                        <div class="no-drag text-center table_info">
                             <!-- Вывод инфо об ограничении по времени -->
                             <div v-for="(item, idx) in item.restrictions" :key="idx"
+                                 class="pointer restriction_time"
                                  data-bs-toggle="modal"
                                  data-bs-target="#UpdateRestriction"
-                                 :style="{cursor: 'pointer'}"
                                  @click="updateRestrictionInfo(item)"
                             >
+                                <!-- Иконка замка -->
                                 <img
                                     :src="
                                         require('../../svg/lockSign.svg')
                                             .default
                                     "
                                     alt="restriction"
-                                    :style="{
-                                        width: '15px',
-                                        paddingBottom: '3px',
-                                        marginLeft: 'auto',
-                                    }"
+                                    class="restriction_time_lock"
                                 />
-                                <span :style="{ color: 'white' }">{{item.from}}-{{item.to}}</span>
+                                <span class="restriction_time_info">{{item.from}}-{{item.to}}</span>
                             </div>
                             <div class="pt-1 align-middle">
-                                <span
-                                    :style="{
-                                        color: '#FFF0F5',
-                                        fontWeight: '600',
-                                    }"
-                                    >{{
-                                        Number(item.i) === 0
-                                            ? null
-                                            : item.i === 'Бар' ? item.i : Number(item.i)
-                                    }}</span
-                                >
+                                <!-- Номер стола / Бар -->
+                                <span class="table_info_bar">
+                                    {{ Number(item.i) === 0 ? null : item.i === 'Бар' ? item.i : Number(item.i) }}
+                                </span>
+                                <!-- Иконка BBQ -->
                                 <img
-                                    class="bbq_table"
+                                    class="table_info_icon_table"
                                     v-if="item.bbq"
-                                    :src="
-                                        require('../../svg/bbqSign.svg').default
-                                    "
+                                    :src="require('../../svg/bbqSign.svg').default"
                                     alt="bbq"
-                                    :style="{
-                                        width: '15px',
-                                        paddingBottom: '3px',
-                                    }"
                                 />
+                                <!-- Иконка Бара -->
                                 <img
-                                    class="bbq_table"
+                                    class="table_info_icon_table"
                                     v-if="item.i === 'Бар'"
-                                    :src="
-                                        require('../../svg/barSign.svg').default
-                                    "
+                                    :src="require('../../svg/barSign.svg').default"
                                     alt="bar"
-                                    :style="{
-                                        width: '15px',
-                                        paddingBottom: '3px',
-                                    }"
                                 />
                                 <br />
                             </div>
@@ -481,30 +426,20 @@
                     </div>
                     <!-- Вывод информации о бронированияя -->
                     <ul
-                        class="m-0 p-0 list-unstyled"
+                        class="m-0 p-0 list-unstyled reservation_list"
                     >
                         <li
                             v-for="(item, idx) in item.reservations"
                             :key="idx"
-                            v-if="
-                                new Date(item.date).getDate() ===
-                                today.getDate()
-                            "
-                            @click="updateGuestInfo(item)"
+                            v-if="new Date(item.date).getDate() === new Date(date).getDate()"
+                            class="p-0 m-0 align-items-center pointer reservation_item"
+                            :class="[ item.arrived ? 'arrived' : null, item.late ? 'late' : null]"
+                            :style="{backgroundColor: item.from !== null ? colorByTime(item.from) : ''}"
                             data-bs-toggle="modal"
                             data-bs-target="#updateGuestInfo"
-                            class="p-0 m-0 align-items-center"
-                            :class="[ item.arrived ? 'arrived' : null, item.late ? 'late' : null]"
-                            :style="{
-                                height: '17px',
-                                backgroundColor: item.from !== null ? colorByTime(item.from) : '',
-                                color: '',
-                                fontSize: '9px',
-                                cursor: 'pointer',
-                                borderBottom: '1px solid black',
-                            }"
+                            @click="updateGuestInfo(item)"
                         >
-                            <div :style="{ padding: '1px' }" class="align-items-center">
+                            <div class="align-items-center reservation_item_info">
                                 <!-- Иконка предоплаты -->
                                 <img
                                     v-if="item.prepayment"
@@ -512,7 +447,6 @@
                                         require('../../svg/ruble.svg').default
                                     "
                                     alt="Ruble"
-                                    :style="{ width: '15px' }"
                                 />
                                 <!-- Тип визита -->
                                 <img
@@ -522,7 +456,6 @@
                                             .default
                                     "
                                     alt="Birthday cake"
-                                    :style="{ width: '15px' }"
                                 />
                                 <img
                                     v-if="
@@ -532,7 +465,6 @@
                                         require('../../svg/heart.svg').default
                                     "
                                     alt="Heart"
-                                    :style="{ width: '15px' }"
                                 />
                                 <img
                                     v-if="item.visit_type === 'Семейный ужин'"
@@ -540,7 +472,6 @@
                                         require('../../svg/family.svg').default
                                     "
                                     alt="Family"
-                                    :style="{ width: '15px' }"
                                 />
                                 <!-- Конфликтный гость -->
                                 <img
@@ -550,7 +481,6 @@
                                             .default
                                     "
                                     alt="Warning!"
-                                    :style="{ width: '15px' }"
                                 />
                                 <span class="align-middle">
                                     <b
@@ -1222,35 +1152,22 @@
                     <div class="modal-body">
                         <ul
                             v-if="waitingList"
-                            :style="{ margin: '0px', padding: '0px' }"
+                            class="m-0 p-0 list-unstyled waiting_list"
                         >
                             <li
                                 v-for="item in waitingList.reservations"
                                 :key="item.id"
-                                :style="{
-                                    listStyle: 'none',
-                                    padding: '2px',
-                                    margin: '0',
-                                    backgroundColor: colorByTime(
-                                        getExactTime(item.created_at)
-                                    ),
-                                    color: '',
-                                    fontSize: '12px',
-                                    cursor: 'pointer',
-                                    borderBottom: '1px solid black',
-                                }"
-                                @click="updateGuestInfo(item)"
+                                v-if="new Date(item.date).getDate() === new Date(date).getDate()"
+                                class="p-1 m-0 cursor border-bottom-2 waiting_guest"
+                                :style="{backgroundColor: colorByTime(getExactTime(item.created_at))}"
                                 data-bs-toggle="modal"
                                 data-bs-target="#updateGuestInfo"
+                                @click="updateGuestInfo(item)"
                             >
-                                {{
-                                    item.created_at
-                                        ? getExactTime(
-                                              new Date(item.created_at)
-                                          )
-                                        : null
-                                }}. {{ item.name }} [{{ item.amount }}] |
-                                {{ item.phone }}
+                                <div>
+                                    {{ item.created_at ? getExactTime(new Date(item.created_at)) : null }}. {{ item.name }} [{{ item.amount }}] |
+                                    {{ item.phone }}
+                                </div>
                             </li>
                         </ul>
                     </div>
@@ -1267,151 +1184,6 @@
                 </div>
             </div>
         </div>
-        <!-- Использую модалку Добавления Гостяя, а не отдальную. Пока не удалять. -->
-        <div
-            class="modal fade"
-            data-bs-backdrop="static"
-            data-bs-keyboard="false"
-            id="sendToWaitingList"
-            tabindex="-1"
-            aria-labelledby="sendToWaitingList"
-            aria-hidden="true"
-        >
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="sendToWaitingListTitle">
-                            Лист ожидания
-                        </h5>
-                        <button
-                            type="button"
-                            class="btn-close"
-                            data-bs-dismiss="modal"
-                            aria-label="Close"
-                            @click="() => clearReservationInfo()"
-                        ></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label for="guestName" class="form-label"
-                                >Имя</label
-                            >
-                            <input
-                                v-model="reservation.name"
-                                type="text"
-                                class="form-control"
-                                id="guestName"
-                                placeholder="Brad Pitt"
-                            />
-                        </div>
-                        <div class="mb-3">
-                            <label for="guestPhone" class="form-label"
-                                >Телефон</label
-                            >
-                            <input
-                                v-model="reservation.phone"
-                                type="number"
-                                class="form-control"
-                                id="guestPhone"
-                                placeholder="+7(xxx)xxx-xx-xx"
-                            />
-                        </div>
-                        <div class="mb-3">
-                            <label for="guestPrepayment" class="form-label"
-                                >Предоплата</label
-                            >
-                            <input
-                                v-model="reservation.prepayment"
-                                type="number"
-                                class="form-control"
-                                id="guestPrepayment"
-                                placeholder="Сумма предоплаты"
-                            />
-                        </div>
-                        <div class="mb-3">
-                            <label for="note" class="form-label"
-                                >Дополнительная информация</label
-                            >
-                            <input
-                                v-model="reservation.note"
-                                type="text"
-                                class="form-control"
-                                id="note"
-                                placeholder="Important information"
-                            />
-                        </div>
-                        <div class="mb-3">
-                            <span>Количество гостей</span>
-                            <select
-                                v-model="reservation.amount"
-                                @change="
-                                    reservation.amount = $event.target.value
-                                "
-                            >
-                                <option value="1" selected>1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                                <option value="6+">Больше 6</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <span>№ стола</span>
-                            <select
-                                v-model="reservation.table_id"
-                                @change="
-                                    reservation.table_id = $event.target.value
-                                "
-                            >
-                                <option
-                                    v-for="table in layout"
-                                    :value="table.id"
-                                    :key="table.id"
-                                >
-                                    {{ table.i }}
-                                </option>
-                            </select>
-                        </div>
-                        <date-picker
-                            v-model="reservation.date"
-                            format="YYYY-MM-DD"
-                            type="date"
-                            valueType="format"
-                        ></date-picker>
-                        <date-picker
-                            v-model="reservation.time"
-                            :minute-step="30"
-                            :hour-options="hours"
-                            format="HH:mm"
-                            value-type="format"
-                            type="time"
-                            placeholder="HH:mm"
-                        ></date-picker>
-                    </div>
-                    <div class="modal-footer">
-                        <button
-                            type="button"
-                            class="btn btn-secondary"
-                            data-bs-dismiss="modal"
-                            @click="() => clearReservationInfo()"
-                        >
-                            Закрыть
-                        </button>
-                        <button
-                            type="button"
-                            class="btn btn-primary"
-                            @click="() => addToWaitingList()"
-                            data-bs-dismiss="modal"
-                        >
-                            Добавить в ожидание
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- Модалка для добавления стола-->
         <div
             class="modal fade"
@@ -1957,7 +1729,7 @@ export default {
             const options = {
                 day: "numeric",
             };
-            return Intl.DateTimeFormat("ru-RU", options).format(this.today);
+            return Intl.DateTimeFormat("ru-RU", options).format(new Date(this.date));
         },
         dateFilter() {
             const options = {
@@ -1969,7 +1741,7 @@ export default {
                 return string.charAt(0).toUpperCase() + string.slice(1);
             }
             return capitalizeFirstLetter(
-                Intl.DateTimeFormat("ru-RU", options).format(this.today)
+                Intl.DateTimeFormat("ru-RU", options).format(new Date(this.date))
             );
         },
     },
@@ -2019,6 +1791,7 @@ export default {
             if (newValue >= 18) {
                 return "#FFFB00";
             }
+            return null;
         },
         choosePlace(event) {
             this.place = event.target.value;
@@ -2401,97 +2174,6 @@ export default {
                 });
             }
         },
-        // 13.03.22 - Т.к. бронирование и ожидание - один ендпоинт, отдельная функция не нужна
-        // async addToWaitingList() {
-        //     if (this.place === "place_1") {
-        //         const waitingGuest = {
-        //             name: this.reservation.name,
-        //             phone: this.reservation.phone,
-        //             prepayment: this.reservation.prepayment,
-        //             amount: this.reservation.amount,
-        //             note: this.reservation.note,
-        //             date: this.today,
-        //             from: this.from,
-        //             to: this.to,
-        //             table_id: 100,
-        //             place_id: 1,
-        //             responsible_email: this.reservation.responsible_email,
-        //             responsible_name: this.reservation.responsible_name,
-        //         };
-        //         await axios.post(
-        //             `/api/reservations`,
-        //             waitingGuest
-        //         );
-        //
-        //         const newLog = {
-        //             text: `Гость был добавлен в лист ожидания.`,
-        //             type: "Ожидание",
-        //             ...waitingGuest,
-        //         };
-        //         await axios.post(`/api/logs`, newLog);
-        //     }
-        //     if (this.place === "place_2") {
-        //         const waitingGuest = {
-        //             name: this.reservation.name,
-        //             phone: this.reservation.phone,
-        //             prepayment: this.reservation.prepayment,
-        //             amount: this.reservation.amount,
-        //             note: this.reservation.note,
-        //             date: this.reservation.date,
-        //             from:
-        //                 this.reservation.from === ""
-        //                     ? "Ожидание"
-        //                     : this.reservation.from,
-        //             to: this.reservation.to,
-        //             table_id: 101,
-        //             place_id: 2,
-        //             responsible_email: this.reservation.responsible_email,
-        //             responsible_name: this.reservation.responsible_name,
-        //         };
-        //         await axios.post(
-        //             `/api/reservations`,
-        //             waitingGuest
-        //         );
-        //
-        //         const newLog = {
-        //             text: `Гость был добавлен в лист ожидания.`,
-        //             type: "Ожидание",
-        //             ...waitingGuest,
-        //         };
-        //         await axios.post(`/api/logs`, newLog);
-        //     }
-        //     if (this.place === "place_3") {
-        //         const waitingGuest = {
-        //             name: this.reservation.name,
-        //             phone: this.reservation.phone,
-        //             prepayment: this.reservation.prepayment,
-        //             amount: this.reservation.amount,
-        //             note: this.reservation.note,
-        //             date: this.reservation.date,
-        //             from:
-        //                 this.reservation.from === ""
-        //                     ? "Ожидание"
-        //                     : this.reservation.from,
-        //             to: this.reservation.to,
-        //             table_id: 102,
-        //             place_id: 3,
-        //             responsible_email: this.reservation.responsible_email,
-        //             responsible_name: this.reservation.responsible_name,
-        //         };
-        //         await axios.post(
-        //             `/api/reservations`,
-        //             waitingGuest
-        //         );
-        //
-        //         const newLog = {
-        //             text: `Гость был добавлен в лист ожидания.`,
-        //             type: "Ожидание",
-        //             ...waitingGuest,
-        //         };
-        //         await axios.post(`/api/logs`, newLog);
-        //     }
-        //     this.clearReservationInfo();
-        // },
         async deleteReservation() {
             const deletedReservation = {
                 reason_failed: this.reason_failed,
@@ -2735,6 +2417,7 @@ export default {
 </script>
 
 <style lang="scss">
+// Общий стиль для кнопок на столе
 .vue-draggable-handle {
     position: absolute;
     width: 20px;
@@ -2747,6 +2430,8 @@ export default {
     border-radius: 5px;
     cursor: pointer;
 }
+
+// Кнопки на столе
 .add_guest {
     border-radius: 0;
     position: absolute;
@@ -2778,9 +2463,6 @@ export default {
         font-size: 25px;
     }
 }
-.size {
-    width: 200px;
-}
 .button_action:hover {
     box-shadow: 0 3px 1px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.08),
         0 2px 2px rgba(0, 0, 0, 0.12);
@@ -2789,157 +2471,213 @@ export default {
     box-shadow: 0 3px 1px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.08),
         0 2px 2px rgba(0, 0, 0, 0.12);
 }
-.place_input {
-    height: 50px;
-    font-weight: 600;
-    color: #3c4655;
-    background-color: white;
-    border: 1px none;
-    @media (min-width: 2560px) {
-        font-size: 20px;
-    }
-}
-.card {
-    width: 70px;
-    height: 70px;
-    @media (min-width: 576px) {
-        width: 74px;
-        height: 74px;
-    }
-    @media (min-width: 767px) {
-        width: 150px;
-        height: 157px;
-    }
-    @media (min-width: 992px) {
-        min-width: 182px;
-        min-height: 182px;
-    }
-    @media (min-width: 1200px) and (max-width: 1500px) {
-        min-width: 240px;
-        min-height: 240px;
-    }
-    @media (min-width: 1501px) {
-        min-width: 300px;
-        min-height: 300px;
-    }
-    @media (min-width: 1999px) {
-        min-width: 410px;
-        min-height: 300px;
-    }
-}
 
-.card_content_info {
-    @media (min-width: 576px) {
-        padding: 15px 5px 15px 5px;
+// Главная панель, объединяющая Календарь и Инфо Панель
+.general_panel {
+    background-color: #eef1f4;
+    & .date_picker_full {
+        @media (min-width: 1440px) {
+            margin-top: 20px;
+        }
+        @media (min-width: 2559px) {
+            margin-top: 45px;
+        }
+        .place_title {
+            width: 160px;
+            font-weight: 500;
+            color: #3c4655;
+            @media (min-width: 2560px) {
+                font-size: 25px;
+            }
+        }
+        .place_input {
+            height: 50px;
+            font-weight: 600;
+            color: #3c4655;
+            background-color: white;
+            border: 1px none;
+            @media (min-width: 2560px) {
+                font-size: 20px;
+            }
+        }
+        p {
+            font-weight: 500;
+            @media (min-width: 2560px) {
+                font-size: 25px;
+            }
+        }
     }
-    @media (min-width: 767px) {
-        padding: 20px 5px 20px 5px;
+    & .date_full_mobile {
+        @media (min-width: 375px) and (max-width: 767px) {
+            display: block;
+        }
+        @media (min-width: 768px) {
+            display: none;
+        }
     }
-    @media (min-width: 992px) {
-        padding: 17px 5px 20px 5px;
-    }
-    @media (min-width: 1200px) {
-        padding: 25px 10px 15px 10px;
-    }
-    @media (min-width: 1500px) {
-        padding: 50px 10px 15px 10px;
-    }
-    @media (min-width: 2000px) {
-        padding: 45px 10px 15px 10px;
-    }
-}
-.day_full {
-    font-weight: 500;
-    @media (min-width: 375px) {
-        font-size: 30px;
-    }
-    @media (min-width: 576px) {
-        font-size: 30px;
-    }
-    @media (min-width: 767px) {
-        font-size: 40px;
-    }
-    @media (min-width: 998px) {
-        font-size: 60px;
-    }
-    @media (min-width: 1203px) {
-        font-size: 80px;
-    }
-}
+    & .card {
+        width: 70px;
+        height: 70px;
+        @media (min-width: 576px) {
+            width: 74px;
+            height: 74px;
+        }
+        @media (min-width: 767px) {
+            width: 150px;
+            height: 157px;
+        }
+        @media (min-width: 992px) {
+            min-width: 182px;
+            min-height: 182px;
+        }
+        @media (min-width: 1200px) and (max-width: 1500px) {
+            min-width: 240px;
+            min-height: 240px;
+        }
+        @media (min-width: 1501px) {
+            min-width: 300px;
+            min-height: 300px;
+        }
+        @media (min-width: 1999px) {
+            min-width: 410px;
+            min-height: 300px;
+        }
+        & .card_content_info {
+            @media (min-width: 576px) {
+                padding: 15px 5px 15px 5px;
+            }
+            @media (min-width: 767px) {
+                padding: 20px 5px 20px 5px;
+            }
+            @media (min-width: 992px) {
+                padding: 17px 5px 20px 5px;
+            }
+            @media (min-width: 1200px) {
+                padding: 25px 10px 15px 10px;
+            }
+            @media (min-width: 1500px) {
+                padding: 50px 10px 15px 10px;
+            }
+            @media (min-width: 2000px) {
+                padding: 45px 10px 15px 10px;
+            }
+        }
+        & .card-body {
+            .day_full {
+                font-weight: 500;
+                @media (min-width: 375px) {
+                    font-size: 30px;
+                }
+                @media (min-width: 576px) {
+                    font-size: 30px;
+                }
+                @media (min-width: 767px) {
+                    font-size: 40px;
+                }
+                @media (min-width: 998px) {
+                    font-size: 60px;
+                }
+                @media (min-width: 1203px) {
+                    font-size: 80px;
+                }
+            }
+            .date_full {
 
-.date_full {
-
-    @media (min-width: 375px) {
-        display: none;
-    }
-    @media (min-width: 767px) {
-        display: block;
-        font-size: 15px;
-    }
-    @media (min-width: 992px) {
-        font-size: 25px;
-    }
-    @media (min-width: 1440px) {
-        font-size: 28px;
-    }
-    @media (min-width: 2000px) {
-        font-size: 35px;
-    }
-    @media (min-width: 2560px) {
-        font-size: 40px;
-    }
-}
-.date_full_mobile {
-    @media (min-width: 375px) and (max-width: 767px) {
-        display: block;
-    }
-    @media (min-width: 768px) {
-        display: none;
-    }
-}
-.date_picker_full {
-    @media (min-width: 1440px) {
-        margin-top: 20px;
-    }
-    @media (min-width: 2559px) {
-        margin-top: 45px;
-    }
-    p {
-        font-weight: 500;
-        @media (min-width: 2560px) {
-            font-size: 25px;
+                @media (min-width: 375px) {
+                    display: none;
+                }
+                @media (min-width: 767px) {
+                    display: block;
+                    font-size: 15px;
+                }
+                @media (min-width: 992px) {
+                    font-size: 25px;
+                }
+                @media (min-width: 1440px) {
+                    font-size: 28px;
+                }
+                @media (min-width: 2000px) {
+                    font-size: 35px;
+                }
+                @media (min-width: 2560px) {
+                    font-size: 40px;
+                }
+            }
         }
     }
 }
-.place_title {
-    width: 160px;
-    font-weight: 500;
-    color: #3c4655;
-    @media (min-width: 2560px) {
-        font-size: 25px;
-    }
-}
-.card_time {
-    color: #3c4655;
-}
-.first_column {
-    @media (min-width: 375px) and (max-width: 576px) {
-        margin: 0 0 10px 0;
-    }
-}
-.bbq_table path {
-    fill: #fff;
-    stroke: #fff;
-}
+
+// Информационная панель с кнопками и иконками
 .info_panel {
     @media (min-width: 1500px) {
         margin-top: 20px;
     }
+    & .info_panel_icons {
+        background-color: white;
+
+        & .info_panel_icons_icon {
+            width: 15px;
+        }
+    }
 }
-.arrived {
-    background-color: #03a9f4!important;
+
+// Стиль стола (grid)
+.grid_item {
+    background-color: #3E2C41;
+    touch-action: none;
 }
-.late {
-    background-color: #EE4B2B!important;
+
+// Инфо о столе (Номер, иконки)
+.table_info {
+    & .table_info_bar {
+        color: #FFF0F5;
+        font-weight: 600;
+    }
+    & .table_info_icon_table {
+        width: 15px;
+        padding-bottom: 3px;
+    }
+}
+
+// Инфо об ограничении по времени
+.restriction_time {
+    & .restriction_time_lock {
+        width: 15px;
+        padding-bottom: 3px;
+        margin-left: auto
+    }
+    & .restriction_time_info {
+        color: white;
+    }
+}
+
+// Лист бронирований и отображение гостей
+.reservation_list {
+    & .arrived {
+        background-color: #03a9f4!important;
+    }
+    & .late {
+        background-color: #EE4B2B!important;
+    }
+    & .reservation_item {
+        height: 17px;
+        font-size: 9px;
+        border-bottom: 1px solid black;
+            & .reservation_item_info {
+                padding: 1px;
+
+                & img {
+                    width: 15px;
+                }
+            }
+    }
+}
+
+// Лист ожидания и отображение гостей
+.waiting_list {
+    & .waiting_guest {
+        font-size: 12px;
+        border-bottom: 1px solid black;
+    }
 }
 </style>
