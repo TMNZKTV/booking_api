@@ -237,6 +237,14 @@
                                 />
                                 <span>Бар</span>
                             </div>
+                            <div class="col-auto col-lg-4 col-xl-5">
+                                <img
+                                    :src="require('../../svg/booked.svg').default"
+                                    alt="booked sign"
+                                    class="info_panel_icons_icon"
+                                />
+                                <span>Сейчас занят</span>
+                            </div>
                             <div class="w-100"></div>
                             <!-- Утреннее время -->
                             <div class="col-auto col-lg-4 col-xl-4">
@@ -333,7 +341,29 @@
                     :key="item.i"
                     drag-allow-from=".vue-draggable-handle"
                     drag-ignore-from=".no-drag"
+                    :style="{backgroundColor: item.booked ? '#cc3300' : '#3E2C41'}"
                 >
+                    <div>
+                        <!-- Забронировать сейчас -->
+                        <div class="me-auto">
+                            <div
+                                @click="chooseTable(item); bookNow(item)"
+                            >
+                                <img
+                                    v-if="!item.booked"
+                                    :src="require('../../svg/unbooked.svg').default"
+                                    alt="unlocked"
+                                    class="grid_item_locked"
+                                />
+                                <img
+                                    v-if="item.booked"
+                                    :src="require('../../svg/booked.svg').default"
+                                    alt="locked"
+                                    class="grid_item_locked"
+                                />
+                            </div>
+                        </div>
+                    </div>
                     <div class="text">
                         <!-- Изменить расположение столов -->
                         <div v-if="passCheck === true">
@@ -369,18 +399,6 @@
                                 -
                             </button>
                         </div>
-                        <!-- Добавить ограничение по времени -->
-                        <div v-if="actionType === 'addRestriction'">
-                            <button
-                                type="button"
-                                class="btn btn-light btn-sm add_guest"
-                                data-bs-toggle="modal"
-                                data-bs-target="#AddRestriction"
-                                @click="chooseTable(item)"
-                            >
-                                !
-                            </button>
-                        </div>
                         <!-- Номер и иконки стола -->
                         <div class="no-drag text-center table_info">
                             <!-- Вывод инфо об ограничении по времени -->
@@ -409,15 +427,27 @@
                                 <!-- Иконка BBQ -->
                                 <img
                                     class="table_info_icon_table"
-                                    v-if="item.bbq"
+                                    v-if="item.bbq && !item.booked"
                                     :src="require('../../svg/bbqSign.svg').default"
+                                    alt="bbq"
+                                />
+                                <img
+                                    class="table_info_icon_table"
+                                    v-if="item.bbq && item.booked"
+                                    :src="require('../../svg/bbqSignBlack.svg').default"
                                     alt="bbq"
                                 />
                                 <!-- Иконка Бара -->
                                 <img
                                     class="table_info_icon_table"
-                                    v-if="item.i === 'Бар'"
+                                    v-if="item.i === 'Бар' && !item.booked"
                                     :src="require('../../svg/barSign.svg').default"
+                                    alt="bar"
+                                />
+                                <img
+                                    class="table_info_icon_table"
+                                    v-if="item.i === 'Бар' && item.booked"
+                                    :src="require('../../svg/barSignBlack.svg').default"
                                     alt="bar"
                                 />
                                 <br />
@@ -702,7 +732,7 @@
                                         type="time"
                                         value-type="format"
                                         :hour-options="hours"
-                                        :minute-step="30"
+                                        :minute-step="5"
                                         placeholder="Ч:м"
                                     ></date-picker>
                                 </div>
@@ -966,7 +996,7 @@
                                     <p class="mb-1">Начало</p>
                                     <date-picker
                                         v-model="reservation.from"
-                                        :minute-step="30"
+                                        :minute-step="5"
                                         :hour-options="hours"
                                         format="HH:mm"
                                         value-type="format"
@@ -1958,6 +1988,39 @@ export default {
                     console.log("Default message");
             }
         },
+        async bookNow(item) {
+            item.booked = !item.booked
+            if (this.place === "place_1") {
+                try {
+                    await axios.put(
+                        `/api/tables/${item.id}`,
+                        item
+                    );
+                } catch (error) {
+                    this.error = error;
+                }
+            }
+            if (this.place === "place_2") {
+                try {
+                    await axios.put(
+                        `/api/tables/${item.id}`,
+                        item
+                    );
+                } catch (error) {
+                    this.error = error;
+                }
+            }
+            if (this.place === "place_3") {
+                try {
+                    await axios.put(
+                        `/api/tables/${item.id}`,
+                        item
+                    );
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+        },
         async updateLayout(item) {
             if (this.place === "place_1") {
                 try {
@@ -2432,6 +2495,17 @@ export default {
 }
 
 // Кнопки на столе
+.book_table {
+    border-radius: 0;
+    position: absolute;
+    width: 20px;
+    top: 2px;
+    padding: 0;
+    background-origin: content-box;
+    background-color: white;
+    box-sizing: border-box;
+    cursor: pointer;
+}
 .add_guest {
     border-radius: 0;
     position: absolute;
@@ -2625,6 +2699,10 @@ export default {
 .grid_item {
     background-color: #3E2C41;
     touch-action: none;
+
+    .grid_item_locked {
+        width: 20px;
+    }
 }
 
 // Инфо о столе (Номер, иконки)
