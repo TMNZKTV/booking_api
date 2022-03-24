@@ -237,6 +237,7 @@
                                 />
                                 <span>Бар</span>
                             </div>
+                            <!-- Сейчас занят -->
                             <div class="col-auto col-lg-4 col-xl-5">
                                 <img
                                     :src="require('../../svg/booked.svg').default"
@@ -244,6 +245,16 @@
                                     class="info_panel_icons_icon"
                                 />
                                 <span>Сейчас занят</span>
+                            </div>
+                            <div class="w-100"></div>
+                            <!-- Ограниченное время -->
+                            <div class="col-auto col-lg-4 col-xl-5">
+                                <img
+                                    :src="require('../../svg/finish.svg').default"
+                                    alt="fixed visit time"
+                                    class="info_panel_icons_icon"
+                                />
+                                <span>Ограниченный визит</span>
                             </div>
                             <div class="w-100"></div>
                             <!-- Утреннее время -->
@@ -419,7 +430,7 @@
                                 />
                                 <span class="restriction_time_info">{{item.from}}-{{item.to}}</span>
                             </div>
-                            <div class="pt-1 align-middle">
+                            <div>
                                 <!-- Номер стола / Бар -->
                                 <span class="table_info_bar">
                                     {{ Number(item.i) === 0 ? null : item.i === 'Бар' ? item.i : Number(item.i) }}
@@ -462,7 +473,7 @@
                             v-for="(item, idx) in item.reservations"
                             :key="idx"
                             v-if="new Date(item.date).getDate() === new Date(date).getDate()"
-                            class="p-0 m-0 align-items-center pointer reservation_item"
+                            class="m-0 pointer reservation_item"
                             :class="[ item.arrived ? 'arrived' : null, item.late ? 'late' : null]"
                             :style="{backgroundColor: item.from !== null ? colorByTime(item.from) : ''}"
                             data-bs-toggle="modal"
@@ -512,9 +523,18 @@
                                     "
                                     alt="Warning!"
                                 />
+                                <!-- Ограничение по времени -->
+                                <img
+                                    v-if="item.to"
+                                    :src="
+                                        require('../../svg/finish.svg')
+                                            .default
+                                    "
+                                    alt="fixed visit time"
+                                />
                                 <span class="align-middle">
                                     <b
-                                        >{{ item.from }}{{item.to === null ? "." : null }}
+                                        >{{item.from}}{{item.to === null ? "." : null }}
                                         {{item.to === null ? null : "-"}}
                                         {{item.to !== '' ? item.to : null}}{{item.to === null ? null : '.'}}
                                         {{ item.name }} [{{item.amount }}]
@@ -1164,6 +1184,8 @@
             id="waitingList"
             aria-hidden="true"
             aria-labelledby="waitingList"
+            data-bs-backdrop="static"
+            data-bs-keyboard="false"
             tabindex="-1"
         >
             <div class="modal-dialog modal-dialog-centered">
@@ -1177,9 +1199,21 @@
                             class="btn-close"
                             data-bs-dismiss="modal"
                             aria-label="Close"
+                            @click="emptyWaitingList"
                         ></button>
                     </div>
                     <div class="modal-body">
+                        <!-- Лоадер -->
+                        <div class="text-center" v-if="loadingWaitingList">
+                            <div
+                                class="spinner-grow mt-5 text-success"
+                                style="width: 2rem; height: 2rem"
+                                role="status"
+                            >
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                        <!-- Список гостей в листе ожидания -->
                         <ul
                             v-if="waitingList"
                             class="m-0 p-0 list-unstyled waiting_list"
@@ -1203,6 +1237,13 @@
                     </div>
                     <div class="modal-footer">
                         <button
+                            class="btn btn-danger me-auto"
+                            data-bs-toggle="modal"
+                            data-bs-target="#clearWaitingListModal"
+                        >
+                            Очистить список
+                        </button>
+                        <button
                             class="btn btn-primary"
                             data-bs-target="#AddGuest"
                             data-bs-toggle="modal"
@@ -1210,6 +1251,80 @@
                         >
                             Добавить в очередь
                         </button>
+                        <button class="btn btn-secondary" data-bs-dismiss="modal" @click="emptyWaitingList">Закрыть</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Модалка для очищения листа ожидания -->
+        <div
+            class="modal fade"
+            id="clearWaitingListModal"
+            tabindex="-1"
+            aria-labelledby="clearWaitingListModal"
+            aria-hidden="true"
+        >
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="clearWaitingListModalTitle">
+                            Уверены, что хотите очистить лист ожидания?
+                        </h5>
+                        <button
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                        ></button>
+                    </div>
+                    <div class="modal-body">
+                        <form @submit.prevent="clearWaitingList">
+                            <label for="clearWaitingListReason">Причина</label>
+                            <input type="text" id="clearWaitingListReason"  class="form-control" v-model="reason_failed"/>
+                            <label for="clearWaitingList">Введите пароль</label>
+                            <input
+                                v-if="showPassword"
+                                class="form-control"
+                                v-model="password"
+                                type="text"
+                                id="clearWaitingList"
+                                required
+                            />
+                            <input
+                                v-else-if="!showPassword"
+                                class="form-control"
+                                v-model="password"
+                                type="password"
+                                id="clearWaitingListHidden"
+                                required
+                            />
+                            <div>
+                                <div
+                                    class="btn btn-primary btn-sm mt-2"
+                                    @click="toggleShow()"
+                                >
+                                <span class="icon is-small is-right">
+                                    Показать пароль
+                                </span>
+                                </div>
+                            </div>
+                            <div class="modal-footer justify-content-center">
+                                <button
+                                    type="submit"
+                                    class="btn btn-danger"
+                                    data-bs-dismiss="modal"
+                                >
+                                    Очистить лист ожидания
+                                </button>
+                                <button
+                                    type="button"
+                                    class="btn btn-primary"
+                                    data-bs-dismiss="modal"
+                                >
+                                    Закрыть
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -1682,6 +1797,7 @@ export default {
             logs: [],
             colors: ["#FFFF8F", "#19DF01", "#EE4B2B"],
             loading: true,
+            loadingWaitingList: false,
             error: null,
             showModal: false,
             table: {
@@ -1874,6 +1990,9 @@ export default {
             this.restriction.to = '';
             this.restriction.table_id = null;
         },
+        emptyWaitingList () {
+            this.waitingList = null;
+        },
         updateGuestInfo(item) {
             console.log(item);
             this.reservation = {
@@ -1899,7 +2018,7 @@ export default {
         checkPass(value) {
             this.password = value;
 
-            if (this.password === process.env.MIX_MASTERKEY) {
+            if (this.password === process.env.MIX_MASTERKEY && this.actionType === 'changeLayout') {
                 this.passCheck = true;
                 this.timer = setTimeout(() => {
                     this.passCheck = false;
@@ -2212,6 +2331,7 @@ export default {
             await this.fetchTables();
         },
         async fetchWaitingList() {
+            this.loadingWaitingList = true;
             const response = await axios.get(
                 "/api/tables"
             );
@@ -2236,6 +2356,43 @@ export default {
                     }
                 });
             }
+            this.loadingWaitingList = false;
+        },
+        async clearWaitingList() {
+            if(this.password === process.env.MIX_MASTERKEY) {
+                const waitingGuests = this.waitingList.reservations.map(guest => guest)
+                console.log('Ждуны: ', waitingGuests)
+                const reason_failed = this.reason_failed
+                async function processArray(array) {
+                    for (const guest of array) {
+                        const deletedReservation = {
+                            reason_failed,
+                            ...guest
+                        }
+                        console.log('Failed: ', deletedReservation)
+                        await axios.post(
+                            `/api/failed_reservations`,
+                            deletedReservation
+                        );
+                        console.log('Удаляем: ', guest.id)
+                        await axios.delete(
+                            `/api/reservations/${guest.id}`
+                        );
+
+                        const newLog = {
+                            text: "Бронирование удалено.",
+                            type: "Отмена",
+                            reason_failed,
+                            ...guest
+                        };
+
+                        await axios.post(`/api/logs`, newLog);
+                    }
+                }
+                await processArray(waitingGuests);
+            }
+            this.clearReservationInfo();
+            this.reason_failed = '';
         },
         async deleteReservation() {
             const deletedReservation = {
@@ -2613,7 +2770,7 @@ export default {
             min-height: 300px;
         }
         @media (min-width: 1999px) {
-            min-width: 410px;
+            min-width: 390px;
             min-height: 300px;
         }
         & .card_content_info {
@@ -2738,14 +2895,18 @@ export default {
         background-color: #EE4B2B!important;
     }
     & .reservation_item {
-        height: 17px;
+        padding: 2px;
         font-size: 9px;
         border-bottom: 1px solid black;
             & .reservation_item_info {
-                padding: 1px;
+                display: flex;
+                justify-content: flex-start;
+                align-items: center;
+                vertical-align: center;
 
                 & img {
-                    width: 15px;
+                    margin-right: 2px;
+                    width: 10px;
                 }
             }
     }
