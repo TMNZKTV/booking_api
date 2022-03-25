@@ -2876,7 +2876,10 @@ export default {
     }
     & .reservation_item {
         padding: 2px;
-        font-size: 9px;
+        font-size: 10px;
+        @media (min-width: 1500px) {
+            font-size: 15px;
+        }
         border-bottom: 1px solid black;
             & .reservation_item_info {
                 display: flex;
@@ -2887,6 +2890,9 @@ export default {
                 & img {
                     margin-right: 2px;
                     width: 10px;
+                    @media (min-width: 1500px) {
+                        width: 15px;
+                    }
                 }
             }
     }
