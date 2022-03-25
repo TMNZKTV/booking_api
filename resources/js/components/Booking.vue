@@ -656,21 +656,10 @@
                                         class="form-control form-select w-50"
                                         v-model="reservation.amount"
                                         @change="
-                                        reservation.amount = $event.target.value
+                                        reservation.amount = Number($event.target.value)
                                     "
                                     >
-                                        <option value="1" selected>1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
-                                        <option value="5">5</option>
-                                        <option value="6">6</option>
-                                        <option value="7">7</option>
-                                        <option value="8">8</option>
-                                        <option value="9">9</option>
-                                        <option value="10">10</option>
-                                        <option value="11">11</option>
-                                        <option value="12">12</option>
+                                        <option v-for="guest in guests" :value="guest">{{guest}}</option>
                                     </select>
                                 </div>
                             </div>
@@ -921,22 +910,11 @@
                                     <select
                                         v-model="reservation.amount"
                                         @change="
-                                            reservation.amount = $event.target.value
+                                            reservation.amount = Number($event.target.value)
                                         "
                                         class="form-control w-50"
                                     >
-                                        <option value="1" selected>1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
-                                        <option value="5">5</option>
-                                        <option value="6">6</option>
-                                        <option value="7">7</option>
-                                        <option value="8">8</option>
-                                        <option value="9">9</option>
-                                        <option value="10">10</option>
-                                        <option value="11">11</option>
-                                        <option value="12">12</option>
+                                        <option v-for="guest in guests" :value="guest">{{guest}}</option>
                                     </select>
                                 </div>
                             </div>
@@ -1026,6 +1004,7 @@
                                 </div>
                             </div>
                             <div class="row">
+                                <!-- Гость пришел / Опоздал / Конец визита-->
                                 <div class="col-6">
                                     <div class="form-check form-switch col-auto mb-3">
                                         <label class="form-check-label" for="guestArrivedToggleUpdate">Гость пришел</label>
@@ -1814,6 +1793,7 @@ export default {
                 table_id: null
             },
             hours: Array.from({ length: 23 }).map((_, i) => i + 11),
+            guests: Array.from({ length: 20 }).map((_, i) => i + 1),
             reservation: {
                 name: "",
                 phone: '',
