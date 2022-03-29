@@ -2878,7 +2878,7 @@ export default {
         padding: 2px;
         font-size: 10px;
         @media (min-width: 1500px) {
-            font-size: 15px;
+            font-size: 20px;
         }
         border-bottom: 1px solid black;
             & .reservation_item_info {
