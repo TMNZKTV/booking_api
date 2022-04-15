@@ -1338,7 +1338,7 @@
                             class="form-control"
                             v-model="password"
                             type="text"
-                            id="AddTablePasswordCheck"
+                            id="AddTablePasswordCheck1"
                             required
                         />
                         <input
@@ -1752,7 +1752,6 @@ import '../../styles/datepicker.scss';
 
 export default {
     name: "Booking",
-    // props: ["user"],
     components: {
         GridLayout: VueGridLayout.GridLayout,
         GridItem: VueGridLayout.GridItem,
@@ -2004,7 +2003,11 @@ export default {
                     this.passCheck = false;
                 }, 600000);
             }
-            if(this.password !== process.env.MIX_MASTERKEY) {
+            if (this.password === process.env.MIX_MASTERKEY) {
+                this.password = "";
+                return true;
+            }
+            if (this.password !== process.env.MIX_MASTERKEY) {
                 alert('Неправильный пароль')
             }
             this.password = "";
@@ -2410,14 +2413,14 @@ export default {
             await this.fetchTables();
         },
         async completeReservation() {
-            const сompletedReservation = {
+            const completedReservation = {
                 feedback: this.feedback,
                 ...this.reservation
             }
             try {
                 await axios.post(
                     `/api/completed_reservations`,
-                    сompletedReservation
+                    completedReservation
                 );
             } catch (error) {
                 console.log(error);
@@ -2442,69 +2445,69 @@ export default {
             await this.fetchTables();
         },
         async addTable(type, password) {
-            this.checkPass(password);
-            const response = await axios.get(
-                "/api/tables"
-            );
-
-            if (this.place === "place_1" && this.passCheck) {
-                const newTable = {
-                    ...this.table,
-                    place_id: 1,
-                    i: (this.tables.length + 1).toString(),
-                    bbq: type,
-                };
-                await axios.post(
-                    "/api/tables",
-                    newTable
-                );
+            if (this.checkPass(password)) {
+                if (this.place === "place_1") {
+                    console.log('Adding a table')
+                    const newTable = {
+                        ...this.table,
+                        place_id: 1,
+                        i: (this.tables.length + 1).toString(),
+                        bbq: type,
+                        booked: false
+                    };
+                    await axios.post(
+                        "/api/tables",
+                        newTable
+                    );
+                }
+                if (this.place === "place_2") {
+                    const newTable = {
+                        ...this.table,
+                        place_id: 2,
+                        i: (this.tables.length + 1).toString(),
+                        bbq: type,
+                        booked: false
+                    };
+                    await axios.post(
+                        "/api/tables",
+                        newTable
+                    );
+                }
+                if (this.place === "place_3") {
+                    const newTable = {
+                        ...this.table,
+                        place_id: 3,
+                        i: (this.tables.length + 1).toString(),
+                        bbq: type,
+                        booked: false
+                    };
+                    await axios.post(
+                        "/api/tables",
+                        newTable
+                    );
+                }
             }
-            if (this.place === "place_2" && this.passCheck) {
-                const newTable = {
-                    ...this.table,
-                    place_id: 2,
-                    i: (this.tables.length + 1).toString(),
-                    bbq: type,
-                };
-                await axios.post(
-                    "/api/tables",
-                    newTable
-                );
-            }
-            if (this.place === "place_3" && this.passCheck) {
-                const newTable = {
-                    ...this.table,
-                    place_id: 3,
-                    i: (this.tables.length + 1).toString(),
-                    bbq: type,
-                };
-                await axios.post(
-                    "/api/tables",
-                    newTable
-                );
-            }
-
             this.loading = true;
             await this.fetchTables();
             this.loading = false;
         },
         async deleteOneTable(password) {
-            this.checkPass(password);
-
-            if (this.place === "place_1" && this.passCheck) {
-                await axios.delete(
-                    `/api/tables/${this.table.id}`
-                );
-            }
-            if (this.place === "place_2" && this.passCheck) {
-                await axios.delete(
-                    `/api/tables/${this.table.id}`
-                );
-            }
-            if (this.place === "place_3" && this.passCheck) {
-                await axios.delete(
-                    `/api/tables/${this.table.id}`
-                );
+            if (this.checkPass(password)) {
+                if (this.place === "place_1") {
+                    await axios.delete(
+                        `/api/tables/${this.table.id}`
+                    );
+                }
+                if (this.place === "place_2") {
+                    await axios.delete(
+                        `/api/tables/${this.table.id}`
+                    );
+                }
+                if (this.place === "place_3") {
+                    await axios.delete(
+                        `/api/tables/${this.table.id}`
+                    );
+                }
             }
             this.loading = true;
             await this.fetchTables();
@@ -2611,7 +2614,6 @@ export default {
             }
             await this.fetchTables();
         }
-
     },
 };
 </script>

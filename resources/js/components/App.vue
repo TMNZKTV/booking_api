@@ -18,11 +18,12 @@
                                     Бронирования
                                 </router-link>
                                 <router-link
-                                    class="link"
+                                    class="link me-3"
                                     :to="{ name: 'History' }"
                                 >
                                     История
                                 </router-link>
+                                <a class="link" href="https://kimchi.team/feedback-kitchen/">Проблема с блюдом</a>
                         </nav>
                         <div
                             v-if="token"
@@ -82,6 +83,9 @@
                                     >
                                         История
                                     </router-link>
+                                </li>
+                                <li>
+                                    <a   class="dropdown-item" href="https://kimchi.team/feedback-kitchen/">Проблема с блюдом</a>
                                 </li>
                             </ul>
                         </div>
@@ -150,7 +154,7 @@ export default {
         },
         logout() {
             // Отправляем запрос на logout
-            axios.post("/logout").then((res) => {
+            axios.post("/logout").then(() => {
                 // Удаляем из локалсторедж токен
                 localStorage.removeItem("token");
                 // Отправляем на страницу входа
