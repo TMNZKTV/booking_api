@@ -23,7 +23,7 @@
                                 >
                                     История
                                 </router-link>
-                                <a class="link" href="https://kimchi.team/feedback-kitchen/">Проблема с блюдом</a>
+                                <a class="link" href="https://kimchi.team/feedback-kitchen/" target="_blank">Проблема с блюдом</a>
                         </nav>
                         <div
                             v-if="token"
@@ -85,7 +85,7 @@
                                     </router-link>
                                 </li>
                                 <li>
-                                    <a   class="dropdown-item" href="https://kimchi.team/feedback-kitchen/">Проблема с блюдом</a>
+                                    <a class="dropdown-item" href="https://kimchi.team/feedback-kitchen/" target="_blank">Проблема с блюдом</a>
                                 </li>
                             </ul>
                         </div>
