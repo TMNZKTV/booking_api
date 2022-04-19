@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Log;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class LogController extends Controller
 {
@@ -12,9 +13,16 @@ class LogController extends Controller
      *
      * @return Log[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return Log::all();
+        // 19.04
+        // Получил доступ к параметрам, взял оттуда Дату
+        // Возвращаю модель Лог, в которой Дата поля "created_at" равна дате из параметров + get()
+        $params = $request->all();
+
+        $date = $params['date'];
+
+        return Log::whereDate('created_at', '=', $date)->get();
     }
 
     /**

@@ -5,7 +5,7 @@
                 <div class="xs col-12 col-sm-4 col-md-6 mb-2">
                     <!-- Календарь -->
                     <div class="row">
-                        <div class="col-sm-10 col-md-5 col-lg-5">
+                        <div class="col-auto">
                             <div
                                 class="card col-md card_md col-lg-6 border border-4"
                             >
@@ -2690,10 +2690,10 @@ export default {
     background-color: #eef1f4;
     & .date_picker_full {
         @media (min-width: 1440px) {
-            margin-top: 20px;
+            padding-top: 20px;
         }
         @media (min-width: 2559px) {
-            margin-top: 45px;
+            padding-top: 45px;
         }
         .place_title {
             width: 160px;

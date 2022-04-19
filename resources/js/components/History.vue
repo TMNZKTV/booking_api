@@ -1,51 +1,95 @@
 <template>
     <div>
-        <div>
-            <div class="row px-4 py-3" :style="{ backgroundColor: '#eef1f4' }">
-                <!-- Выбор Ресторана -->
-                <div class="col-6">
-                    <div class="mb-2">
-                        <label for="place_selector" class="place_title">
-                            <b>Ресторан на </b>
-                        </label>
-                    </div>
-                    <div>
-                        <select
-                            class="form-control form-select w-full place_input"
-                            id="place_selector"
-                            v-model="place"
-                            @change="choosePlace($event)"
-                        >
-                            <option value="" selected>...</option>
-                            <option value="place_1">Марата</option>
-                            <option value="place_2">Байкальской</option>
-                            <option value="place_3">Горной</option>
-                        </select>
-                    </div>
-                </div>
-                <!-- Выбор Стола -->
-                <div class="col-6">
-                    <div class="mb-2">
-                        <label class="place_title">
-                            <b>Стол №</b>
-                        </label>
-                    </div>
-                    <div>
-                        <select
-                            class="form-control form-select w-full place_input"
-                            id="table_selector"
-                            v-model="table"
-                            @change="chooseTable($event)"
+        <!-- Панель управления -->
+        <div class="px-4 py-3 mb-5 history_panel">
+                <div class="row">
+                            <!-- Календарь -->
+                            <div class="col-auto">
+                                <div class="card col-lg-6 border border-4">
+                                    <div class="card-body card_content_info text-center">
+                                        <p class="day_full m-0">
+                                            {{ dayFilter }}
+                                        </p>
+                                        <p class="date_full m-0">
+                                            {{ dateFilter }}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="date_full_mobile d-none">
+                                        <b>{{ dateFilter }}</b>
+                                    </p>
+                                </div>
+                            </div>
+                            <!-- Дата и Ресторан -->
+                            <div class="date_picker_full col-6 col-sm-6 col-md-6">
+                                <p class="p-0 mb-2"><b>Дата</b></p>
+                                <date-picker
+                                    v-model="date"
+                                    format="YYYY-MM-DD"
+                                    valueType="format"
+                                    :style="{ width: '150px' }"
+                                ></date-picker>
 
-                        >
-                            <option value="" selected>Все столы</option>
-                            <option v-for="item in tables" :value="item.id">{{item.i}}</option>
-                        </select>
-                    </div>
+                                <div class="row mt-md-2 mt-xl-4">
+                                    <div class="col-sm-6 col-md-6">
+                                        <div class="mb-2">
+                                            <label
+                                                for="place_selector"
+                                                class="place_title"
+                                            >
+                                                <b>Ресторан на</b>
+                                            </label>
+                                        </div>
+
+                                        <div>
+                                            <select
+                                                class="form-control form-select w-full select_input border border-2"
+                                                id="place_selector"
+                                                v-model="place"
+                                                @change="choosePlace($event)"
+                                            >
+                                                <option value="" selected>
+                                                    ...
+                                                </option>
+                                                <option value="place_1">
+                                                    Марата
+                                                </option>
+                                                <option value="place_2">
+                                                    Байкальской
+                                                </option>
+                                                <option value="place_3">
+                                                    Горной
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-md-5">
+                                        <!-- Выбор Стола -->
+                                                <div class="mb-2">
+                                                    <label class="place_title">
+                                                        <b>Стол №</b>
+                                                    </label>
+                                                </div>
+                                                <div>
+                                                    <select
+                                                        class="form-control form-select w-full select_input border border-2"
+                                                        id="table_selector"
+                                                        v-model="table"
+                                                        @change="chooseTable($event)"
+
+                                                    >
+                                                        <option value="" selected>Все столы</option>
+                                                        <option v-for="item in tables" :value="item.id">{{item.i}}</option>
+                                                    </select>
+                                                </div>
+                                    </div>
+                                </div>
+                            </div>
                 </div>
-            </div>
         </div>
 
+        <!-- Выберите ресторан   -->
         <h1 v-if="place === ''" class="text-center my-5">
             Пожалуйста, выберите ресторан
         </h1>
@@ -61,6 +105,7 @@
             </div>
         </div>
 
+        <!-- Все логи -->
         <div v-if="allLogs.length">
             <ul class="list-group">
                 <li
@@ -406,7 +451,8 @@
             </ul>
         </div>
 
-        <div v-if="logs.length === 0 && place !== ''" class="text-center mt-3">
+        <!-- Если записей нет -->
+        <div v-if="logs.length === 0 && place !== '' && !loading" class="text-center mt-3">
             <h2 class="text-center">Пока нет никаких записей</h2>
         </div>
     </div>
@@ -423,7 +469,9 @@ export default {
     },
     data() {
         return {
+            date: this.datePicker(new Date()),
             allLogs: [],
+            allTables: [],
             hours: Array.from({ length: 23 }).map((_, i) => i + 9),
             log: {
                 id: null,
@@ -446,7 +494,6 @@ export default {
             },
             place: "",
             table: '',
-            allTables: [],
             loading: false,
         };
     },
@@ -455,6 +502,25 @@ export default {
       this.allTables = response.data.data;
     },
     computed: {
+        dayFilter() {
+            const options = {
+                day: "numeric",
+            };
+            return Intl.DateTimeFormat("ru-RU", options).format(new Date(this.date));
+        },
+        dateFilter() {
+            const options = {
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+            };
+            function capitalizeFirstLetter(string) {
+                return string.charAt(0).toUpperCase() + string.slice(1);
+            }
+            return capitalizeFirstLetter(
+                Intl.DateTimeFormat("ru-RU", options).format(new Date(this.date))
+            );
+        },
         tables() {
             if(this.place === 'place_1') {
                 return this.allTables.filter(
@@ -501,7 +567,19 @@ export default {
             }
         }
     },
+    watch: {
+        async date() {
+            await this.fetchLogs();
+        }
+    },
     methods: {
+        datePicker(date) {
+            let Y = date.getFullYear();
+            let M = this.addLeadingZero(date.getMonth() + 1);
+            let D = this.addLeadingZero(date.getDate());
+
+            return `${Y}-${M}-${D}`;
+        },
         addLeadingZero(date) {
             return date < 10 ? "0" + date : date;
         },
@@ -542,6 +620,7 @@ export default {
             return `${Y}.${M}.${D} (${d})`;
         },
         choosePlace($event) {
+            this.allLogs = [];
             this.place = $event.target.value;
             this.table = '';
             this.fetchLogs();
@@ -674,9 +753,8 @@ export default {
         },
         async fetchLogs() {
             this.loading = true;
-            const response = await axios.get(
-                 "/api/logs"
-            );
+            const response = await axios.get("/api/logs", { params: {date: this.date}})
+            console.log(response)
             if (this.place === "place_1") {
                 this.allLogs = response.data.filter((log) => log.place_id === 1).reverse();
             }
@@ -693,21 +771,140 @@ export default {
 </script>
 
 <style lang="scss">
+.history_panel {
+    background-color: #eef1f4;
+    .date_picker_full {
+        @media (min-width: 1440px) {
+            padding-top: 20px;
+        }
+        @media (min-width: 2559px) {
+            padding-top: 45px;
+        }
+
+        .place_title {
+            width: 160px;
+            font-weight: 500;
+            color: #3c4655;
+            @media (min-width: 2560px) {
+                font-size: 25px;
+            }
+        }
+
+        p {
+            font-weight: 500;
+            @media (min-width: 2560px) {
+                font-size: 25px;
+            }
+        }
+    }
+    .select_input {
+        height: 50px;
+        font-weight: 600;
+        color: #3c4655;
+        background-color: white;
+        border: 1px none;
+        @media (min-width: 2560px) {
+            font-size: 20px;
+        }
+    }
+     .date_full_mobile {
+        @media (min-width: 375px) and (max-width: 767px) {
+            display: block;
+        }
+        @media (min-width: 768px) {
+            display: none;
+        }
+    }
+     .card {
+         width: 115px;
+         height: 130px;
+        @media (min-width: 767px) {
+            width: 150px;
+            height: 157px;
+        }
+        @media (min-width: 992px) {
+            min-width: 182px;
+            min-height: 182px;
+        }
+        @media (min-width: 1200px) and (max-width: 1500px) {
+            min-width: 240px;
+            min-height: 240px;
+        }
+        @media (min-width: 1501px) {
+            min-width: 300px;
+            min-height: 300px;
+        }
+        @media (min-width: 1999px) {
+            min-width: 390px;
+            min-height: 300px;
+        }
+         .card_content_info {
+             padding: 15px 5px 15px 5px;
+            @media (min-width: 576px) {
+                padding: 15px 5px 15px 5px;
+            }
+            @media (min-width: 767px) {
+                padding: 20px 5px 20px 5px;
+            }
+            @media (min-width: 992px) {
+                padding: 17px 5px 20px 5px;
+            }
+            @media (min-width: 1200px) {
+                padding: 25px 10px 15px 10px;
+            }
+            @media (min-width: 1500px) {
+                padding: 50px 10px 15px 10px;
+            }
+            @media (min-width: 2000px) {
+                padding: 45px 10px 15px 10px;
+            }
+        }
+         .card-body {
+            .day_full {
+                font-weight: 500;
+                @media (min-width: 375px) {
+                    font-size: 30px;
+                }
+                @media (min-width: 576px) {
+                    font-size: 30px;
+                }
+                @media (min-width: 767px) {
+                    font-size: 40px;
+                }
+                @media (min-width: 998px) {
+                    font-size: 60px;
+                }
+                @media (min-width: 1203px) {
+                    font-size: 80px;
+                }
+            }
+            .date_full {
+
+                //@media (min-width: 375px) {
+                //    display: none;
+                //}
+                @media (min-width: 767px) {
+                    display: block;
+                    font-size: 15px;
+                }
+                @media (min-width: 992px) {
+                    font-size: 25px;
+                }
+                @media (min-width: 1440px) {
+                    font-size: 28px;
+                }
+                @media (min-width: 2000px) {
+                    font-size: 35px;
+                }
+                @media (min-width: 2560px) {
+                    font-size: 40px;
+                }
+            }
+        }
+    }
+}
 .dropdown-menu {
     min-width: 500px;
-}
-.panel {
-    min-height: 100px;
-}
-.place_input {
-    font-weight: 600;
-    color: #3c4655;
-    background-color: white;
-    border-width: 1px;
-    border: none;
-}
-.place_title {
-    color: #3c4655;
 }
 .log_info {
     font-weight: bold;
