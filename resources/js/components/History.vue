@@ -2,91 +2,90 @@
     <div>
         <!-- Панель управления -->
         <div class="px-4 py-3 history_panel">
-                <div class="row">
-                            <!-- Календарь -->
-                            <div class="col-auto">
-                                <div class="card col-lg-6 border border-4">
-                                    <div class="card-body card_content_info text-center">
-                                        <p class="day_full m-0">
-                                            {{ dayFilter }}
-                                        </p>
-                                        <p class="date_full m-0">
-                                            {{ dateFilter }}
-                                        </p>
-                                    </div>
-                                </div>
-                                <div>
-                                    <p class="date_full_mobile d-none">
-                                        <b>{{ dateFilter }}</b>
-                                    </p>
-                                </div>
-                            </div>
-                            <!-- Дата и Ресторан -->
-                            <div class="date_picker_full col-6 col-sm-6 col-md-6">
-                                <p class="p-0 mb-2"><b>Дата</b></p>
-                                <date-picker
-                                    v-model="date"
-                                    format="YYYY-MM-DD"
-                                    valueType="format"
-                                    :style="{ width: '150px' }"
-                                ></date-picker>
-
-                                <div class="row mt-md-2 mt-xl-4">
-                                    <div class="col-sm-6 col-md-6">
-                                        <div class="mb-2">
-                                            <label
-                                                for="place_selector"
-                                                class="place_title"
-                                            >
-                                                <b>Ресторан на</b>
-                                            </label>
-                                        </div>
-
-                                        <div>
-                                            <select
-                                                class="form-control form-select w-full select_input border border-2"
-                                                id="place_selector"
-                                                v-model="place"
-                                                @change="choosePlace($event)"
-                                            >
-                                                <option value="" selected>
-                                                    ...
-                                                </option>
-                                                <option value="place_1">
-                                                    Марата
-                                                </option>
-                                                <option value="place_2">
-                                                    Байкальской
-                                                </option>
-                                                <option value="place_3">
-                                                    Горной
-                                                </option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6 col-md-5">
-                                        <!-- Выбор Стола -->
-                                                <div class="mb-2">
-                                                    <label class="place_title">
-                                                        <b>Стол №</b>
-                                                    </label>
-                                                </div>
-                                                <div>
-                                                    <select
-                                                        class="form-control form-select w-full select_input border border-2"
-                                                        id="table_selector"
-                                                        v-model="table"
-                                                        @change="chooseTable($event)"
-
-                                                    >
-                                                        <option value="" selected>Все столы</option>
-                                                        <option v-for="item in tables" :value="item.id">{{item.i}}</option>
-                                                    </select>
-                                                </div>
-                                    </div>
-                                </div>
-                            </div>
+            <div class="row">
+                <!-- Календарь -->
+                <div class="col-auto">
+                    <div class="card col-lg-6 border border-4">
+                        <div class="card-body card_content_info text-center">
+                            <p class="day_full m-0">
+                                {{ dayFilter }}
+                            </p>
+                            <p class="date_full m-0">
+                                {{ dateFilter }}
+                            </p>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="date_full_mobile d-none">
+                            <b>{{ dateFilter }}</b>
+                        </p>
+                    </div>
                 </div>
+                <!-- Дата и Ресторан -->
+                <div class="date_picker_full col-6 col-sm-6 col-md-6">
+                    <p class="p-0 mb-2"><b>Дата</b></p>
+                    <date-picker
+                        v-model="date"
+                        format="YYYY-MM-DD"
+                        valueType="format"
+                        :style="{ width: '150px' }"
+                    ></date-picker>
+
+                    <div class="row mt-md-2 mt-xl-4">
+                        <div class="col-sm-6 col-md-6">
+                            <div class="mb-2">
+                                <label
+                                    for="place_selector"
+                                    class="place_title"
+                                >
+                                    <b>Ресторан на</b>
+                                </label>
+                            </div>
+
+                            <div>
+                                <select
+                                    class="form-control form-select w-full select_input border border-2"
+                                    id="place_selector"
+                                    v-model="place"
+                                    @change="choosePlace($event)"
+                                >
+                                    <option value="" selected>
+                                        ...
+                                    </option>
+                                    <option value="place_1">
+                                        Марата
+                                    </option>
+                                    <option value="place_2">
+                                        Байкальской
+                                    </option>
+                                    <option value="place_3">
+                                        Горной
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-5">
+                            <!-- Выбор Стола -->
+                            <div class="mb-2">
+                                <label class="place_title">
+                                    <b>Стол №</b>
+                                </label>
+                            </div>
+                            <div>
+                                <select
+                                    class="form-control form-select w-full select_input border border-2"
+                                    id="table_selector"
+                                    v-model="table"
+                                    @change="chooseTable($event)"
+                                >
+                                    <option value="" selected>Все столы</option>
+                                    <option v-for="item in tables" :value="item.id">{{item.i}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Выберите ресторан   -->
