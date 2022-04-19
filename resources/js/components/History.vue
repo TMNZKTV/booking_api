@@ -1,7 +1,7 @@
 <template>
     <div>
         <!-- Панель управления -->
-        <div class="px-4 py-3 mb-5 history_panel">
+        <div class="px-4 py-3 history_panel">
                 <div class="row">
                             <!-- Календарь -->
                             <div class="col-auto">
@@ -569,6 +569,7 @@ export default {
     },
     watch: {
         async date() {
+            this.allLogs = [];
             await this.fetchLogs();
         }
     },
