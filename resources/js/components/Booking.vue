@@ -472,7 +472,7 @@
                         <li
                             v-for="(item, idx) in item.reservations"
                             :key="idx"
-                            v-if="new Date(item.date).getDate() === new Date(date).getDate()"
+                            v-if="datePicker(item.date) === datePicker(date)"
                             class="m-0 pointer reservation_item"
                             :class="[ item.arrived ? 'arrived' : null, item.late ? 'late' : null]"
                             :style="{backgroundColor: item.from !== null ? colorByTime(item.from) : ''}"
@@ -1765,7 +1765,6 @@ export default {
             passCheck: false,
             place: "",
             actionType: "addGuest",
-            today: new Date(),
             date: this.datePicker(new Date()),
             from: this.addLeadingZero(new Date().getHours()) + ":" + this.addLeadingZero(new Date().getMinutes()),
             to: "",
@@ -1871,7 +1870,9 @@ export default {
         },
     },
     methods: {
-        datePicker(date) {
+        datePicker(value) {
+            const date = new Date(value)
+
             let Y = date.getFullYear();
             let M = this.addLeadingZero(date.getMonth() + 1);
             let D = this.addLeadingZero(date.getDate());
@@ -1973,7 +1974,6 @@ export default {
             this.waitingList = null;
         },
         updateGuestInfo(item) {
-            console.log(item);
             this.reservation = {
                 id: item.id,
                 name: item.name,
@@ -1985,7 +1985,7 @@ export default {
                 note: item.note,
                 table_id: item.table_id,
                 place_id: item.place_id,
-                date: item.date !== '' ? item.date : new Date(),
+                date: item.date !== '' ? this.datePicker(item.date) : this.date,
                 from: item.from,
                 to: item.to,
                 arrived: item.arrived,
@@ -2270,7 +2270,6 @@ export default {
                     `/api/reservations/${this.reservation.id}`,
                     updatedGuest
                 );
-                console.log(this.reservation.id)
                 const newLog = {
                     text: `Новые данные гостя.`,
                     type: "Обновление",
