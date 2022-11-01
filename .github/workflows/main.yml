@@ -15,7 +15,7 @@ jobs:
   deploy:
     name: Deploy to production
     # The type of runner that the job will run on
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -23,10 +23,10 @@ jobs:
         uses: tarunjangra/ssh-remote-cmd@v1
         with:
           # Command to execute on the remote server.
-          command: sh /var/www/www-root/data/deploy_booking.sh
+          command: ${{ secrets.PATH }}
           # Hostname or IP address of the server.
           host: ${{ secrets.HOST }}
           # Username for authentication.
           user: ${{ secrets.USER }}
           # File Location or string that contains a private key for either key-based or hostbased user authentication (OpenSSH format)
-          pass: ${{ secrets.PASSWORD}}
+          pass: ${{ secrets.PASSWORD }}
