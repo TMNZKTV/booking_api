@@ -174,7 +174,7 @@
                             <!-- Стол BBQ -->
                             <div class="col-auto col-md-4 col-lg-4 col-xl-5">
                                 <img
-                                    :src="require('../../svg/bbq.svg').default"
+                                    src="/images/bbq.svg"
                                     alt="bbq"
                                     class="info_panel_icons_icon"
                                 />
@@ -183,7 +183,7 @@
                             <!-- Предоплата -->
                             <div class="col-auto col-lg-4 col-xl-5">
                                 <img
-                                    :src="require('../../svg/ruble.svg').default"
+                                    src="/images/ruble.svg"
                                     alt="Ruble"
                                     class="info_panel_icons_icon"
                                 />
@@ -193,7 +193,7 @@
                             <!-- День рождения -->
                             <div class="col-auto col-md-4 col-lg-4 col-xl-5">
                                 <img
-                                    :src="require('../../svg/birthday.svg').default"
+                                    src="images/birthday.svg"
                                     alt="birthday"
                                     class="info_panel_icons_icon"
                                 />
@@ -202,7 +202,7 @@
                             <!-- Романтический ужин -->
                             <div class="col-auto col-lg-5 col-xl-5">
                                 <img
-                                    :src="require('../../svg/heart.svg').default"
+                                    src="images/heart.svg"
                                     alt="romantic dinner"
                                     class="info_panel_icons_icon"
                                 />
@@ -212,7 +212,7 @@
                             <!-- Семейный ужин -->
                             <div class="col-auto col-md-4 col-lg-4 col-xl-5">
                                 <img
-                                    :src="require('../../svg/family.svg').default"
+                                    src="images/family.svg"
                                     alt="family dinner"
                                     class="info_panel_icons_icon"
                                 />
@@ -221,7 +221,7 @@
                             <!-- Конфликтный гость -->
                             <div class="col-auto col-lg-5 col-xl-5">
                                 <img
-                                    :src="require('../../svg/conflict.svg').default"
+                                    src="images/conflict.svg"
                                     alt="conflict guest"
                                     class="info_panel_icons_icon"
                                 />
@@ -231,7 +231,7 @@
                             <!-- Бар -->
                             <div class="col-auto col-lg-4 col-xl-5">
                                 <img
-                                    :src="require('../../svg/bar.svg').default"
+                                    src="images/bar.svg"
                                     alt="bar sign"
                                     class="info_panel_icons_icon"
                                 />
@@ -240,7 +240,7 @@
                             <!-- Сейчас занят -->
                             <div class="col-auto col-lg-4 col-xl-5">
                                 <img
-                                    :src="require('../../svg/booked.svg').default"
+                                    src="images/booked.svg"
                                     alt="booked sign"
                                     class="info_panel_icons_icon"
                                 />
@@ -250,7 +250,7 @@
                             <!-- Ограниченное время -->
                             <div class="col-auto col-lg-4 col-xl-5">
                                 <img
-                                    :src="require('../../svg/finish.svg').default"
+                                    src="images/finish.svg"
                                     alt="fixed visit time"
                                     class="info_panel_icons_icon"
                                 />
@@ -260,7 +260,7 @@
                             <!-- Утреннее время -->
                             <div class="col-auto col-lg-4 col-xl-4">
                                 <img
-                                    :src="require('../../svg/morning.svg').default"
+                                    src="images/morning.svg"
                                     alt="morning time"
                                     class="info_panel_icons_icon"
                                 />
@@ -269,7 +269,7 @@
                             <!-- Дневное время -->
                             <div class="col-auto col-lg-4 col-xl-4">
                                 <img
-                                    :src="require('../../svg/day.svg').default"
+                                    src="images/day.svg"
                                     alt="day time"
                                     class="info_panel_icons_icon"
                                 />
@@ -278,7 +278,7 @@
                             <!-- Вечернее время -->
                             <div class="col-auto col-lg-4 col-xl-4">
                                 <img
-                                    :src="require('../../svg/evening.svg').default"
+                                    src="images/evening.svg"
                                     alt="evening time"
                                     class="info_panel_icons_icon"
                                 />
@@ -288,7 +288,7 @@
                             <!-- Гость пришел -->
                             <div class="col-auto col-lg-4 col-xl-4">
                                 <img
-                                    :src="require('../../svg/arrived.svg').default"
+                                    src="images/arrived.svg"
                                     alt="guest arrived"
                                     class="info_panel_icons_icon"
                                 />
@@ -297,7 +297,7 @@
                             <!-- Гость опаздывает -->
                             <div class="col-auto col-lg-4 col-xl-4">
                                 <img
-                                    :src="require('../../svg/late.svg').default"
+                                    src="images/late.svg"
                                     alt="guest late"
                                     class="info_panel_icons_icon"
                                 />
@@ -362,13 +362,13 @@
                             >
                                 <img
                                     v-if="!item.booked"
-                                    :src="require('../../svg/unbooked.svg').default"
+                                    src="images/unbooked.svg"
                                     alt="unlocked"
                                     class="grid_item_locked"
                                 />
                                 <img
                                     v-if="item.booked"
-                                    :src="require('../../svg/booked.svg').default"
+                                    src="images/booked.svg"
                                     alt="locked"
                                     class="grid_item_locked"
                                 />
@@ -421,9 +421,9 @@
                             >
                                 <!-- Иконка замка -->
                                 <img
-                                    :src="
-                                        require('../../svg/lockSign.svg')
-                                            .default
+                                    src="
+                                        images/lockSign.svg')
+
                                     "
                                     alt="restriction"
                                     class="restriction_time_lock"
@@ -439,26 +439,26 @@
                                 <img
                                     class="table_info_icon_table"
                                     v-if="item.bbq && !item.booked"
-                                    :src="require('../../svg/bbqSign.svg').default"
+                                    src="images/bbqSign.svg"
                                     alt="bbq"
                                 />
                                 <img
                                     class="table_info_icon_table"
                                     v-if="item.bbq && item.booked"
-                                    :src="require('../../svg/bbqSignBlack.svg').default"
+                                    src="images/bbqSignBlack.svg"
                                     alt="bbq"
                                 />
                                 <!-- Иконка Бара -->
                                 <img
                                     class="table_info_icon_table"
                                     v-if="item.i === 'Бар' && !item.booked"
-                                    :src="require('../../svg/barSign.svg').default"
+                                    src="images/barSign.svg'"
                                     alt="bar"
                                 />
                                 <img
                                     class="table_info_icon_table"
                                     v-if="item.i === 'Бар' && item.booked"
-                                    :src="require('../../svg/barSignBlack.svg').default"
+                                    src="images/barSignBlack.svg'"
                                     alt="bar"
                                 />
                                 <br />
@@ -484,52 +484,37 @@
                                 <!-- Иконка предоплаты -->
                                 <img
                                     v-if="item.prepayment"
-                                    :src="
-                                        require('../../svg/ruble.svg').default
-                                    "
+                                    src="images/ruble.svg"
                                     alt="Ruble"
                                 />
                                 <!-- Тип визита -->
                                 <img
                                     v-if="item.visit_type === 'День рождения'"
-                                    :src="
-                                        require('../../svg/birthday.svg')
-                                            .default
-                                    "
+                                    src="images/birthday.svg"
                                     alt="Birthday cake"
                                 />
                                 <img
                                     v-if="
                                         item.visit_type === 'Романтический ужин'
                                     "
-                                    :src="
-                                        require('../../svg/heart.svg').default
-                                    "
+                                    src="images/heart.svg"
                                     alt="Heart"
                                 />
                                 <img
                                     v-if="item.visit_type === 'Семейный ужин'"
-                                    :src="
-                                        require('../../svg/family.svg').default
-                                    "
+                                    src=" images/family.svg"
                                     alt="Family"
                                 />
                                 <!-- Конфликтный гость -->
                                 <img
                                     v-if="item.conflict"
-                                    :src="
-                                        require('../../svg/conflict.svg')
-                                            .default
-                                    "
+                                    src="images/conflict.svg"
                                     alt="Warning!"
                                 />
                                 <!-- Ограничение по времени -->
                                 <img
                                     v-if="item.to"
-                                    :src="
-                                        require('../../svg/finish.svg')
-                                            .default
-                                    "
+                                    src="images/finish.svg"
                                     alt="fixed visit time"
                                 />
                                 <span class="align-middle">
