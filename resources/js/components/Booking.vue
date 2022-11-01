@@ -422,9 +422,7 @@
                                 <!-- Иконка замка -->
                                 <img
                                     src="
-                                        images/lockSign.svg')
-
-                                    "
+                                        images/lockSign.svg"
                                     alt="restriction"
                                     class="restriction_time_lock"
                                 />
@@ -452,13 +450,13 @@
                                 <img
                                     class="table_info_icon_table"
                                     v-if="item.i === 'Бар' && !item.booked"
-                                    src="images/barSign.svg'"
+                                    src="images/barSign.svg"
                                     alt="bar"
                                 />
                                 <img
                                     class="table_info_icon_table"
                                     v-if="item.i === 'Бар' && item.booked"
-                                    src="images/barSignBlack.svg'"
+                                    src="images/barSignBlack.svg"
                                     alt="bar"
                                 />
                                 <br />
