@@ -68,6 +68,9 @@
                                             <option value="place_3">
                                                 Горной
                                             </option>
+                                            <option value="place_4">
+                                                Красноказачья
+                                            </option>
                                         </select>
                                     </div>
                                 </div>
@@ -1831,6 +1834,11 @@ export default {
                     (table) => table.id !== 104 && table.place_id === 3
                 );
             }
+            if (this.place === "place_4") {
+                return this.layout.filter(
+                    (table) => table.id !== 104 && table.place_id === 4
+                );
+            }
         },
         dayFilter() {
             const options = {
@@ -2069,6 +2077,23 @@ export default {
                         this.error = error;
                     }
                     break;
+                case "place_4":
+                    try {
+                        this.loading = true;
+                        const response = await axios.get(
+                            "/api/tables"
+                        );
+                        this.layout = response.data.data.filter((table) => {
+                            if (table.place_id === 4) {
+                                return table;
+                            }
+                        });
+                        this.loading = false;
+                    } catch (error) {
+                        this.loading = false;
+                        this.error = error;
+                    }
+                    break;
                 default:
                     console.log("Default message");
             }
@@ -2105,6 +2130,16 @@ export default {
                     console.log(error);
                 }
             }
+            if (this.place === "place_4") {
+                try {
+                    await axios.put(
+                        `/api/tables/${item.id}`,
+                        item
+                    );
+                } catch (error) {
+                    console.log(error);
+                }
+            }
         },
         async updateLayout(item) {
             if (this.place === "place_1") {
@@ -2128,6 +2163,16 @@ export default {
                 }
             }
             if (this.place === "place_3") {
+                try {
+                    await axios.put(
+                        `/api/tables/${item.id}`,
+                        item
+                    );
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+            if (this.place === "place_4") {
                 try {
                     await axios.put(
                         `/api/tables/${item.id}`,
@@ -2240,6 +2285,36 @@ export default {
                 };
                 await axios.post(`/api/logs`, newLog);
             }
+            if (this.place === "place_4") {
+                const newReservation = {
+                    name: this.reservation.name,
+                    phone: this.reservation.phone,
+                    conflict: this.reservation.conflict,
+                    visit_type: this.reservation.visit_type,
+                    amount: this.reservation.amount,
+                    note: this.reservation.note,
+                    prepayment: this.reservation.prepayment === '' ? 0 : this.reservation.prepayment,
+                    table_id: this.reservation.table_id,
+                    place_id: 4,
+                    date: this.date,
+                    from: this.from,
+                    to: this.to,
+                    arrived: this.reservation.arrived,
+                    late: this.reservation.late,
+                    responsible_email: this.reservation.responsible_email,
+                    responsible_name: this.reservation.responsible_name,
+                };
+                await axios.post(
+                    `/api/reservations`,
+                    newReservation
+                );
+                const newLog = {
+                    text: `Стол №${newReservation.table_id === 104 ? 'ОЖИДАНИЕ' : newReservation.table_id === 105 ? 'Бар' : newReservation.table_id} на Красноказачьей был забронирован.`,
+                    type: "Бронирование",
+                    ...newReservation,
+                };
+                await axios.post(`/api/logs`, newLog);
+            }
             this.clearReservationInfo();
             await this.fetchTables();
         },
@@ -2292,6 +2367,22 @@ export default {
                 };
                 await axios.post(`/api/logs`, newLog);
             }
+            if (this.place === "place_4") {
+                const updatedGuest = {
+                    ...this.reservation,
+                    prepayment: this.reservation.prepayment === '' ? 0 : this.reservation.prepayment
+                }
+                await axios.put(
+                    `/api/reservations/${this.reservation.id}`,
+                    updatedGuest
+                );
+                const newLog = {
+                    text: `Новые данные гостя.`,
+                    type: "Обновление",
+                    ...updatedGuest,
+                };
+                await axios.post(`/api/logs`, newLog);
+            }
             this.clearReservationInfo();
             await this.fetchTables();
         },
@@ -2315,6 +2406,13 @@ export default {
                 });
             }
             if (this.place === "place_3") {
+                this.waitingList = response.data.data.find((table) => {
+                    if (table.id === 104) {
+                        return table;
+                    }
+                });
+            }
+            if (this.place === "place_4") {
                 this.waitingList = response.data.data.find((table) => {
                     if (table.id === 104) {
                         return table;
@@ -2468,6 +2566,19 @@ export default {
                         newTable
                     );
                 }
+                if (this.place === "place_4") {
+                    const newTable = {
+                        ...this.table,
+                        place_id: 4,
+                        i: (this.tables.length + 1).toString(),
+                        bbq: type,
+                        booked: false
+                    };
+                    await axios.post(
+                        "/api/tables",
+                        newTable
+                    );
+                }
             }
             this.loading = true;
             await this.fetchTables();
@@ -2486,6 +2597,11 @@ export default {
                     );
                 }
                 if (this.place === "place_3") {
+                    await axios.delete(
+                        `/api/tables/${this.table.id}`
+                    );
+                }
+                if (this.place === "place_4") {
                     await axios.delete(
                         `/api/tables/${this.table.id}`
                     );
@@ -2531,6 +2647,21 @@ export default {
                     ...this.restriction,
                     table_id: this.table.id,
                     place_id: 3
+                };
+                try {
+                    await axios.post(
+                        "/api/restrictions",
+                        restriction
+                    );
+                } catch (error) {
+                    alert("Error appeared while posting restriction");
+                }
+            }
+            if (this.place === "place_4") {
+                const restriction = {
+                    ...this.restriction,
+                    table_id: this.table.id,
+                    place_id: 4
                 };
                 try {
                     await axios.post(
